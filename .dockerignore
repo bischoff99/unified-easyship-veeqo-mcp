@@ -1,16 +1,16 @@
 # Dependencies
-node_modules/
+node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Build outputs
-dist/
-build/
-coverage/
+# Build outputs (will be built inside container)
+dist
+build
+*.tsbuildinfo
 
-# Environment files
+# Development files
 .env
 .env.local
 .env.development.local
@@ -18,8 +18,8 @@ coverage/
 .env.production.local
 
 # IDE and editor files
-.vscode/
-.idea/
+.vscode
+.idea
 *.swp
 *.swo
 *~
@@ -34,49 +34,46 @@ ehthumbs.db
 Thumbs.db
 
 # Git
-.git/
+.git
 .gitignore
 
-# Documentation
-docs/
+# Documentation (not needed in production)
+docs
 *.md
 !README.md
-!PROJECT_SUMMARY.md
 
 # Test files
-test/
-tests/
-*.test.js
-*.test.ts
-*.spec.js
-*.spec.ts
-
-# Scripts
-scripts/
-eslint-plugin-fastmcp/
-
-# Temporary files
-tmp/
-temp/
-*.tmp
-*.temp
+test
+tests
+coverage
+.nyc_output
+test-results.xml
 
 # Logs
-logs/
+logs
 *.log
 
+# Temporary files
+tmp
+temp
+
+# Cache directories
+.cache
+.parcel-cache
+.eslintcache
+.stylelintcache
+
 # Runtime data
-pids/
+pids
 *.pid
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
-coverage/
-.nyc_output/
+# Coverage directory
+coverage
 
-# ESLint cache
-.eslintcache
+# Dependency directories
+jspm_packages
 
 # Optional npm cache directory
 .npm
@@ -90,30 +87,83 @@ coverage/
 # Yarn Integrity file
 .yarn-integrity
 
-# parcel-bundler cache (https://parceljs.org/)
+# dotenv environment variable files
+.env*
+
+# parcel-bundler cache
 .cache
 .parcel-cache
 
-# next.js build output
+# Next.js build output
 .next
+out
 
-# nuxt.js build output
+# Nuxt.js build / generate output
 .nuxt
+dist
 
-# vuepress build output
+# Gatsby files
+.cache
+public
+
+# Vuepress build output
 .vuepress/dist
 
 # Serverless directories
 .serverless
 
 # FuseBox cache
-.fusebox/
+.fusebox
 
 # DynamoDB Local files
-.dynamodb/
+.dynamodb
 
 # TernJS port file
 .tern-port
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Scripts (not needed in production)
+scripts
+
+# Railway specific (keep railway.toml but ignore others)
+railway.json
+
+# MCP specific
+.mcp
+mcp-debug.log
+
+# Docker files (avoid recursive copying)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# CI/CD files
+.github
+.gitlab-ci.yml
+.travis.yml
+.circleci
+
+# Linting and formatting
+.eslintrc*
+.prettierrc*
+.eslintignore
+.prettierignore
+
+# TypeScript config (keep tsconfig.json but ignore others)
+tsconfig.*.json
+
+# Package manager files (keep package.json and package-lock.json)
+yarn.lock
+pnpm-lock.yaml
+
+# Development tools
+jsdoc.config.json
