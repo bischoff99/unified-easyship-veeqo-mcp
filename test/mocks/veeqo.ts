@@ -14,7 +14,7 @@ export const mockVeeqoProduct = {
     height: 6,
   },
   price: 29.99,
-  cost_price: 15.00,
+  cost_price: 15.0,
   created_at: '2024-01-01T00:00:00Z',
   updated_at: '2024-01-13T12:00:00Z',
 };
@@ -93,7 +93,7 @@ export const mockVeeqoOrder = {
   },
   subtotal: 59.98,
   shipping_cost: 5.99,
-  tax: 5.40,
+  tax: 5.4,
   total: 71.37,
   currency: 'USD',
   created_at: '2024-01-13T10:00:00Z',

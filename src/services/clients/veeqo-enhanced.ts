@@ -168,7 +168,7 @@ export class VeeqoClient {
    */
   async getInventoryLevels(
     productIds?: string[],
-    locationIds?: string[],
+    locationIds?: string[]
   ): Promise<VeeqoInventoryLevel[]> {
     if (this.mockMode) {
       return this.getMockInventoryLevels(productIds, locationIds);
@@ -222,7 +222,7 @@ export class VeeqoClient {
           productIds: productIds?.length || 'all',
           locationIds: locationIds?.length || 'all',
         },
-        'Inventory levels retrieved successfully',
+        'Inventory levels retrieved successfully'
       );
 
       return inventoryLevels;
@@ -243,7 +243,7 @@ export class VeeqoClient {
    * Update inventory levels
    */
   async updateInventoryLevels(
-    updates: VeeqoInventoryUpdate[],
+    updates: VeeqoInventoryUpdate[]
   ): Promise<VeeqoInventoryUpdateResult[]> {
     if (this.mockMode) {
       return this.getMockInventoryUpdateResults(updates);
@@ -288,7 +288,7 @@ export class VeeqoClient {
           successful: results.filter((r) => r.success).length,
           failed: results.filter((r) => !r.success).length,
         },
-        'Inventory levels updated',
+        'Inventory levels updated'
       );
 
       return results;
@@ -321,7 +321,7 @@ export class VeeqoClient {
           page,
           limit,
         },
-        'Products retrieved successfully',
+        'Products retrieved successfully'
       );
 
       return products;
@@ -378,7 +378,7 @@ export class VeeqoClient {
           limit,
           status,
         },
-        'Orders retrieved successfully',
+        'Orders retrieved successfully'
       );
 
       return orders;
@@ -584,7 +584,7 @@ export class VeeqoClient {
           locationId,
           days,
         },
-        'Demand forecast retrieved successfully',
+        'Demand forecast retrieved successfully'
       );
 
       return response;
@@ -621,7 +621,7 @@ export class VeeqoClient {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(
-          `Veeqo API error: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`,
+          `Veeqo API error: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
         );
       }
 
@@ -639,7 +639,7 @@ export class VeeqoClient {
    */
   private getMockInventoryLevels(
     productIds?: string[],
-    locationIds?: string[],
+    locationIds?: string[]
   ): VeeqoInventoryLevel[] {
     const mockData: VeeqoInventoryLevel[] = [
       {
@@ -709,7 +709,7 @@ export class VeeqoClient {
   }
 
   private getMockInventoryUpdateResults(
-    updates: VeeqoInventoryUpdate[],
+    updates: VeeqoInventoryUpdate[]
   ): VeeqoInventoryUpdateResult[] {
     return updates.map((update) => ({
       product_id: update.product_id,

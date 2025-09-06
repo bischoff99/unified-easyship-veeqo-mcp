@@ -13,34 +13,34 @@ async function testDomesticLabel() {
   const client = new EasyPostClient();
 
   const fromAddress = {
-    name: "Apricot Lane Boutique – Las Vegas Blue Diamond Rd",
-    company: "Apricot Lane Boutique",
-    street1: "5025 Blue Diamond Rd",
-    street2: "Suite 109",
-    city: "Las Vegas",
-    state: "NV",
-    zip: "89139",
-    country: "US",
-    phone: "17156034341",
-    email: "emily.carter@apricotlane-lv.tk"
+    name: 'Apricot Lane Boutique – Las Vegas Blue Diamond Rd',
+    company: 'Apricot Lane Boutique',
+    street1: '5025 Blue Diamond Rd',
+    street2: 'Suite 109',
+    city: 'Las Vegas',
+    state: 'NV',
+    zip: '89139',
+    country: 'US',
+    phone: '17156034341',
+    email: 'emily.carter@apricotlane-lv.tk',
   };
 
   const toAddress = {
-    name: "John Smith",
-    street1: "123 Main Street",
-    city: "New York",
-    state: "NY",
-    zip: "10001",
-    country: "US",
-    phone: "555-123-4567",
-    email: "john.smith@example.com"
+    name: 'John Smith',
+    street1: '123 Main Street',
+    city: 'New York',
+    state: 'NY',
+    zip: '10001',
+    country: 'US',
+    phone: '555-123-4567',
+    email: 'john.smith@example.com',
   };
 
   const parcel = {
     length: 10,
     width: 8,
     height: 4,
-    weight: 1.5
+    weight: 1.5,
   };
 
   try {
@@ -51,14 +51,18 @@ async function testDomesticLabel() {
     if (rates.length > 0) {
       console.log('\n📋 Available USPS Rates:');
       rates.forEach((rate, index) => {
-        console.log(`   ${index + 1}. ${rate.carrier} ${rate.service}: $${rate.rate} (${rate.delivery_days} days)`);
+        console.log(
+          `   ${index + 1}. ${rate.carrier} ${rate.service}: $${rate.rate} (${rate.delivery_days} days)`
+        );
       });
 
       // Create label with USPS Priority (cheapest option)
-      const priorityRate = rates.find(rate => rate.service.includes('Priority'));
+      const priorityRate = rates.find((rate) => rate.service.includes('Priority'));
       if (priorityRate) {
         console.log(`\n2. Creating USPS Priority label...`);
-        console.log(`   Rate: ${priorityRate.carrier} ${priorityRate.service} - $${priorityRate.rate}`);
+        console.log(
+          `   Rate: ${priorityRate.carrier} ${priorityRate.service} - $${priorityRate.rate}`
+        );
 
         const label = await client.createLabel(
           toAddress,
@@ -86,7 +90,6 @@ async function testDomesticLabel() {
     } else {
       console.log('❌ No rates found');
     }
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     if (error.response) {

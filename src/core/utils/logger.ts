@@ -9,7 +9,7 @@ export const logger = pino(
         : undefined,
     redact: ['apiKey', 'authorization', 'EASYPOST_API_KEY', 'VEEQO_API_KEY'],
   },
-  pino.destination(2), // stderr only
+  pino.destination(2) // stderr only
 );
 
 // Helper functions for structured logging

@@ -9,6 +9,7 @@
 ---
 
 ## 🏪 **FROM ADDRESS (Your Boutique)**
+
 ```
 Melrose Trading Post Vintage
 Sofia Martinez
@@ -20,6 +21,7 @@ United States
 ```
 
 ## 🏠 **TO ADDRESS (Customer)**
+
 ```
 DANOND CORKE
 APARTMENT 3 - YORK MILL
@@ -35,6 +37,7 @@ United Kingdom
 ## 📋 **CUSTOMS INFORMATION** (Key for International Orders)
 
 ### **Package Contents**
+
 - **Type**: Merchandise
 - **Items**: 4x Vintage clothing items
 - **Total Value**: $95.00 USD
@@ -43,6 +46,7 @@ United Kingdom
 - **Origin Country**: United States
 
 ### **Customs Declaration**
+
 - **Signer**: Sofia Martinez
 - **Non-delivery Option**: Return to sender
 - **Restriction Type**: None
@@ -54,16 +58,17 @@ United Kingdom
 
 ### **Available Carriers & Services**
 
-| Carrier | Service | Cost | Delivery Time | Status |
-|---------|---------|------|---------------|---------|
-| **FedEx** | International Priority Express | **$54.67** | 4 days | ✅ **SELECTED** |
-| **FedEx** | International Priority | $66.59 | 4 days | Available |
-| **FedEx** | International Economy | $54.47 | 6 days | Available |
-| **USPS** | Priority Mail International | $97.20 | Unknown | Available |
-| **USPS** | Express Mail International | $113.79 | Unknown | Available |
-| **USA Export PBA** | Export Select | $71.61 | Unknown | Available |
+| Carrier            | Service                        | Cost       | Delivery Time | Status          |
+| ------------------ | ------------------------------ | ---------- | ------------- | --------------- |
+| **FedEx**          | International Priority Express | **$54.67** | 4 days        | ✅ **SELECTED** |
+| **FedEx**          | International Priority         | $66.59     | 4 days        | Available       |
+| **FedEx**          | International Economy          | $54.47     | 6 days        | Available       |
+| **USPS**           | Priority Mail International    | $97.20     | Unknown       | Available       |
+| **USPS**           | Express Mail International     | $113.79    | Unknown       | Available       |
+| **USA Export PBA** | Export Select                  | $71.61     | Unknown       | Available       |
 
 ### **Carrier Issues (Normal for International)**
+
 - ❌ **Canada Post**: "Unable to get rates for shipments originating outside of Canada"
 - ❌ **DHL Express**: "Does not service this destination address"
 - ❌ **DhlEcs**: "Customs item code field required"
@@ -74,12 +79,14 @@ United Kingdom
 ## 📄 **GENERATED DOCUMENTS**
 
 ### **1. Shipping Label**
+
 - **URL**: https://easypost-files.s3.us-west-2.amazonaws.com/files/postage_label/20250904/e8b72a01d23b3f48eb93da2b6dd1a78a44.png
 - **Format**: PNG image
 - **Size**: 4x6 inches
 - **Resolution**: 200 DPI
 
 ### **2. Commercial Invoice**
+
 - **URL**: https://easypost-files.s3-us-west-2.amazonaws.com/files/form/20250904/9aaa453fee304214802433cbfbcf4ca8.pdf
 - **Type**: Commercial Invoice
 - **Status**: ✅ Submitted electronically
@@ -88,29 +95,30 @@ United Kingdom
 
 ## 💰 **COST BREAKDOWN**
 
-| Fee Type | Amount | Status |
-|----------|--------|---------|
-| **Postage Fee** | $54.67 | ✅ Charged |
-| **Label Fee** | $0.00 | ✅ Charged |
-| **Total Cost** | **$54.67** | ✅ Paid |
+| Fee Type        | Amount     | Status     |
+| --------------- | ---------- | ---------- |
+| **Postage Fee** | $54.67     | ✅ Charged |
+| **Label Fee**   | $0.00      | ✅ Charged |
+| **Total Cost**  | **$54.67** | ✅ Paid    |
 
 ---
 
 ## 📊 **ORDER TIMELINE**
 
-| Timestamp | Event |
-|-----------|-------|
-| 2025-09-04 14:40:12Z | Addresses created |
+| Timestamp            | Event                         |
+| -------------------- | ----------------------------- |
+| 2025-09-04 14:40:12Z | Addresses created             |
 | 2025-09-04 14:40:13Z | Shipment created with customs |
-| 2025-09-04 14:40:15Z | Rates calculated |
-| 2025-09-04 14:40:18Z | Label purchased & generated |
-| 2025-09-04 14:40:18Z | Commercial invoice generated |
+| 2025-09-04 14:40:15Z | Rates calculated              |
+| 2025-09-04 14:40:18Z | Label purchased & generated   |
+| 2025-09-04 14:40:18Z | Commercial invoice generated  |
 
 ---
 
 ## 🔑 **KEY DIFFERENCES: International vs Domestic Orders**
 
 ### **International Orders Require:**
+
 1. ✅ **Customs Information** (contents, value, HS codes)
 2. ✅ **Commercial Invoice** (automatically generated)
 3. ✅ **Proper country codes** (US, GB, etc.)
@@ -118,6 +126,7 @@ United Kingdom
 5. ✅ **Higher shipping costs** ($54+ vs $8-15 domestic)
 
 ### **Domestic Orders Only Need:**
+
 1. ✅ **Basic addresses** (no customs)
 2. ✅ **Standard carriers** (USPS, UPS, FedEx)
 3. ✅ **Lower costs** ($8-15 typical)

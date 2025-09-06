@@ -14,7 +14,7 @@ class GracefulShutdown {
     this.connections = new Set();
     this.timers = new Set();
     this.cleanup = [];
-    
+
     this.setupSignalHandlers();
   }
 
@@ -58,12 +58,12 @@ class GracefulShutdown {
    */
   registerConnection(connection) {
     this.connections.add(connection);
-    
+
     // Remove connection when it closes
     connection.on('close', () => {
       this.connections.delete(connection);
     });
-    
+
     connection.on('error', () => {
       this.connections.delete(connection);
     });
@@ -129,7 +129,6 @@ class GracefulShutdown {
       clearTimeout(shutdownTimeout);
       logger.info('Graceful shutdown completed successfully');
       process.exit(0);
-
     } catch (error) {
       clearTimeout(shutdownTimeout);
       logger.error({ error: error.message }, 'Error during graceful shutdown');
@@ -152,7 +151,7 @@ class GracefulShutdown {
    * Close all active connections
    */
   async closeConnections() {
-    const connectionPromises = Array.from(this.connections).map(connection => {
+    const connectionPromises = Array.from(this.connections).map((connection) => {
       return new Promise((resolve) => {
         if (connection.destroyed) {
           resolve();
@@ -235,7 +234,7 @@ class GracefulShutdown {
       if (process.env.NODE_ENV === 'development') {
         const fs = await import('fs/promises');
         const path = await import('path');
-        
+
         try {
           const reportPath = path.join(process.cwd(), 'logs', 'shutdown-report.json');
           await fs.mkdir(path.dirname(reportPath), { recursive: true });
@@ -285,10 +284,5 @@ const gracefulShutdown = new GracefulShutdown();
 export default gracefulShutdown;
 
 // Export helpers for server integration
-export const {
-  registerConnection,
-  registerTimer,
-  registerCleanup,
-  isShuttingDownFlag,
-  getStatus,
-} = gracefulShutdown;
+export const { registerConnection, registerTimer, registerCleanup, isShuttingDownFlag, getStatus } =
+  gracefulShutdown;

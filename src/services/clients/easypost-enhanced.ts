@@ -156,7 +156,7 @@ export class EasyPostClient {
     toAddress: EasyPostAddress,
     fromAddress: EasyPostAddress,
     parcel: EasyPostParcel,
-    customsInfo?: any,
+    customsInfo?: any
   ): Promise<EasyPostShipment> {
     if (this.mockMode) {
       return this.getMockShipment(toAddress, fromAddress, parcel);
@@ -194,7 +194,7 @@ export class EasyPostClient {
     fromAddress: EasyPostAddress,
     parcel: EasyPostParcel,
     carriers?: string[],
-    customsInfo?: any,
+    customsInfo?: any
   ): Promise<EasyPostRate[]> {
     if (this.mockMode) {
       return this.getMockRates(toAddress, fromAddress, parcel, carriers);
@@ -207,7 +207,7 @@ export class EasyPostClient {
       let rates = shipment.rates;
       if (carriers && carriers.length > 0) {
         rates = rates.filter((rate) =>
-          carriers.some((carrier) => rate.carrier.toLowerCase().includes(carrier.toLowerCase())),
+          carriers.some((carrier) => rate.carrier.toLowerCase().includes(carrier.toLowerCase()))
         );
       }
 
@@ -216,7 +216,7 @@ export class EasyPostClient {
           count: rates.length,
           carriers: carriers,
         },
-        'Rates retrieved successfully',
+        'Rates retrieved successfully'
       );
       return rates;
     } catch (error) {
@@ -266,7 +266,7 @@ export class EasyPostClient {
     parcel: EasyPostParcel,
     carrier: string,
     service: string,
-    customsInfo?: any,
+    customsInfo?: any
   ): Promise<any> {
     if (this.mockMode) {
       return this.getMockLabel(toAddress, fromAddress, parcel, carrier, service);
@@ -279,7 +279,7 @@ export class EasyPostClient {
       const selectedRate = shipment.rates.find(
         (rate) =>
           rate.carrier.toLowerCase().includes(carrier.toLowerCase()) &&
-          rate.service.toLowerCase().includes(service.toLowerCase()),
+          rate.service.toLowerCase().includes(service.toLowerCase())
       );
 
       if (!selectedRate) {
@@ -297,7 +297,7 @@ export class EasyPostClient {
           carrier: response.selected_rate.carrier,
           service: response.selected_rate.service,
         },
-        'Label created successfully',
+        'Label created successfully'
       );
 
       return {
@@ -333,7 +333,7 @@ export class EasyPostClient {
           trackingCode,
           status: response.status,
         },
-        'Shipment tracked successfully',
+        'Shipment tracked successfully'
       );
 
       return response;
@@ -343,7 +343,7 @@ export class EasyPostClient {
           error: (error as Error).message,
           trackingCode,
         },
-        'Failed to track shipment',
+        'Failed to track shipment'
       );
       throw error;
     }
@@ -367,7 +367,7 @@ export class EasyPostClient {
           addressId: response.id,
           verified: response.verifications,
         },
-        'Address verified successfully',
+        'Address verified successfully'
       );
 
       return response;
@@ -426,7 +426,7 @@ export class EasyPostClient {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(
-          `EasyPost API error: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`,
+          `EasyPost API error: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
         );
       }
 
@@ -445,7 +445,7 @@ export class EasyPostClient {
   private getMockShipment(
     toAddress: EasyPostAddress,
     fromAddress: EasyPostAddress,
-    parcel: EasyPostParcel,
+    parcel: EasyPostParcel
   ): EasyPostShipment {
     return {
       id: 'shp_mock_' + Date.now(),
@@ -469,7 +469,7 @@ export class EasyPostClient {
     _toAddress: EasyPostAddress,
     _fromAddress: EasyPostAddress,
     _parcel: EasyPostParcel,
-    carriers?: string[],
+    carriers?: string[]
   ): EasyPostRate[] {
     const allRates: EasyPostRate[] = [
       {
@@ -536,7 +536,7 @@ export class EasyPostClient {
 
     if (carriers && carriers.length > 0) {
       return allRates.filter((rate) =>
-        carriers.some((carrier) => rate.carrier.toLowerCase().includes(carrier.toLowerCase())),
+        carriers.some((carrier) => rate.carrier.toLowerCase().includes(carrier.toLowerCase()))
       );
     }
 
@@ -548,7 +548,7 @@ export class EasyPostClient {
     _fromAddress: EasyPostAddress,
     _parcel: EasyPostParcel,
     carrier: string,
-    service: string,
+    service: string
   ): any {
     return {
       tracking_code: '1Z' + Math.random().toString(36).substr(2, 16).toUpperCase(),

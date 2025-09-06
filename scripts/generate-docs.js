@@ -17,19 +17,19 @@ const projectRoot = path.resolve(__dirname, '..');
  */
 async function extractToolDocs() {
   console.log('📋 Extracting tool documentation...');
-  
+
   const serverFile = path.join(projectRoot, 'src/server/fastmcp-server.ts');
   const content = await fs.readFile(serverFile, 'utf-8');
-  
+
   const tools = [];
   const toolPattern = /server\.addTool\(\{[\s\S]*?\}\);/g;
   const matches = content.match(toolPattern) || [];
-  
+
   for (const match of matches) {
     const nameMatch = match.match(/name:\s*['"`]([^'"`]+)['"`]/);
     const descMatch = match.match(/description:\s*['"`]([^'"`]+)['"`]/);
     const parametersMatch = match.match(/parameters:\s*(z\.object\(\{[\s\S]*?\}\))/);
-    
+
     if (nameMatch && descMatch) {
       tools.push({
         name: nameMatch[1],
@@ -39,7 +39,7 @@ async function extractToolDocs() {
       });
     }
   }
-  
+
   console.log(`✅ Extracted ${tools.length} tools`);
   return tools;
 }
@@ -49,19 +49,19 @@ async function extractToolDocs() {
  */
 async function extractResourceDocs() {
   console.log('📋 Extracting resource documentation...');
-  
+
   const serverFile = path.join(projectRoot, 'src/server/fastmcp-server.ts');
   const content = await fs.readFile(serverFile, 'utf-8');
-  
+
   const resources = [];
   const resourcePattern = /server\.addResourceTemplate\(\{[\s\S]*?\}\);/g;
   const matches = content.match(resourcePattern) || [];
-  
+
   for (const match of matches) {
     const uriMatch = match.match(/uriTemplate:\s*['"`]([^'"`]+)['"`]/);
     const nameMatch = match.match(/name:\s*['"`]([^'"`]+)['"`]/);
     const mimeMatch = match.match(/mimeType:\s*['"`]([^'"`]+)['"`]/);
-    
+
     if (uriMatch && nameMatch) {
       resources.push({
         uriTemplate: uriMatch[1],
@@ -70,7 +70,7 @@ async function extractResourceDocs() {
       });
     }
   }
-  
+
   console.log(`✅ Extracted ${resources.length} resources`);
   return resources;
 }
@@ -80,18 +80,18 @@ async function extractResourceDocs() {
  */
 async function extractPromptDocs() {
   console.log('📋 Extracting prompt documentation...');
-  
+
   const serverFile = path.join(projectRoot, 'src/server/fastmcp-server.ts');
   const content = await fs.readFile(serverFile, 'utf-8');
-  
+
   const prompts = [];
   const promptPattern = /server\.addPrompt\(\{[\s\S]*?\}\);/g;
   const matches = content.match(promptPattern) || [];
-  
+
   for (const match of matches) {
     const nameMatch = match.match(/name:\s*['"`]([^'"`]+)['"`]/);
     const descMatch = match.match(/description:\s*['"`]([^'"`]+)['"`]/);
-    
+
     if (nameMatch && descMatch) {
       prompts.push({
         name: nameMatch[1],
@@ -99,7 +99,7 @@ async function extractPromptDocs() {
       });
     }
   }
-  
+
   console.log(`✅ Extracted ${prompts.length} prompts`);
   return prompts;
 }
@@ -109,13 +109,13 @@ async function extractPromptDocs() {
  */
 async function generateToolReference(tools) {
   console.log('📝 Generating tool reference...');
-  
+
   const categorizedTools = tools.reduce((acc, tool) => {
     if (!acc[tool.category]) acc[tool.category] = [];
     acc[tool.category].push(tool);
     return acc;
   }, {});
-  
+
   let markdown = `# FastMCP Tool Reference
 
 This document provides comprehensive reference documentation for all tools available in the Unified EasyPost-Veeqo MCP Server.
@@ -131,31 +131,31 @@ This document provides comprehensive reference documentation for all tools avail
       markdown += `  - [${tool.name}](#${tool.name.replace(/_/g, '-')})\n`;
     }
   }
-  
+
   markdown += '\n---\n\n';
-  
+
   // Generate tool documentation
   for (const [category, categoryTools] of Object.entries(categorizedTools)) {
     markdown += `## ${category}\n\n`;
-    
+
     for (const tool of categoryTools) {
       markdown += `### ${tool.name}\n\n`;
       markdown += `${tool.description}\n\n`;
       markdown += `**Parameters:**\n\`\`\`typescript\n${tool.parameters}\n\`\`\`\n\n`;
-      
+
       // Add usage example
       markdown += `**Example Usage:**\n\`\`\`json\n`;
       markdown += generateToolExample(tool.name);
       markdown += `\n\`\`\`\n\n`;
-      
+
       markdown += '---\n\n';
     }
   }
-  
+
   const outputPath = path.join(projectRoot, 'docs/tool-reference.md');
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, markdown);
-  
+
   console.log(`✅ Generated tool reference at ${outputPath}`);
 }
 
@@ -164,7 +164,7 @@ This document provides comprehensive reference documentation for all tools avail
  */
 async function generateApiDocs() {
   console.log('📝 Generating API documentation...');
-  
+
   const markdown = `# API Documentation
 
 ## Overview
@@ -272,7 +272,7 @@ See the [Integration Guide](./integration-guide.md) for comprehensive examples o
   const outputPath = path.join(projectRoot, 'docs/api-documentation.md');
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, markdown);
-  
+
   console.log(`✅ Generated API documentation at ${outputPath}`);
 }
 
@@ -281,7 +281,7 @@ See the [Integration Guide](./integration-guide.md) for comprehensive examples o
  */
 async function generateIntegrationGuide() {
   console.log('📝 Generating integration guide...');
-  
+
   const markdown = `# Integration Guide
 
 ## Claude Desktop Integration
@@ -468,7 +468,7 @@ The server provides health check endpoints:
   const outputPath = path.join(projectRoot, 'docs/integration-guide.md');
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, markdown);
-  
+
   console.log(`✅ Generated integration guide at ${outputPath}`);
 }
 
@@ -477,7 +477,7 @@ The server provides health check endpoints:
  */
 async function generateSchemaDocs() {
   console.log('📝 Generating schema documentation...');
-  
+
   const markdown = `# Schema Documentation
 
 ## Common Types
@@ -644,7 +644,7 @@ interface ErrorResponse {
   const outputPath = path.join(projectRoot, 'docs/schema-documentation.md');
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, markdown);
-  
+
   console.log(`✅ Generated schema documentation at ${outputPath}`);
 }
 
@@ -652,11 +652,25 @@ interface ErrorResponse {
  * Helper functions
  */
 function getToolCategory(toolName) {
-  if (toolName.includes('shipping') || toolName.includes('rate') || toolName.includes('label') || toolName.includes('track')) {
+  if (
+    toolName.includes('shipping') ||
+    toolName.includes('rate') ||
+    toolName.includes('label') ||
+    toolName.includes('track')
+  ) {
     return 'Shipping Tools';
-  } else if (toolName.includes('inventory') || toolName.includes('stock') || toolName.includes('fulfill') || toolName.includes('order')) {
+  } else if (
+    toolName.includes('inventory') ||
+    toolName.includes('stock') ||
+    toolName.includes('fulfill') ||
+    toolName.includes('order')
+  ) {
     return 'Inventory Tools';
-  } else if (toolName.includes('optimize') || toolName.includes('analyze') || toolName.includes('ai')) {
+  } else if (
+    toolName.includes('optimize') ||
+    toolName.includes('analyze') ||
+    toolName.includes('ai')
+  ) {
     return 'AI-Powered Tools';
   } else if (toolName.includes('address') || toolName.includes('validate')) {
     return 'Validation Tools';
@@ -667,37 +681,45 @@ function getToolCategory(toolName) {
 
 function generateToolExample(toolName) {
   const examples = {
-    calculate_shipping_rates: JSON.stringify({
-      from_address: {
-        name: "John Doe",
-        street1: "123 Main St",
-        city: "San Francisco",
-        state: "CA",
-        zip: "94105",
-        country: "US"
+    calculate_shipping_rates: JSON.stringify(
+      {
+        from_address: {
+          name: 'John Doe',
+          street1: '123 Main St',
+          city: 'San Francisco',
+          state: 'CA',
+          zip: '94105',
+          country: 'US',
+        },
+        to_address: {
+          name: 'Jane Smith',
+          street1: '456 Oak Ave',
+          city: 'New York',
+          state: 'NY',
+          zip: '10001',
+          country: 'US',
+        },
+        parcel: {
+          length: 12,
+          width: 9,
+          height: 6,
+          weight: 16,
+        },
       },
-      to_address: {
-        name: "Jane Smith", 
-        street1: "456 Oak Ave",
-        city: "New York",
-        state: "NY", 
-        zip: "10001",
-        country: "US"
+      null,
+      2
+    ),
+    get_inventory_levels: JSON.stringify(
+      {
+        product_ids: ['12345', '67890'],
+        location_ids: ['339686'],
       },
-      parcel: {
-        length: 12,
-        width: 9,
-        height: 6,
-        weight: 16
-      }
-    }, null, 2),
-    get_inventory_levels: JSON.stringify({
-      product_ids: ["12345", "67890"],
-      location_ids: ["339686"]
-    }, null, 2),
+      null,
+      2
+    ),
   };
-  
-  return examples[toolName] || JSON.stringify({ example: "Example not available" }, null, 2);
+
+  return examples[toolName] || JSON.stringify({ example: 'Example not available' }, null, 2);
 }
 
 /**
@@ -705,19 +727,19 @@ function generateToolExample(toolName) {
  */
 async function main() {
   console.log('🚀 Starting documentation generation...');
-  
+
   try {
     // Extract documentation from source code
     const tools = await extractToolDocs();
     const resources = await extractResourceDocs();
     const prompts = await extractPromptDocs();
-    
+
     // Generate documentation files
     await generateToolReference(tools);
     await generateApiDocs();
     await generateIntegrationGuide();
     await generateSchemaDocs();
-    
+
     // Create index file
     const indexContent = `# Documentation Index
 
@@ -739,13 +761,12 @@ Generated on ${new Date().toISOString()}
 - Resources documented: ${resources.length}  
 - Prompts documented: ${prompts.length}
 `;
-    
+
     const indexPath = path.join(projectRoot, 'docs/README.md');
     await fs.writeFile(indexPath, indexContent);
-    
+
     console.log('✅ Documentation generation completed successfully!');
     console.log('📁 Documentation available in ./docs/');
-    
   } catch (error) {
     console.error('❌ Documentation generation failed:', error);
     process.exit(1);

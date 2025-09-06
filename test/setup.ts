@@ -72,7 +72,7 @@ expect.extend({
     }
 
     const response = received as Record<string, unknown>;
-    
+
     if (!response.jsonrpc || response.jsonrpc !== '2.0') {
       return {
         message: () => 'Expected jsonrpc: "2.0"',
@@ -109,7 +109,7 @@ expect.extend({
     }
 
     const result = received as Record<string, unknown>;
-    
+
     if (!result.content || !Array.isArray(result.content)) {
       return {
         message: () => 'Expected content array',

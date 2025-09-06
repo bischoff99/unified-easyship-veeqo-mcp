@@ -62,7 +62,7 @@ describe('FastMCP Server Integration', () => {
   describe('Tool Registration', () => {
     it('should register all expected shipping tools', async () => {
       const tools = await server.listTools();
-      
+
       const expectedTools = [
         'calculate_shipping_rates',
         'create_shipping_label',
@@ -72,14 +72,14 @@ describe('FastMCP Server Integration', () => {
         'validate_address_with_suggestions',
       ];
 
-      expectedTools.forEach(toolName => {
-        expect(tools.some(tool => tool.name === toolName)).toBe(true);
+      expectedTools.forEach((toolName) => {
+        expect(tools.some((tool) => tool.name === toolName)).toBe(true);
       });
     });
 
     it('should register all expected inventory tools', async () => {
       const tools = await server.listTools();
-      
+
       const expectedTools = [
         'get_inventory_levels',
         'update_inventory_levels',
@@ -89,21 +89,18 @@ describe('FastMCP Server Integration', () => {
         'check_low_stock',
       ];
 
-      expectedTools.forEach(toolName => {
-        expect(tools.some(tool => tool.name === toolName)).toBe(true);
+      expectedTools.forEach((toolName) => {
+        expect(tools.some((tool) => tool.name === toolName)).toBe(true);
       });
     });
 
     it('should register AI-powered tools', async () => {
       const tools = await server.listTools();
-      
-      const expectedTools = [
-        'optimize_shipping',
-        'analyze_shipping_code',
-      ];
 
-      expectedTools.forEach(toolName => {
-        expect(tools.some(tool => tool.name === toolName)).toBe(true);
+      const expectedTools = ['optimize_shipping', 'analyze_shipping_code'];
+
+      expectedTools.forEach((toolName) => {
+        expect(tools.some((tool) => tool.name === toolName)).toBe(true);
       });
     });
   });
@@ -256,20 +253,20 @@ describe('FastMCP Server Integration', () => {
   describe('Resource Templates', () => {
     it('should load shipping rates resource', async () => {
       const resource = await server.loadResource('shipping://rates/94105/10001');
-      
+
       expect(resource).toBeDefined();
       expect(resource.text).toBeDefined();
-      
+
       const data = JSON.parse(resource.text);
       expect(Array.isArray(data)).toBe(true);
     });
 
     it('should load inventory status resource', async () => {
       const resource = await server.loadResource('inventory://status/123456');
-      
+
       expect(resource).toBeDefined();
       expect(resource.text).toBeDefined();
-      
+
       const data = JSON.parse(resource.text);
       expect(data).toHaveProperty('available_quantity');
     });

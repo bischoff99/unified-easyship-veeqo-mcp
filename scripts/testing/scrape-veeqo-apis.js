@@ -22,39 +22,80 @@ async function scrapeVeeqoAPIs() {
   // Common API endpoint patterns to test
   const endpointPatterns = [
     // Core resources
-    '/products', '/orders', '/locations', '/customers', '/suppliers',
-    '/inventory', '/inventory_levels', '/stock_levels', '/allocations',
-    '/shipments', '/returns', '/refunds', '/payments', '/invoices',
+    '/products',
+    '/orders',
+    '/locations',
+    '/customers',
+    '/suppliers',
+    '/inventory',
+    '/inventory_levels',
+    '/stock_levels',
+    '/allocations',
+    '/shipments',
+    '/returns',
+    '/refunds',
+    '/payments',
+    '/invoices',
 
     // Product related
-    '/products/variants', '/products/images', '/products/categories',
-    '/products/brands', '/products/tags', '/products/attributes',
+    '/products/variants',
+    '/products/images',
+    '/products/categories',
+    '/products/brands',
+    '/products/tags',
+    '/products/attributes',
 
     // Order related
-    '/orders/line_items', '/orders/fulfillments', '/orders/shipments',
-    '/orders/returns', '/orders/refunds', '/orders/payments',
+    '/orders/line_items',
+    '/orders/fulfillments',
+    '/orders/shipments',
+    '/orders/returns',
+    '/orders/refunds',
+    '/orders/payments',
 
     // Location related
-    '/locations/inventory', '/locations/allocations', '/warehouses',
+    '/locations/inventory',
+    '/locations/allocations',
+    '/warehouses',
 
     // Customer related
-    '/customers/addresses', '/customers/orders', '/contacts',
+    '/customers/addresses',
+    '/customers/orders',
+    '/contacts',
 
     // Shipping related
-    '/shipping_methods', '/carriers', '/tracking', '/labels',
+    '/shipping_methods',
+    '/carriers',
+    '/tracking',
+    '/labels',
 
     // Analytics and reports
-    '/analytics', '/reports', '/metrics', '/dashboard',
+    '/analytics',
+    '/reports',
+    '/metrics',
+    '/dashboard',
 
     // Settings and configuration
-    '/settings', '/config', '/webhooks', '/integrations',
-    '/channels', '/marketplaces', '/tax_rates', '/price_lists',
+    '/settings',
+    '/config',
+    '/webhooks',
+    '/integrations',
+    '/channels',
+    '/marketplaces',
+    '/tax_rates',
+    '/price_lists',
 
     // User and permissions
-    '/users', '/permissions', '/roles', '/teams',
+    '/users',
+    '/permissions',
+    '/roles',
+    '/teams',
 
     // System
-    '/health', '/status', '/version', '/ping'
+    '/health',
+    '/status',
+    '/version',
+    '/ping',
   ];
 
   console.log('1. Testing Core Endpoints...\n');
@@ -77,14 +118,19 @@ async function scrapeVeeqoAPIs() {
       console.log('');
 
       // Add delay to respect rate limits
-      await new Promise(resolve => setTimeout(resolve, 200));
-
+      await new Promise((resolve) => setTimeout(resolve, 200));
     } catch (error) {
-      const status = error.message.includes('404') ? 'Not Found' :
-                    error.message.includes('401') ? 'Unauthorized' :
-                    error.message.includes('403') ? 'Forbidden' :
-                    error.message.includes('429') ? 'Rate Limited' :
-                    error.message.includes('500') ? 'Server Error' : 'Error';
+      const status = error.message.includes('404')
+        ? 'Not Found'
+        : error.message.includes('401')
+          ? 'Unauthorized'
+          : error.message.includes('403')
+            ? 'Forbidden'
+            : error.message.includes('429')
+              ? 'Rate Limited'
+              : error.message.includes('500')
+                ? 'Server Error'
+                : 'Error';
 
       console.log(`   ❌ ${status}: ${endpoint}`);
 
@@ -94,7 +140,7 @@ async function scrapeVeeqoAPIs() {
         status: status,
         error: error.message,
         fields: [],
-        sampleData: null
+        sampleData: null,
       });
     }
   }
@@ -107,14 +153,15 @@ async function scrapeVeeqoAPIs() {
     .filter(([_, analysis]) => analysis.type !== 'error')
     .map(([endpoint, _]) => endpoint);
 
-  for (const endpoint of successfulEndpoints.slice(0, 5)) { // Test top 5 successful endpoints
+  for (const endpoint of successfulEndpoints.slice(0, 5)) {
+    // Test top 5 successful endpoints
     const variations = [
       `${endpoint}?limit=1`,
       `${endpoint}?page=1&limit=1`,
       `${endpoint}?include=all`,
       `${endpoint}?fields=id,title,name`,
       `${endpoint}?sort=created_at`,
-      `${endpoint}?order=desc`
+      `${endpoint}?order=desc`,
     ];
 
     for (const variation of variations) {
@@ -127,8 +174,7 @@ async function scrapeVeeqoAPIs() {
         console.log(`   📊 Structure: ${analysis.type}`);
         console.log('');
 
-        await new Promise(resolve => setTimeout(resolve, 200));
-
+        await new Promise((resolve) => setTimeout(resolve, 200));
       } catch (error) {
         console.log(`   ❌ Failed: ${variation}`);
       }
@@ -144,8 +190,12 @@ async function scrapeVeeqoAPIs() {
   console.log('\n' + '='.repeat(80));
   console.log('✅ Veeqo API Scraping Completed!');
   console.log(`📊 Discovered ${discoveredEndpoints.size} endpoints`);
-  console.log(`✅ Successful: ${Array.from(discoveredEndpoints.values()).filter(a => a.type !== 'error').length}`);
-  console.log(`❌ Failed: ${Array.from(discoveredEndpoints.values()).filter(a => a.type === 'error').length}`);
+  console.log(
+    `✅ Successful: ${Array.from(discoveredEndpoints.values()).filter((a) => a.type !== 'error').length}`
+  );
+  console.log(
+    `❌ Failed: ${Array.from(discoveredEndpoints.values()).filter((a) => a.type === 'error').length}`
+  );
 }
 
 function analyzeResponse(endpoint, response) {
@@ -181,16 +231,18 @@ function analyzeResponse(endpoint, response) {
     type,
     fields,
     sampleData,
-    endpoint
+    endpoint,
   };
 }
 
 function generateAPIDocumentation(endpoints) {
-  const successful = Array.from(endpoints.entries())
-    .filter(([_, analysis]) => analysis.type !== 'error');
+  const successful = Array.from(endpoints.entries()).filter(
+    ([_, analysis]) => analysis.type !== 'error'
+  );
 
-  const failed = Array.from(endpoints.entries())
-    .filter(([_, analysis]) => analysis.type === 'error');
+  const failed = Array.from(endpoints.entries()).filter(
+    ([_, analysis]) => analysis.type === 'error'
+  );
 
   console.log('📚 VEEQO API DOCUMENTATION');
   console.log('='.repeat(50));

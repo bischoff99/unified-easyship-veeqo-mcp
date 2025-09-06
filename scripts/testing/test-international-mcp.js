@@ -21,34 +21,34 @@ async function testInternationalMCP() {
   console.log('1. Testing Domestic Order (no customs required)...');
   await testMCPTool('create_shipping_label', {
     from_address: {
-      name: "Sofia Martinez",
-      company: "Melrose Trading Post Vintage",
-      street1: "7850 Melrose Ave",
-      city: "Los Angeles",
-      state: "CA",
-      zip: "90046",
-      country: "US",
-      phone: "12135591982",
-      email: "sofia.martinez@melrosetradingpost.com"
+      name: 'Sofia Martinez',
+      company: 'Melrose Trading Post Vintage',
+      street1: '7850 Melrose Ave',
+      city: 'Los Angeles',
+      state: 'CA',
+      zip: '90046',
+      country: 'US',
+      phone: '12135591982',
+      email: 'sofia.martinez@melrosetradingpost.com',
     },
     to_address: {
-      name: "John Doe",
-      street1: "123 Main St",
-      city: "New York",
-      state: "NY",
-      zip: "10001",
-      country: "US",
-      phone: "12125551234",
-      email: "john.doe@example.com"
+      name: 'John Doe',
+      street1: '123 Main St',
+      city: 'New York',
+      state: 'NY',
+      zip: '10001',
+      country: 'US',
+      phone: '12125551234',
+      email: 'john.doe@example.com',
     },
     parcel: {
       length: 12,
       width: 10,
       height: 8,
-      weight: 2.0
+      weight: 2.0,
     },
-    carrier: "USPS",
-    service: "Priority"
+    carrier: 'USPS',
+    service: 'Priority',
   });
 
   console.log('\n' + '='.repeat(60) + '\n');
@@ -57,35 +57,35 @@ async function testInternationalMCP() {
   console.log('2. Testing International Order WITHOUT customs (should fail)...');
   await testMCPTool('create_shipping_label', {
     from_address: {
-      name: "Sofia Martinez",
-      company: "Melrose Trading Post Vintage",
-      street1: "7850 Melrose Ave",
-      city: "Los Angeles",
-      state: "CA",
-      zip: "90046",
-      country: "US",
-      phone: "12135591982",
-      email: "sofia.martinez@melrosetradingpost.com"
+      name: 'Sofia Martinez',
+      company: 'Melrose Trading Post Vintage',
+      street1: '7850 Melrose Ave',
+      city: 'Los Angeles',
+      state: 'CA',
+      zip: '90046',
+      country: 'US',
+      phone: '12135591982',
+      email: 'sofia.martinez@melrosetradingpost.com',
     },
     to_address: {
-      name: "DANOND CORKE",
-      street1: "APARTMENT 3 - YORK MILL",
-      street2: "WEST STREET",
-      city: "SHELF HALIFAX",
-      state: "WEST YORKSHIRE",
-      zip: "HX3 7JQ",
-      country: "GB",
-      phone: "447418874913",
-      email: "damondcorke8829@gmail.com"
+      name: 'DANOND CORKE',
+      street1: 'APARTMENT 3 - YORK MILL',
+      street2: 'WEST STREET',
+      city: 'SHELF HALIFAX',
+      state: 'WEST YORKSHIRE',
+      zip: 'HX3 7JQ',
+      country: 'GB',
+      phone: '447418874913',
+      email: 'damondcorke8829@gmail.com',
     },
     parcel: {
       length: 12,
       width: 10,
       height: 8,
-      weight: 97.6
+      weight: 97.6,
     },
-    carrier: "FedEx",
-    service: "FEDEX_INTERNATIONAL_PRIORITY_EXPRESS"
+    carrier: 'FedEx',
+    service: 'FEDEX_INTERNATIONAL_PRIORITY_EXPRESS',
   });
 
   console.log('\n' + '='.repeat(60) + '\n');
@@ -94,61 +94,61 @@ async function testInternationalMCP() {
   console.log('3. Testing International Order WITH customs (should work)...');
   await testMCPTool('create_shipping_label', {
     from_address: {
-      name: "Sofia Martinez",
-      company: "Melrose Trading Post Vintage",
-      street1: "7850 Melrose Ave",
-      city: "Los Angeles",
-      state: "CA",
-      zip: "90046",
-      country: "US",
-      phone: "12135591982",
-      email: "sofia.martinez@melrosetradingpost.com"
+      name: 'Sofia Martinez',
+      company: 'Melrose Trading Post Vintage',
+      street1: '7850 Melrose Ave',
+      city: 'Los Angeles',
+      state: 'CA',
+      zip: '90046',
+      country: 'US',
+      phone: '12135591982',
+      email: 'sofia.martinez@melrosetradingpost.com',
     },
     to_address: {
-      name: "DANOND CORKE",
-      street1: "APARTMENT 3 - YORK MILL",
-      street2: "WEST STREET",
-      city: "SHELF HALIFAX",
-      state: "WEST YORKSHIRE",
-      zip: "HX3 7JQ",
-      country: "GB",
-      phone: "447418874913",
-      email: "damondcorke8829@gmail.com"
+      name: 'DANOND CORKE',
+      street1: 'APARTMENT 3 - YORK MILL',
+      street2: 'WEST STREET',
+      city: 'SHELF HALIFAX',
+      state: 'WEST YORKSHIRE',
+      zip: 'HX3 7JQ',
+      country: 'GB',
+      phone: '447418874913',
+      email: 'damondcorke8829@gmail.com',
     },
     parcel: {
       length: 12,
       width: 10,
       height: 8,
-      weight: 97.6
+      weight: 97.6,
     },
-    carrier: "FedEx",
-    service: "FEDEX_INTERNATIONAL_PRIORITY_EXPRESS",
+    carrier: 'FedEx',
+    service: 'FEDEX_INTERNATIONAL_PRIORITY_EXPRESS',
     customs_info: {
-      contents_type: "merchandise",
-      contents_explanation: "Vintage clothing items",
+      contents_type: 'merchandise',
+      contents_explanation: 'Vintage clothing items',
       customs_items: [
         {
-          description: "Vintage clothing items",
+          description: 'Vintage clothing items',
           quantity: 4,
           weight: 97.6,
           value: 95.0,
-          currency: "USD",
-          origin_country: "US",
-          hs_tariff_number: "6203434010"
-        }
+          currency: 'USD',
+          origin_country: 'US',
+          hs_tariff_number: '6203434010',
+        },
       ],
       customs_certify: true,
-      customs_signer: "Sofia Martinez",
-      non_delivery_option: "return",
-      restriction_type: "none"
-    }
+      customs_signer: 'Sofia Martinez',
+      non_delivery_option: 'return',
+      restriction_type: 'none',
+    },
   });
 }
 
 async function testMCPTool(toolName, params) {
   return new Promise((resolve) => {
     const server = spawn('node', [serverPath], {
-      stdio: ['pipe', 'pipe', 'pipe']
+      stdio: ['pipe', 'pipe', 'pipe'],
     });
 
     let output = '';
@@ -185,8 +185,8 @@ async function testMCPTool(toolName, params) {
       method: 'tools/call',
       params: {
         name: toolName,
-        arguments: params
-      }
+        arguments: params,
+      },
     };
 
     server.stdin.write(JSON.stringify(request) + '\n');
