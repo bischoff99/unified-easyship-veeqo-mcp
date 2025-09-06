@@ -4,7 +4,12 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { EasyPostClient } from '@/services/clients/easypost-enhanced';
-import { mockEasyPostAddress, mockEasyPostParcel, mockEasyPostRates, mockShippingLabel } from '@test/mocks/easypost';
+import {
+  mockEasyPostAddress,
+  mockEasyPostParcel,
+  mockEasyPostRates,
+  mockShippingLabel,
+} from '@test/mocks/easypost';
 
 // Mock the config
 vi.mock('@/config/index.js', () => ({
@@ -45,9 +50,10 @@ describe('EasyPostClient', () => {
       mockRequest.mockResolvedValueOnce({
         statusCode: 200,
         body: {
-          json: () => Promise.resolve({
-            rates: mockEasyPostRates,
-          }),
+          json: () =>
+            Promise.resolve({
+              rates: mockEasyPostRates,
+            }),
         },
       });
 
@@ -70,12 +76,13 @@ describe('EasyPostClient', () => {
       mockRequest.mockResolvedValueOnce({
         statusCode: 400,
         body: {
-          json: () => Promise.resolve({
-            error: {
-              message: 'Invalid address',
-              code: 'ADDRESS.INVALID',
-            },
-          }),
+          json: () =>
+            Promise.resolve({
+              error: {
+                message: 'Invalid address',
+                code: 'ADDRESS.INVALID',
+              },
+            }),
         },
       });
 
@@ -123,12 +130,13 @@ describe('EasyPostClient', () => {
       mockRequest.mockResolvedValueOnce({
         statusCode: 422,
         body: {
-          json: () => Promise.resolve({
-            error: {
-              message: 'Insufficient funds',
-              code: 'BILLING.INSUFFICIENT_FUNDS',
-            },
-          }),
+          json: () =>
+            Promise.resolve({
+              error: {
+                message: 'Insufficient funds',
+                code: 'BILLING.INSUFFICIENT_FUNDS',
+              },
+            }),
         },
       });
 
@@ -178,13 +186,14 @@ describe('EasyPostClient', () => {
       mockRequest.mockResolvedValueOnce({
         statusCode: 200,
         body: {
-          json: () => Promise.resolve({
-            id: 'adr_test123',
-            verifications: {
-              zip4: { success: false, errors: [{ message: 'Invalid ZIP code' }] },
-              delivery: { success: false, errors: [{ message: 'Address not deliverable' }] },
-            },
-          }),
+          json: () =>
+            Promise.resolve({
+              id: 'adr_test123',
+              verifications: {
+                zip4: { success: false, errors: [{ message: 'Invalid ZIP code' }] },
+                delivery: { success: false, errors: [{ message: 'Address not deliverable' }] },
+              },
+            }),
         },
       });
 
@@ -231,12 +240,13 @@ describe('EasyPostClient', () => {
       mockRequest.mockResolvedValueOnce({
         statusCode: 404,
         body: {
-          json: () => Promise.resolve({
-            error: {
-              message: 'Tracking number not found',
-              code: 'TRACKING.NOT_FOUND',
-            },
-          }),
+          json: () =>
+            Promise.resolve({
+              error: {
+                message: 'Tracking number not found',
+                code: 'TRACKING.NOT_FOUND',
+              },
+            }),
         },
       });
 
@@ -260,12 +270,13 @@ describe('EasyPostClient', () => {
           'retry-after': '60',
         },
         body: {
-          json: () => Promise.resolve({
-            error: {
-              message: 'Rate limit exceeded',
-              code: 'RATE_LIMIT.EXCEEDED',
-            },
-          }),
+          json: () =>
+            Promise.resolve({
+              error: {
+                message: 'Rate limit exceeded',
+                code: 'RATE_LIMIT.EXCEEDED',
+              },
+            }),
         },
       });
 

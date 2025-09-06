@@ -56,6 +56,7 @@ unified-easyship-veeqo-mcp/
 ## 🎯 **Key Directories:**
 
 ### **📁 src/** - Source Code
+
 - **server/**: MCP server implementation
 - **services/**: Business logic and API clients
 - **middleware/**: Authentication and health checks
@@ -63,15 +64,18 @@ unified-easyship-veeqo-mcp/
 - **config/**: Configuration management
 
 ### **📁 docs/** - Documentation
+
 - **guides/**: User guides and tutorials
 - **examples/**: Code examples and samples
 - **Root**: Main documentation files
 
 ### **📁 scripts/** - Tools and Scripts
+
 - **testing/**: Test scripts for APIs
 - **webhooks/**: Webhook setup and handlers
 
 ### **📁 tests/** - Unit Tests
+
 - Automated test suites
 - Integration tests
 - Mock data and fixtures
@@ -117,6 +121,7 @@ npm run type-check
 ## 🎯 **Project Status:**
 
 ✅ **Completed:**
+
 - EasyPost integration with international shipping
 - Veeqo integration with inventory management
 - MCP server implementation
@@ -125,10 +130,12 @@ npm run type-check
 - Testing scripts
 
 🔄 **In Progress:**
+
 - Project cleanup and organization
 - Final testing and validation
 
 📋 **Next Steps:**
+
 - Deploy to production
 - Monitor webhook delivery
 - Scale for boutique network

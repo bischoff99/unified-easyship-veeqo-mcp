@@ -53,7 +53,7 @@ async function testVeeqoReadOnly() {
   console.log('5. Testing Get Specific Order (READ ONLY)...');
   console.log('   Note: This will only work if you have existing orders in Veeqo');
   await testMCPTool('get_order', {
-    order_id: "1" // Try with order ID 1, will fail gracefully if doesn't exist
+    order_id: '1', // Try with order ID 1, will fail gracefully if doesn't exist
   });
 
   console.log('\n' + '='.repeat(60) + '\n');
@@ -62,7 +62,7 @@ async function testVeeqoReadOnly() {
   console.log('6. Testing Get Product Inventory (READ ONLY)...');
   console.log('   Note: This will only work if you have products in Veeqo');
   await testMCPTool('get_product_inventory', {
-    product_id: "1" // Try with product ID 1, will fail gracefully if doesn't exist
+    product_id: '1', // Try with product ID 1, will fail gracefully if doesn't exist
   });
 
   console.log('\n' + '='.repeat(60) + '\n');
@@ -110,7 +110,7 @@ async function testVeeqoReadOnly() {
 async function testMCPTool(toolName, params) {
   return new Promise((resolve) => {
     const server = spawn('node', [serverPath], {
-      stdio: ['pipe', 'pipe', 'pipe']
+      stdio: ['pipe', 'pipe', 'pipe'],
     });
 
     let output = '';
@@ -147,8 +147,8 @@ async function testMCPTool(toolName, params) {
       method: 'tools/call',
       params: {
         name: toolName,
-        arguments: params
-      }
+        arguments: params,
+      },
     };
 
     server.stdin.write(JSON.stringify(request) + '\n');

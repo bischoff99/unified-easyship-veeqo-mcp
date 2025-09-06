@@ -66,7 +66,7 @@ export const CreateOrderSchema = z.object({
       product_id: z.string(),
       quantity: z.number().int().positive(),
       price: z.number().positive(),
-    }),
+    })
   ),
   shipping_address: AddressSchema,
   billing_address: AddressSchema.optional(),
@@ -80,7 +80,7 @@ export const OptimizeShippingSchema = z.object({
       to_address: AddressSchema,
       parcel: ParcelSchema,
       priority: z.enum(['standard', 'expedited', 'overnight']).default('standard'),
-    }),
+    })
   ),
   preferences: z
     .object({

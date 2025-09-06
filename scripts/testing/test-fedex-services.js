@@ -43,7 +43,7 @@ async function testFedExServices() {
     console.log(`📊 Found ${rates.length} available rates:\n`);
 
     // Filter and display FedEx rates
-    const fedexRates = rates.filter(rate => rate.carrier === 'FedEx');
+    const fedexRates = rates.filter((rate) => rate.carrier === 'FedEx');
 
     if (fedexRates.length > 0) {
       console.log('🚚 Available FedEx Services:');
@@ -59,24 +59,24 @@ async function testFedExServices() {
         parseFloat(current.rate) < parseFloat(cheapest.rate) ? current : cheapest
       );
 
-      console.log(`💰 Buying cheapest FedEx rate: ${cheapestFedEx.service} - $${cheapestFedEx.rate}`);
+      console.log(
+        `💰 Buying cheapest FedEx rate: ${cheapestFedEx.service} - $${cheapestFedEx.rate}`
+      );
 
       const boughtShipment = await client.Shipment.buy(shipment.id, cheapestFedEx.id);
 
       console.log('✅ Label purchased successfully!');
       console.log(`🏷️  Tracking Code: ${boughtShipment.tracking_code}`);
       console.log(`📋 Label URL: ${boughtShipment.postage_label.label_url}`);
-
     } else {
       console.log('❌ No FedEx rates available for this destination');
       console.log('\n📋 All available carriers:');
-      const carriers = [...new Set(rates.map(rate => rate.carrier))];
-      carriers.forEach(carrier => {
-        const carrierRates = rates.filter(rate => rate.carrier === carrier);
+      const carriers = [...new Set(rates.map((rate) => rate.carrier))];
+      carriers.forEach((carrier) => {
+        const carrierRates = rates.filter((rate) => rate.carrier === carrier);
         console.log(`- ${carrier}: ${carrierRates.length} services`);
       });
     }
-
   } catch (error) {
     console.error('❌ Error:', error.message);
     if (error.details) {

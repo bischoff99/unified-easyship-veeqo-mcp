@@ -87,7 +87,7 @@ export class AuthService {
         adminKey: adminKey.substring(0, 16) + '...',
         userKey: userKey.substring(0, 16) + '...',
       },
-      'Development API keys initialized',
+      'Development API keys initialized'
     );
   }
 
@@ -102,7 +102,7 @@ export class AuthService {
         {
           keyPrefix: apiKey.substring(0, 10) + '...',
         },
-        'Invalid API key attempted',
+        'Invalid API key attempted'
       );
       return null;
     }
@@ -114,7 +114,7 @@ export class AuthService {
           userId: key.userId,
           expiredAt: key.expiresAt,
         },
-        'Expired API key used',
+        'Expired API key used'
       );
       return null;
     }
@@ -128,7 +128,7 @@ export class AuthService {
         userId: key.userId,
         role: key.role,
       },
-      'API key validated',
+      'API key validated'
     );
 
     return key;
@@ -182,7 +182,7 @@ export class AuthService {
         role,
         keyPrefix: key.substring(0, 10) + '...',
       },
-      'New API key created',
+      'New API key created'
     );
 
     return key;
@@ -199,7 +199,7 @@ export class AuthService {
         {
           keyPrefix: apiKey.substring(0, 10) + '...',
         },
-        'API key revoked',
+        'API key revoked'
       );
     }
 
@@ -255,7 +255,7 @@ export class AuthService {
           count: limit.count,
           resetAt: limit.resetAt,
         },
-        'Rate limit exceeded',
+        'Rate limit exceeded'
       );
       return false;
     }

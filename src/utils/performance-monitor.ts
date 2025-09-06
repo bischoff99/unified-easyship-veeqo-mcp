@@ -44,7 +44,7 @@ class PerformanceMonitor {
     TOOL_EXECUTION_WARNING: 3000,
     TOOL_EXECUTION_ERROR: 10000,
     MEMORY_WARNING: 500 * 1024 * 1024, // 500MB
-    MEMORY_ERROR: 1024 * 1024 * 1024,   // 1GB
+    MEMORY_ERROR: 1024 * 1024 * 1024, // 1GB
   };
 
   /**
@@ -60,7 +60,7 @@ class PerformanceMonitor {
   endOperation(
     operationId: string,
     operationName: string,
-    metadata?: Record<string, unknown>,
+    metadata?: Record<string, unknown>
   ): PerformanceMetrics {
     const startTime = this.activeOperations.get(operationId);
     if (!startTime) {
@@ -87,7 +87,7 @@ class PerformanceMonitor {
     endpoint: string,
     statusCode?: number,
     responseSize?: number,
-    retryCount = 0,
+    retryCount = 0
   ): APICallMetrics {
     const baseMetrics = this.endOperation(operationId, `${apiProvider}_${endpoint}`);
 
@@ -115,7 +115,7 @@ class PerformanceMonitor {
     inputSize: number,
     outputSize?: number,
     streamingUsed = false,
-    progressReports = 0,
+    progressReports = 0
   ): ToolExecutionMetrics {
     const baseMetrics = this.endOperation(operationId, `tool_${toolName}`);
 
@@ -158,29 +158,29 @@ class PerformanceMonitor {
       currentUsage: NodeJS.MemoryUsage;
     };
   } {
-    const cutoffTime = Date.now() - (minutesBack * 60 * 1000);
+    const cutoffTime = Date.now() - minutesBack * 60 * 1000;
 
-    const recentMetrics = this.metrics.filter(m => m.timestamp > cutoffTime);
-    const recentApiMetrics = this.apiMetrics.filter(m => m.timestamp > cutoffTime);
-    const recentToolMetrics = this.toolMetrics.filter(m => m.timestamp > cutoffTime);
+    const recentMetrics = this.metrics.filter((m) => m.timestamp > cutoffTime);
+    const recentApiMetrics = this.apiMetrics.filter((m) => m.timestamp > cutoffTime);
+    const recentToolMetrics = this.toolMetrics.filter((m) => m.timestamp > cutoffTime);
 
     // Overall stats
     const totalOperations = recentMetrics.length;
-    const averageDuration = totalOperations > 0
-      ? recentMetrics.reduce((sum, m) => sum + m.duration, 0) / totalOperations
-      : 0;
+    const averageDuration =
+      totalOperations > 0
+        ? recentMetrics.reduce((sum, m) => sum + m.duration, 0) / totalOperations
+        : 0;
 
     const sortedMetrics = [...recentMetrics].sort((a, b) => b.duration - a.duration);
     const slowestOperations = sortedMetrics.slice(0, 5);
 
     // API call stats
     const totalCalls = recentApiMetrics.length;
-    const averageResponseTime = totalCalls > 0
-      ? recentApiMetrics.reduce((sum, m) => sum + m.duration, 0) / totalCalls
-      : 0;
+    const averageResponseTime =
+      totalCalls > 0 ? recentApiMetrics.reduce((sum, m) => sum + m.duration, 0) / totalCalls : 0;
 
-    const errorCalls = recentApiMetrics.filter(m =>
-      m.statusCode && (m.statusCode >= 400 || m.duration > this.THRESHOLDS.API_CALL_ERROR),
+    const errorCalls = recentApiMetrics.filter(
+      (m) => m.statusCode && (m.statusCode >= 400 || m.duration > this.THRESHOLDS.API_CALL_ERROR)
     ).length;
     const errorRate = totalCalls > 0 ? (errorCalls / totalCalls) * 100 : 0;
 
@@ -189,18 +189,22 @@ class PerformanceMonitor {
 
     // Tool stats
     const totalExecutions = recentToolMetrics.length;
-    const averageExecutionTime = totalExecutions > 0
-      ? recentToolMetrics.reduce((sum, m) => sum + m.duration, 0) / totalExecutions
-      : 0;
+    const averageExecutionTime =
+      totalExecutions > 0
+        ? recentToolMetrics.reduce((sum, m) => sum + m.duration, 0) / totalExecutions
+        : 0;
 
-    const toolUsage = recentToolMetrics.reduce((acc, m) => {
-      if (!acc[m.toolName]) {
-        acc[m.toolName] = { count: 0, totalDuration: 0 };
-      }
-      acc[m.toolName].count++;
-      acc[m.toolName].totalDuration += m.duration;
-      return acc;
-    }, {} as Record<string, { count: number; totalDuration: number }>);
+    const toolUsage = recentToolMetrics.reduce(
+      (acc, m) => {
+        if (!acc[m.toolName]) {
+          acc[m.toolName] = { count: 0, totalDuration: 0 };
+        }
+        acc[m.toolName].count++;
+        acc[m.toolName].totalDuration += m.duration;
+        return acc;
+      },
+      {} as Record<string, { count: number; totalDuration: number }>
+    );
 
     const mostUsedTools = Object.entries(toolUsage)
       .map(([name, stats]) => ({
@@ -212,10 +216,11 @@ class PerformanceMonitor {
       .slice(0, 5);
 
     // Memory stats
-    const memoryUsages = recentMetrics.map(m => m.memoryUsage.heapUsed);
-    const averageUsage = memoryUsages.length > 0
-      ? memoryUsages.reduce((sum, usage) => sum + usage, 0) / memoryUsages.length
-      : 0;
+    const memoryUsages = recentMetrics.map((m) => m.memoryUsage.heapUsed);
+    const averageUsage =
+      memoryUsages.length > 0
+        ? memoryUsages.reduce((sum, usage) => sum + usage, 0) / memoryUsages.length
+        : 0;
     const peakUsage = memoryUsages.length > 0 ? Math.max(...memoryUsages) : 0;
     const currentUsage = process.memoryUsage();
 
@@ -283,7 +288,8 @@ class PerformanceMonitor {
         severity: 'warning' as const,
         title: 'Slow Tool Execution',
         description: `Average tool execution time is ${summary.toolStats.averageExecutionTime.toFixed(0)}ms`,
-        recommendation: 'Implement streaming responses and progress reporting for long-running operations',
+        recommendation:
+          'Implement streaming responses and progress reporting for long-running operations',
       });
     }
 
@@ -291,7 +297,9 @@ class PerformanceMonitor {
     if (summary.memoryStats.currentUsage.heapUsed > this.THRESHOLDS.MEMORY_WARNING) {
       recommendations.push({
         category: 'memory' as const,
-        severity: (summary.memoryStats.currentUsage.heapUsed > this.THRESHOLDS.MEMORY_ERROR ? 'critical' : 'warning') as 'info' | 'warning' | 'critical',
+        severity: (summary.memoryStats.currentUsage.heapUsed > this.THRESHOLDS.MEMORY_ERROR
+          ? 'critical'
+          : 'warning') as 'info' | 'warning' | 'critical',
         title: 'High Memory Usage',
         description: `Current heap usage is ${(summary.memoryStats.currentUsage.heapUsed / 1024 / 1024).toFixed(1)}MB`,
         recommendation: 'Review data structures and implement proper cleanup for large operations',
@@ -305,17 +313,17 @@ class PerformanceMonitor {
    * Clear old metrics (keep last 24 hours)
    */
   cleanupMetrics(): void {
-    const cutoffTime = Date.now() - (24 * 60 * 60 * 1000); // 24 hours ago
+    const cutoffTime = Date.now() - 24 * 60 * 60 * 1000; // 24 hours ago
 
-    this.metrics = this.metrics.filter(m => m.timestamp > cutoffTime);
-    this.apiMetrics = this.apiMetrics.filter(m => m.timestamp > cutoffTime);
-    this.toolMetrics = this.toolMetrics.filter(m => m.timestamp > cutoffTime);
+    this.metrics = this.metrics.filter((m) => m.timestamp > cutoffTime);
+    this.apiMetrics = this.apiMetrics.filter((m) => m.timestamp > cutoffTime);
+    this.toolMetrics = this.toolMetrics.filter((m) => m.timestamp > cutoffTime);
   }
 
   private createMetrics(
     operationName: string,
     duration: number,
-    metadata?: Record<string, unknown>,
+    metadata?: Record<string, unknown>
   ): PerformanceMetrics {
     return {
       operationName,
@@ -328,59 +336,80 @@ class PerformanceMonitor {
 
   private checkThresholds(metrics: PerformanceMetrics): void {
     if (metrics.duration > this.THRESHOLDS.API_CALL_ERROR) {
-      logger.error({
-        operation: metrics.operationName,
-        duration: metrics.duration,
-        memoryUsage: metrics.memoryUsage,
-      }, 'Operation exceeded error threshold');
+      logger.error(
+        {
+          operation: metrics.operationName,
+          duration: metrics.duration,
+          memoryUsage: metrics.memoryUsage,
+        },
+        'Operation exceeded error threshold'
+      );
     } else if (metrics.duration > this.THRESHOLDS.API_CALL_WARNING) {
-      logger.warn({
-        operation: metrics.operationName,
-        duration: metrics.duration,
-      }, 'Operation exceeded warning threshold');
+      logger.warn(
+        {
+          operation: metrics.operationName,
+          duration: metrics.duration,
+        },
+        'Operation exceeded warning threshold'
+      );
     }
 
     if (metrics.memoryUsage.heapUsed > this.THRESHOLDS.MEMORY_ERROR) {
-      logger.error({
-        memoryUsage: metrics.memoryUsage,
-        operation: metrics.operationName,
-      }, 'Memory usage exceeded error threshold');
+      logger.error(
+        {
+          memoryUsage: metrics.memoryUsage,
+          operation: metrics.operationName,
+        },
+        'Memory usage exceeded error threshold'
+      );
     } else if (metrics.memoryUsage.heapUsed > this.THRESHOLDS.MEMORY_WARNING) {
-      logger.warn({
-        memoryUsage: metrics.memoryUsage,
-        operation: metrics.operationName,
-      }, 'Memory usage exceeded warning threshold');
+      logger.warn(
+        {
+          memoryUsage: metrics.memoryUsage,
+          operation: metrics.operationName,
+        },
+        'Memory usage exceeded warning threshold'
+      );
     }
   }
 
   private checkAPIThresholds(metrics: APICallMetrics): void {
     if (metrics.retryCount && metrics.retryCount > 0) {
-      logger.warn({
-        apiProvider: metrics.apiProvider,
-        endpoint: metrics.endpoint,
-        retryCount: metrics.retryCount,
-        duration: metrics.duration,
-      }, 'API call required retries');
+      logger.warn(
+        {
+          apiProvider: metrics.apiProvider,
+          endpoint: metrics.endpoint,
+          retryCount: metrics.retryCount,
+          duration: metrics.duration,
+        },
+        'API call required retries'
+      );
     }
 
     if (metrics.statusCode && metrics.statusCode >= 400) {
-      logger.error({
-        apiProvider: metrics.apiProvider,
-        endpoint: metrics.endpoint,
-        statusCode: metrics.statusCode,
-        duration: metrics.duration,
-      }, 'API call failed with error status');
+      logger.error(
+        {
+          apiProvider: metrics.apiProvider,
+          endpoint: metrics.endpoint,
+          statusCode: metrics.statusCode,
+          duration: metrics.duration,
+        },
+        'API call failed with error status'
+      );
     }
   }
 
   private checkToolThresholds(metrics: ToolExecutionMetrics): void {
     if (metrics.duration > this.THRESHOLDS.TOOL_EXECUTION_ERROR) {
-      logger.error({
-        toolName: metrics.toolName,
-        duration: metrics.duration,
-        inputSize: metrics.inputSize,
-        streamingUsed: metrics.streamingUsed,
-      }, 'Tool execution exceeded error threshold');
+      logger.error(
+        {
+          toolName: metrics.toolName,
+          duration: metrics.duration,
+          inputSize: metrics.inputSize,
+          streamingUsed: metrics.streamingUsed,
+        },
+        'Tool execution exceeded error threshold'
+      );
     }
 
     // Recommend streaming for large operations
@@ -389,10 +418,13 @@ class PerformanceMonitor {
       !metrics.streamingUsed &&
       metrics.progressReports === 0
     ) {
-      logger.info({
-        toolName: metrics.toolName,
-        duration: metrics.duration,
-      }, 'Consider implementing streaming or progress reporting for this tool');
+      logger.info(
+        {
+          toolName: metrics.toolName,
+          duration: metrics.duration,
+        },
+        'Consider implementing streaming or progress reporting for this tool'
+      );
     }
   }
 }
@@ -401,6 +433,9 @@ class PerformanceMonitor {
 export const performanceMonitor = new PerformanceMonitor();
 
 // Auto-cleanup every hour
-setInterval(() => {
-  performanceMonitor.cleanupMetrics();
-}, 60 * 60 * 1000);
+setInterval(
+  () => {
+    performanceMonitor.cleanupMetrics();
+  },
+  60 * 60 * 1000
+);

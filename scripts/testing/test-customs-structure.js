@@ -51,54 +51,55 @@ console.log('='.repeat(80));
 
 const exampleOrder = {
   from_address: {
-    name: "Sofia Martinez",
-    company: "Melrose Trading Post Vintage",
-    street1: "7850 Melrose Ave",
-    city: "Los Angeles",
-    state: "CA",
-    zip: "90046",
-    country: "US",
-    phone: "12135591982",
-    email: "sofia.martinez@melrosetradingpost.com"
+    name: 'Sofia Martinez',
+    company: 'Melrose Trading Post Vintage',
+    street1: '7850 Melrose Ave',
+    city: 'Los Angeles',
+    state: 'CA',
+    zip: '90046',
+    country: 'US',
+    phone: '12135591982',
+    email: 'sofia.martinez@melrosetradingpost.com',
   },
   to_address: {
-    name: "DANOND CORKE",
-    street1: "APARTMENT 3 - YORK MILL",
-    street2: "WEST STREET",
-    city: "SHELF HALIFAX",
-    state: "WEST YORKSHIRE",
-    zip: "HX3 7JQ",
-    country: "GB",  // ← This makes it international (US → GB)
-    phone: "447418874913",
-    email: "damondcorke8829@gmail.com"
+    name: 'DANOND CORKE',
+    street1: 'APARTMENT 3 - YORK MILL',
+    street2: 'WEST STREET',
+    city: 'SHELF HALIFAX',
+    state: 'WEST YORKSHIRE',
+    zip: 'HX3 7JQ',
+    country: 'GB', // ← This makes it international (US → GB)
+    phone: '447418874913',
+    email: 'damondcorke8829@gmail.com',
   },
   parcel: {
     length: 12,
     width: 10,
     height: 8,
-    weight: 97.6
+    weight: 97.6,
   },
-  carrier: "FedEx",
-  service: "FEDEX_INTERNATIONAL_PRIORITY_EXPRESS",
-  customs_info: {  // ← REQUIRED for international orders
-    contents_type: "merchandise",
-    contents_explanation: "Vintage clothing items",
+  carrier: 'FedEx',
+  service: 'FEDEX_INTERNATIONAL_PRIORITY_EXPRESS',
+  customs_info: {
+    // ← REQUIRED for international orders
+    contents_type: 'merchandise',
+    contents_explanation: 'Vintage clothing items',
     customs_items: [
       {
-        description: "Vintage clothing items",
+        description: 'Vintage clothing items',
         quantity: 4,
         weight: 97.6,
         value: 95.0,
-        currency: "USD",
-        origin_country: "US",
-        hs_tariff_number: "6203434010"
-      }
+        currency: 'USD',
+        origin_country: 'US',
+        hs_tariff_number: '6203434010',
+      },
     ],
     customs_certify: true,
-    customs_signer: "Sofia Martinez",
-    non_delivery_option: "return",
-    restriction_type: "none"
-  }
+    customs_signer: 'Sofia Martinez',
+    non_delivery_option: 'return',
+    restriction_type: 'none',
+  },
 };
 
 console.log(JSON.stringify(exampleOrder, null, 2));

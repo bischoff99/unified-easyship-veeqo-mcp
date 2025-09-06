@@ -127,7 +127,7 @@ export interface ShippingRecommendation {
  * Optimize shipping using Claude Code SDK
  */
 export async function optimizeShipping(
-  request: ShippingOptimizationRequest,
+  request: ShippingOptimizationRequest
 ): Promise<ShippingOptimizationResult> {
   // Check OAuth authentication instead of API key
   const authStatus = await checkClaudeAuthStatus();
@@ -138,7 +138,7 @@ export async function optimizeShipping(
         isAuthenticated: authStatus.isAuthenticated,
         user: authStatus.user,
       },
-      'AI features disabled or Claude Code not authenticated, returning mock optimization result',
+      'AI features disabled or Claude Code not authenticated, returning mock optimization result'
     );
     return getMockShippingOptimization(request);
   }
@@ -150,7 +150,7 @@ export async function optimizeShipping(
         destination: request.destination,
         weight: request.package.weight,
       },
-      'Optimizing shipping with Claude Code SDK',
+      'Optimizing shipping with Claude Code SDK'
     );
 
     // Use Claude Code SDK for shipping optimization
@@ -198,7 +198,7 @@ Format the response as a structured JSON object.`;
         {
           parseError,
         },
-        'Failed to parse Claude response, using mock result',
+        'Failed to parse Claude response, using mock result'
       );
       return getMockShippingOptimization(request);
     }
@@ -208,7 +208,7 @@ Format the response as a structured JSON object.`;
         error: (error as Error).message,
         request: request,
       },
-      'Failed to optimize shipping with Claude Code SDK',
+      'Failed to optimize shipping with Claude Code SDK'
     );
 
     // Fallback to mock response
@@ -229,7 +229,7 @@ export async function analyzeCode(request: CodeAnalysisRequest): Promise<CodeAna
         isAuthenticated: authStatus.isAuthenticated,
         user: authStatus.user,
       },
-      'AI features disabled or Claude Code not authenticated, returning mock code analysis',
+      'AI features disabled or Claude Code not authenticated, returning mock code analysis'
     );
     return getMockCodeAnalysis(request);
   }
@@ -241,7 +241,7 @@ export async function analyzeCode(request: CodeAnalysisRequest): Promise<CodeAna
         context: request.context,
         codeLength: request.code.length,
       },
-      'Analyzing code with Claude Code SDK',
+      'Analyzing code with Claude Code SDK'
     );
 
     const focusAreas =
@@ -317,7 +317,7 @@ Format the response as a structured JSON object with the following structure:
         {
           parseError,
         },
-        'Failed to parse Claude response, using mock result',
+        'Failed to parse Claude response, using mock result'
       );
       return getMockCodeAnalysis(request);
     }
@@ -327,7 +327,7 @@ Format the response as a structured JSON object with the following structure:
         error: (error as Error).message,
         language: request.language,
       },
-      'Failed to analyze code with Claude Code SDK',
+      'Failed to analyze code with Claude Code SDK'
     );
 
     // Fallback to mock response
@@ -340,7 +340,7 @@ Format the response as a structured JSON object with the following structure:
  */
 export async function generateShippingRecommendations(
   context: string,
-  requirements: string[],
+  requirements: string[]
 ): Promise<ShippingRecommendation[]> {
   if (!config.ai.enableAI || !config.ai.claudeCodeApiKey) {
     logger.warn('AI features disabled or API key missing, returning mock recommendations');
@@ -353,7 +353,7 @@ export async function generateShippingRecommendations(
         context,
         requirementsCount: requirements.length,
       },
-      'Generating shipping recommendations with Claude Code SDK',
+      'Generating shipping recommendations with Claude Code SDK'
     );
 
     const prompt = `Generate shipping optimization recommendations for the following scenario:
@@ -406,7 +406,7 @@ Provide 2-3 high-impact recommendations that address the specific context and re
         {
           parseError,
         },
-        'Failed to parse Claude response, using mock result',
+        'Failed to parse Claude response, using mock result'
       );
       return getMockShippingRecommendations(context, requirements);
     }
@@ -416,7 +416,7 @@ Provide 2-3 high-impact recommendations that address the specific context and re
         error: (error as Error).message,
         context,
       },
-      'Failed to generate shipping recommendations',
+      'Failed to generate shipping recommendations'
     );
 
     // Fallback to mock response
@@ -428,7 +428,7 @@ Provide 2-3 high-impact recommendations that address the specific context and re
  * Mock shipping optimization for development/testing
  */
 function getMockShippingOptimization(
-  request: ShippingOptimizationRequest,
+  request: ShippingOptimizationRequest
 ): ShippingOptimizationResult {
   const baseCost = request.package.weight * 2.5;
   const distanceMultiplier =
@@ -535,7 +535,7 @@ function getMockCodeAnalysis(_request: CodeAnalysisRequest): CodeAnalysisResult 
  */
 function getMockShippingRecommendations(
   _context: string,
-  _requirements: string[],
+  _requirements: string[]
 ): ShippingRecommendation[] {
   return [
     {
@@ -588,7 +588,7 @@ export async function initializeClaudeCodeSDK(): Promise<void> {
         isAuthenticated: authStatus.isAuthenticated,
         error: authStatus.error,
       },
-      'Claude Code SDK initialization skipped - OAuth authentication required',
+      'Claude Code SDK initialization skipped - OAuth authentication required'
     );
     return;
   }
@@ -610,7 +610,7 @@ export async function initializeClaudeCodeSDK(): Promise<void> {
       {
         error: (error as Error).message,
       },
-      'Failed to initialize Claude Code SDK',
+      'Failed to initialize Claude Code SDK'
     );
     throw error;
   }
@@ -641,7 +641,7 @@ export async function checkClaudeCodeSDKHealth(): Promise<boolean> {
       {
         error: (error as Error).message,
       },
-      'Claude Code SDK health check failed',
+      'Claude Code SDK health check failed'
     );
     return false;
   }

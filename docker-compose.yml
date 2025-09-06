@@ -9,7 +9,7 @@ services:
       target: runner
     container_name: unified-easyship-veeqo-mcp
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - PORT=3000
@@ -20,7 +20,13 @@ services:
       - ./logs:/app/logs
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "node", "-e", "import('http').then(http => { const req = http.request({hostname: 'localhost', port: process.env.PORT || 3000, path: '/health', method: 'GET'}, res => { process.exit(res.statusCode === 200 ? 0 : 1) }); req.on('error', () => process.exit(1)); req.end(); })"]
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "import('http').then(http => { const req = http.request({hostname: 'localhost', port: process.env.PORT || 3000, path: '/health', method: 'GET'}, res => { process.exit(res.statusCode === 200 ? 0 : 1) }); req.on('error', () => process.exit(1)); req.end(); })",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -35,7 +41,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: unified-easyship-veeqo-mcp-dev
     ports:
-      - "3001:3000"
+      - '3001:3000'
     environment:
       - NODE_ENV=development
       - PORT=3000
@@ -61,7 +67,7 @@ services:
       target: runner
     container_name: unified-easyship-veeqo-mcp-fastmcp
     ports:
-      - "3002:3000"
+      - '3002:3000'
     environment:
       - NODE_ENV=production
       - PORT=3000
@@ -70,10 +76,16 @@ services:
       - VEEQO_API_KEY=${VEEQO_API_KEY}
     volumes:
       - ./logs:/app/logs
-    command: ["node", "dist/server/fastmcp-server.js"]
+    command: ['node', 'dist/server/fastmcp-server.js']
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "node", "-e", "import('http').then(http => { const req = http.request({hostname: 'localhost', port: process.env.PORT || 3000, path: '/health', method: 'GET'}, res => { process.exit(res.statusCode === 200 ? 0 : 1) }); req.on('error', () => process.exit(1)); req.end(); })"]
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "import('http').then(http => { const req = http.request({hostname: 'localhost', port: process.env.PORT || 3000, path: '/health', method: 'GET'}, res => { process.exit(res.statusCode === 200 ? 0 : 1) }); req.on('error', () => process.exit(1)); req.end(); })",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3

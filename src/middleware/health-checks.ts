@@ -60,8 +60,8 @@ class HealthCheckManager {
     }
 
     // Determine overall status
-    const criticalChecks = results.filter(r => r.status === 'critical');
-    const degradedChecks = results.filter(r => r.status === 'degraded');
+    const criticalChecks = results.filter((r) => r.status === 'critical');
+    const degradedChecks = results.filter((r) => r.status === 'degraded');
 
     let overallStatus: HealthStatus = 'healthy';
     if (criticalChecks.length > 0) {
@@ -122,10 +122,12 @@ class HealthCheckManager {
       let status: HealthStatus = 'healthy';
       let message = `Memory usage: ${heapUsedMB}MB / ${heapTotalMB}MB`;
 
-      if (heapUsedMB > 1024) { // 1GB+
+      if (heapUsedMB > 1024) {
+        // 1GB+
         status = 'critical';
         message += ' - Critical memory usage';
-      } else if (heapUsedMB > 512) { // 512MB+
+      } else if (heapUsedMB > 512) {
+        // 512MB+
         status = 'degraded';
         message += ' - High memory usage';
       }
@@ -147,7 +149,7 @@ class HealthCheckManager {
     // Process uptime check
     this.registerCheck('uptime', async (): Promise<HealthCheckResult> => {
       const uptime = process.uptime();
-      const uptimeHours = Math.round(uptime / 3600 * 100) / 100;
+      const uptimeHours = Math.round((uptime / 3600) * 100) / 100;
 
       return {
         name: 'uptime',
@@ -166,8 +168,8 @@ class HealthCheckManager {
       const summary = performanceMonitor.getPerformanceSummary(5); // Last 5 minutes
       const recommendations = performanceMonitor.getOptimizationRecommendations();
 
-      const criticalIssues = recommendations.filter(r => r.severity === 'critical');
-      const warningIssues = recommendations.filter(r => r.severity === 'warning');
+      const criticalIssues = recommendations.filter((r) => r.severity === 'critical');
+      const warningIssues = recommendations.filter((r) => r.severity === 'warning');
 
       let status: HealthStatus = 'healthy';
       let message = `Performance: ${summary.totalOperations} operations, avg ${Math.round(summary.averageDuration)}ms`;
@@ -195,7 +197,9 @@ class HealthCheckManager {
     // Environment configuration check
     this.registerCheck('environment', async (): Promise<HealthCheckResult> => {
       const requiredEnvVars = ['EASYPOST_API_KEY', 'VEEQO_API_KEY'];
-      const missingVars = requiredEnvVars.filter(varName => !process.env[varName] || process.env[varName] === '');
+      const missingVars = requiredEnvVars.filter(
+        (varName) => !process.env[varName] || process.env[varName] === ''
+      );
 
       let status: HealthStatus = 'healthy';
       let message = 'Environment configuration is valid';
@@ -209,7 +213,10 @@ class HealthCheckManager {
       const easyPostKey = process.env.EASYPOST_API_KEY || '';
       const veeqoKey = process.env.VEEQO_API_KEY || '';
 
-      if (process.env.NODE_ENV === 'production' && (easyPostKey.includes('test') || veeqoKey.includes('test'))) {
+      if (
+        process.env.NODE_ENV === 'production' &&
+        (easyPostKey.includes('test') || veeqoKey.includes('test'))
+      ) {
         status = 'critical';
         message = 'Production environment using test API keys';
       }
@@ -272,7 +279,9 @@ class HealthCheckManager {
         results.veeqo = 'unreachable';
       }
 
-      const unreachableApis = Object.entries(results).filter(([, status]) => status === 'unreachable');
+      const unreachableApis = Object.entries(results).filter(
+        ([, status]) => status === 'unreachable'
+      );
 
       let status: HealthStatus = 'healthy';
       let message = 'All external APIs are reachable';

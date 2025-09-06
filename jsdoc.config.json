@@ -9,10 +9,7 @@
     "recurse": true,
     "readme": "./README.md"
   },
-  "plugins": [
-    "plugins/markdown",
-    "@typescript-eslint/parser"
-  ],
+  "plugins": ["plugins/markdown", "@typescript-eslint/parser"],
   "templates": {
     "cleverLinks": false,
     "monospaceLinks": false
