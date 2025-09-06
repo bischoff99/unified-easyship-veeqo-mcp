@@ -80,7 +80,7 @@ export async function analyzeShippingPatterns(_shippingData: any[]): Promise<Shi
 export async function forecastDemand(
   productIds: string[],
   forecastDays: number = 30,
-  includeSeasonality: boolean = true,
+  includeSeasonality: boolean = true
 ): Promise<DemandForecast[]> {
   if (!config.ai.enableAI || !config.ai.huggingFaceToken) {
     logger.warn('Hugging Face AI is not enabled or token is missing');
@@ -99,23 +99,20 @@ export async function forecastDemand(
       forecast_days: forecastDays,
       predicted_demand: Array.from(
         { length: forecastDays },
-        (_, _i) => Math.floor(Math.random() * 100) + 50,
+        (_, _i) => Math.floor(Math.random() * 100) + 50
       ),
       confidence_interval: {
-        lower: Array.from(
-          { length: forecastDays },
-          (_, _i) => Math.floor(Math.random() * 30) + 30,
-        ),
+        lower: Array.from({ length: forecastDays }, (_, _i) => Math.floor(Math.random() * 30) + 30),
         upper: Array.from(
           { length: forecastDays },
-          (_, _i) => Math.floor(Math.random() * 50) + 100,
+          (_, _i) => Math.floor(Math.random() * 50) + 100
         ),
       },
       seasonality_factors: includeSeasonality
         ? Array.from(
-          { length: forecastDays },
-          (_, i) => 1 + 0.2 * Math.sin((2 * Math.PI * i) / 365),
-        )
+            { length: forecastDays },
+            (_, i) => 1 + 0.2 * Math.sin((2 * Math.PI * i) / 365)
+          )
         : Array.from({ length: forecastDays }, () => 1),
     };
 
@@ -130,7 +127,7 @@ export async function forecastDemand(
  * Currently returns mock data - HF integration disabled
  */
 export async function optimizeInventoryLevels(
-  inventoryData: any[],
+  inventoryData: any[]
 ): Promise<InventoryOptimization[]> {
   if (!config.ai.enableAI || !config.ai.huggingFaceToken) {
     logger.warn('Hugging Face AI is not enabled or token is missing');
@@ -162,7 +159,7 @@ export async function optimizeInventoryLevels(
  */
 export async function generateInsights(
   _data: any,
-  _type: 'shipping' | 'inventory' | 'combined',
+  _type: 'shipping' | 'inventory' | 'combined'
 ): Promise<string> {
   if (!config.ai.enableAI || !config.ai.huggingFaceToken) {
     return 'AI insights are not available. Please configure Hugging Face token.';

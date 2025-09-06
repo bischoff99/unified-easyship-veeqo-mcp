@@ -40,7 +40,7 @@ export function createError(
   code: ErrorCode,
   message: string,
   statusCode?: number,
-  details?: Record<string, unknown>,
+  details?: Record<string, unknown>
 ): McpError {
   const error = new Error(message) as McpError;
   error.code = code;

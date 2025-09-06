@@ -43,7 +43,7 @@ async function setupDeliveryWebhooks() {
       'tracker.updated',
       'shipment.delivered',
       'shipment.exception',
-      'shipment.returned'
+      'shipment.returned',
     ];
 
     for (const event of easyPostEvents) {
@@ -53,8 +53,8 @@ async function setupDeliveryWebhooks() {
         const webhookData = {
           webhook: {
             url: webhookUrl,
-            events: [event]
-          }
+            events: [event],
+          },
         };
 
         const response = await easyPostClient.makeRequest('POST', '/webhooks', webhookData);
@@ -62,7 +62,6 @@ async function setupDeliveryWebhooks() {
         console.log(`   ✅ Success: ${event} webhook created`);
         console.log(`   📍 Webhook ID: ${response.id}`);
         console.log(`   🔗 URL: ${response.url}\n`);
-
       } catch (error) {
         console.log(`   ❌ Failed: ${event} - ${error.message}\n`);
       }
@@ -98,19 +97,24 @@ async function setupDeliveryWebhooks() {
     console.log('   5. Monitor webhook delivery\n');
 
     console.log('📧 Webhook Payload Example:');
-    console.log(JSON.stringify({
-      event: 'tracker.updated',
-      timestamp: '2024-01-15T16:45:00Z',
-      data: {
-        tracking_code: '1Z999AA1234567890',
-        status: 'out_for_delivery',
-        carrier: 'UPS',
-        estimated_delivery: '2024-01-15T18:00:00Z',
-        location: 'Local UPS Facility',
-        order_id: '12345'
-      }
-    }, null, 2));
-
+    console.log(
+      JSON.stringify(
+        {
+          event: 'tracker.updated',
+          timestamp: '2024-01-15T16:45:00Z',
+          data: {
+            tracking_code: '1Z999AA1234567890',
+            status: 'out_for_delivery',
+            carrier: 'UPS',
+            estimated_delivery: '2024-01-15T18:00:00Z',
+            location: 'Local UPS Facility',
+            order_id: '12345',
+          },
+        },
+        null,
+        2
+      )
+    );
   } catch (error) {
     console.error('❌ Error setting up webhooks:', error.message);
   }

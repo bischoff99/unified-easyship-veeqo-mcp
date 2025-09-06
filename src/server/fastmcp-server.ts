@@ -1384,20 +1384,20 @@ server.addTool({
               'CRITICAL STOCK (≤2 days):\n' +
               (criticalStockItems.length > 0
                 ? criticalStockItems
-                  .map(
-                    (item) =>
-                      `- ${item.product_name} (${item.sku}): ${item.available_quantity} units (${item.days_remaining} days remaining)`
-                  )
-                  .join('\n')
+                    .map(
+                      (item) =>
+                        `- ${item.product_name} (${item.sku}): ${item.available_quantity} units (${item.days_remaining} days remaining)`
+                    )
+                    .join('\n')
                 : 'None') +
               `\n\nLOW STOCK (≤${args.threshold_days} days):\n` +
               (lowStockItems.length > 0
                 ? lowStockItems
-                  .map(
-                    (item) =>
-                      `- ${item.product_name} (${item.sku}): ${item.available_quantity} units (${item.days_remaining} days remaining)`
-                  )
-                  .join('\n')
+                    .map(
+                      (item) =>
+                        `- ${item.product_name} (${item.sku}): ${item.available_quantity} units (${item.days_remaining} days remaining)`
+                    )
+                    .join('\n')
                 : 'None') +
               recommendations,
           },

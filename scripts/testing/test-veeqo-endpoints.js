@@ -25,7 +25,7 @@ async function testVeeqoEndpoints() {
     '/stock_levels',
     '/product_inventory',
     '/inventory/levels',
-    '/products/inventory'
+    '/products/inventory',
   ];
 
   console.log('1. Testing Inventory Endpoints...');
@@ -33,7 +33,9 @@ async function testVeeqoEndpoints() {
     try {
       console.log(`   Testing: ${endpoint}`);
       const response = await client.makeRequest('GET', endpoint);
-      console.log(`   ✅ Success: ${endpoint} - Found ${response.length || Object.keys(response).length} items`);
+      console.log(
+        `   ✅ Success: ${endpoint} - Found ${response.length || Object.keys(response).length} items`
+      );
       if (response.length > 0) {
         console.log(`   📊 Sample data:`, JSON.stringify(response[0], null, 2));
       }
@@ -52,7 +54,7 @@ async function testVeeqoEndpoints() {
     '/products?limit=5',
     '/products?page=1&limit=5',
     '/products?include=variants',
-    '/products?include=inventory'
+    '/products?include=inventory',
   ];
 
   for (const endpoint of productEndpoints) {
@@ -86,7 +88,7 @@ async function testVeeqoEndpoints() {
     '/orders?limit=5',
     '/orders?page=1&limit=5',
     '/orders?include=customer',
-    '/orders?include=line_items'
+    '/orders?include=line_items',
   ];
 
   for (const endpoint of orderEndpoints) {

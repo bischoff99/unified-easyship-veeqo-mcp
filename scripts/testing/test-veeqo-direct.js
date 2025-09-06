@@ -61,7 +61,9 @@ async function testVeeqoDirect() {
       const inventory = await client.getInventoryLevels();
       console.log(`   ✅ Success: Found ${inventory.length} inventory records`);
       if (inventory.length > 0) {
-        console.log(`   📊 First inventory: Product ${inventory[0].product_id} at Location ${inventory[0].location_id}`);
+        console.log(
+          `   📊 First inventory: Product ${inventory[0].product_id} at Location ${inventory[0].location_id}`
+        );
       }
     } catch (error) {
       console.log(`   ❌ Error: ${error.message}`);
@@ -75,7 +77,9 @@ async function testVeeqoDirect() {
       const customers = await client.getCustomers();
       console.log(`   ✅ Success: Found ${customers.length} customers`);
       if (customers.length > 0) {
-        console.log(`   👤 First customer: ${customers[0].first_name} ${customers[0].last_name} (ID: ${customers[0].id})`);
+        console.log(
+          `   👤 First customer: ${customers[0].first_name} ${customers[0].last_name} (ID: ${customers[0].id})`
+        );
       }
     } catch (error) {
       console.log(`   ❌ Error: ${error.message}`);
@@ -103,7 +107,9 @@ async function testVeeqoDirect() {
       const shippingMethods = await client.getShippingMethods();
       console.log(`   ✅ Success: Found ${shippingMethods.length} shipping methods`);
       if (shippingMethods.length > 0) {
-        console.log(`   🚚 First shipping method: ${shippingMethods[0].name} (ID: ${shippingMethods[0].id})`);
+        console.log(
+          `   🚚 First shipping method: ${shippingMethods[0].name} (ID: ${shippingMethods[0].id})`
+        );
       }
     } catch (error) {
       console.log(`   ❌ Error: ${error.message}`);
@@ -122,7 +128,6 @@ async function testVeeqoDirect() {
     } catch (error) {
       console.log(`   ❌ Error: ${error.message}`);
     }
-
   } catch (error) {
     console.error('❌ General Error:', error.message);
     if (error.response) {

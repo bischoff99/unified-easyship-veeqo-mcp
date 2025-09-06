@@ -9,17 +9,20 @@ Your Veeqo integration is fully implemented and ready for testing with your prod
 ## 🔑 **How to Test with Your Production Veeqo API Key**
 
 ### **Option 1: Set Environment Variable**
+
 ```bash
 export VEEQO_API_KEY=your_actual_veeqo_api_key_here
 node test-veeqo-production.js
 ```
 
 ### **Option 2: Inline Environment Variable**
+
 ```bash
 VEEQO_API_KEY=your_actual_veeqo_api_key_here node test-veeqo-production.js
 ```
 
 ### **Option 3: Create .env File**
+
 ```bash
 echo "VEEQO_API_KEY=your_actual_veeqo_api_key_here" > .env
 node test-veeqo-production.js
@@ -30,10 +33,13 @@ node test-veeqo-production.js
 ## 🧪 **Available Tests**
 
 ### **1. Production API Test (Recommended)**
+
 ```bash
 VEEQO_API_KEY=your_key node test-veeqo-production.js
 ```
+
 **What it tests:**
+
 - ✅ Locations (warehouses/stores)
 - ✅ Products (inventory items)
 - ✅ Orders (recent orders)
@@ -42,10 +48,13 @@ VEEQO_API_KEY=your_key node test-veeqo-production.js
 - ✅ All tests are READ ONLY (no modifications)
 
 ### **2. Mock Mode Test (Current)**
+
 ```bash
 node test-veeqo-direct.js
 ```
+
 **What it shows:**
+
 - ✅ Mock data structure
 - ✅ API client functionality
 - ✅ Error handling
@@ -56,6 +65,7 @@ node test-veeqo-direct.js
 ## 📋 **What the Tests Will Show You**
 
 ### **✅ Successful API Connection:**
+
 ```
 📦 Testing Veeqo Production API - READ ONLY
 
@@ -100,6 +110,7 @@ node test-veeqo-direct.js
 ```
 
 ### **❌ API Key Issues:**
+
 ```
 ❌ Error: 401 Unauthorized
 📊 Status: 401
@@ -111,6 +122,7 @@ node test-veeqo-direct.js
 ## 🛡️ **Safety Features**
 
 ### **✅ READ ONLY Mode:**
+
 - No inventory updates
 - No order modifications
 - No purchases made
@@ -118,12 +130,14 @@ node test-veeqo-direct.js
 - Only data retrieval
 
 ### **✅ Error Handling:**
+
 - Graceful failure for missing data
 - Clear error messages
 - No system crashes
 - Safe API testing
 
 ### **✅ Production Ready:**
+
 - Real API integration
 - Proper authentication
 - Rate limiting compliance
@@ -136,21 +150,25 @@ node test-veeqo-direct.js
 Once your API key is working, these MCP tools will be available:
 
 ### **📦 Inventory Management:**
+
 - `get_inventory_levels` - View current stock levels
 - `update_inventory_levels` - Update stock quantities
 - `get_product_inventory` - Get inventory for specific product
 
 ### **📋 Order Management:**
+
 - `get_orders` - List all orders
 - `get_order` - Get specific order details
 - `fulfill_order` - Mark order as fulfilled
 - `process_return` - Handle order returns
 
 ### **🏢 Location Management:**
+
 - `get_locations` - List all locations/warehouses
 - `get_warehouses` - Get warehouse information
 
 ### **📊 Analytics:**
+
 - `get_inventory_analytics` - Inventory performance metrics
 - `get_order_analytics` - Order processing analytics
 
@@ -179,16 +197,19 @@ Once your API key is working, these MCP tools will be available:
 ## 🆘 **Troubleshooting**
 
 ### **API Key Not Working:**
+
 - Verify the key is correct in your Veeqo dashboard
 - Check if the key has proper permissions
 - Ensure the key is not expired
 
 ### **No Data Returned:**
+
 - Check if you have data in your Veeqo account
 - Verify the API key has access to your data
 - Check Veeqo API documentation for data requirements
 
 ### **Rate Limit Errors:**
+
 - Veeqo has API rate limits
 - Add delays between requests if needed
 - Consider implementing retry logic

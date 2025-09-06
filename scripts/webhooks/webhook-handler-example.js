@@ -16,8 +16,8 @@ const emailTransporter = nodemailer.createTransporter({
   service: 'gmail', // or your email service
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
+    pass: process.env.EMAIL_PASS,
+  },
 });
 
 // Webhook handler for delivery status changes
@@ -63,7 +63,6 @@ app.post('/webhooks/delivery', async (req, res) => {
     }
 
     res.status(200).send('OK');
-
   } catch (error) {
     console.error('Webhook error:', error);
     res.status(500).send('Error processing webhook');
@@ -82,8 +81,8 @@ async function handleShipmentCreated(data) {
     data: {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
-      carrier: data.carrier
-    }
+      carrier: data.carrier,
+    },
   });
 }
 
@@ -108,8 +107,8 @@ async function handleShipmentPickedUp(data) {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
       carrier: data.carrier,
-      estimatedDelivery: data.estimated_delivery
-    }
+      estimatedDelivery: data.estimated_delivery,
+    },
   });
 }
 
@@ -126,7 +125,7 @@ async function handleTrackerUpdated(data) {
         to: data.customer?.email,
         subject: 'Package In Transit - On the Way!',
         template: 'in_transit',
-        data: { trackingNumber: tracking_code, carrier, location }
+        data: { trackingNumber: tracking_code, carrier, location },
       });
       break;
 
@@ -135,7 +134,7 @@ async function handleTrackerUpdated(data) {
         to: data.customer?.email,
         subject: 'Out for Delivery Today!',
         template: 'out_for_delivery',
-        data: { trackingNumber: tracking_code, carrier, estimatedDelivery }
+        data: { trackingNumber: tracking_code, carrier, estimatedDelivery },
       });
       break;
 
@@ -144,7 +143,7 @@ async function handleTrackerUpdated(data) {
         to: data.customer?.email,
         subject: 'Package Delivered Successfully!',
         template: 'delivered',
-        data: { trackingNumber: tracking_code, carrier, deliveredAt: new Date() }
+        data: { trackingNumber: tracking_code, carrier, deliveredAt: new Date() },
       });
       break;
   }
@@ -163,8 +162,8 @@ async function handleShipmentDelivered(data) {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
       carrier: data.carrier,
-      deliveredAt: data.delivered_at
-    }
+      deliveredAt: data.delivered_at,
+    },
   });
 
   // Update inventory if needed
@@ -184,20 +183,20 @@ async function handleShipmentException(data) {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
       issue: data.message,
-      carrier: data.carrier
-    }
+      carrier: data.carrier,
+    },
   });
 
   // Notify customer of delay
   await sendEmail({
     to: data.customer?.email,
-    subject: 'Delivery Update - We\'re On It!',
+    subject: "Delivery Update - We're On It!",
     template: 'delivery_delay',
     data: {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
-      issue: data.message
-    }
+      issue: data.message,
+    },
   });
 }
 
@@ -216,8 +215,8 @@ async function handleShipmentReturned(data) {
     data: {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
-      reason: data.return_reason
-    }
+      reason: data.return_reason,
+    },
   });
 }
 
@@ -235,7 +234,7 @@ async function sendEmail({ to, subject, template, data }) {
       from: process.env.EMAIL_FROM,
       to,
       subject,
-      html
+      html,
     });
 
     console.log(`📧 Email sent to ${to}: ${subject}`);
@@ -302,7 +301,7 @@ function generateEmailHTML(template, data) {
       <p>Your package for order ${data.orderNumber} has been returned.</p>
       <p>Reason: ${data.reason}</p>
       <p>We'll contact you soon about next steps.</p>
-    `
+    `,
   };
 
   return templates[template] || '<p>Delivery update</p>';

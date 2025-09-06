@@ -57,7 +57,9 @@ async function testVeeqoProduction() {
       if (products.length > 0) {
         console.log(`   📦 Products:`);
         products.slice(0, 5).forEach((product, index) => {
-          console.log(`      ${index + 1}. ${product.title} (ID: ${product.id}, SKU: ${product.sku})`);
+          console.log(
+            `      ${index + 1}. ${product.title} (ID: ${product.id}, SKU: ${product.sku})`
+          );
         });
         if (products.length > 5) {
           console.log(`      ... and ${products.length - 5} more products`);
@@ -81,7 +83,9 @@ async function testVeeqoProduction() {
       if (orders.length > 0) {
         console.log(`   📋 Recent Orders:`);
         orders.slice(0, 3).forEach((order, index) => {
-          console.log(`      ${index + 1}. #${order.order_number} (ID: ${order.id}, Status: ${order.status})`);
+          console.log(
+            `      ${index + 1}. #${order.order_number} (ID: ${order.id}, Status: ${order.status})`
+          );
         });
         if (orders.length > 3) {
           console.log(`      ... and ${orders.length - 3} more orders`);
@@ -138,7 +142,9 @@ async function testVeeqoProduction() {
         console.log(`      Status: ${orderDetails.status}`);
         console.log(`      Total: $${orderDetails.total}`);
         console.log(`      Items: ${orderDetails.line_items?.length || 0}`);
-        console.log(`      Customer: ${orderDetails.customer?.first_name} ${orderDetails.customer?.last_name}`);
+        console.log(
+          `      Customer: ${orderDetails.customer?.first_name} ${orderDetails.customer?.last_name}`
+        );
       } else {
         console.log(`   ⚠️  No orders found to test with`);
       }
@@ -149,7 +155,6 @@ async function testVeeqoProduction() {
         console.log(`   📋 Data: ${JSON.stringify(error.response.data, null, 2)}`);
       }
     }
-
   } catch (error) {
     console.error('❌ General Error:', error.message);
     if (error.response) {

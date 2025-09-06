@@ -15,12 +15,14 @@
 ## 🔧 **Setup Steps:**
 
 ### **1. Get Your EasyPost API Key**
+
 ```bash
 # You need a valid EasyPost API key
 EASYPOST_API_KEY=your_actual_api_key_here
 ```
 
 ### **2. Set Up Your Webhook Server**
+
 ```bash
 # Install dependencies
 npm install express nodemailer
@@ -30,6 +32,7 @@ node webhook-handler-example.js
 ```
 
 ### **3. Configure Webhooks**
+
 ```bash
 # Set your webhook URL
 WEBHOOK_URL=https://your-server.com/webhooks/delivery
@@ -41,24 +44,28 @@ EASYPOST_API_KEY=your_key WEBHOOK_URL=your_url node setup-delivery-webhooks.js
 ## 📧 **Email Notifications You'll Send:**
 
 ### **Order Shipped Email:**
+
 ```
 Subject: Your Order is On the Way!
 Body: Great news! Your vintage jeans shipped with UPS tracking: 1Z999AA1234567890
 ```
 
 ### **Out for Delivery Email:**
+
 ```
 Subject: Out for Delivery Today!
 Body: Your package is out for delivery and should arrive today!
 ```
 
 ### **Delivered Email:**
+
 ```
 Subject: Package Delivered Successfully!
 Body: Your vintage jeans have been delivered! Thanks for shopping with us!
 ```
 
 ### **Delivery Issue Email:**
+
 ```
 Subject: Delivery Update - We're On It!
 Body: We're aware of a delivery issue. We're working to resolve this quickly!
@@ -80,19 +87,20 @@ Body: We're aware of a delivery issue. We're working to resolve this quickly!
 
 ## 📋 **Webhook Events:**
 
-| **Event** | **When It Happens** | **Customer Email** |
-|-----------|-------------------|-------------------|
-| `shipment.created` | Label created | "Order ready to ship" |
-| `shipment.purchased` | Label purchased | "Processing order" |
-| `shipment.picked_up` | Package collected | "Order shipped!" |
-| `tracker.updated` | Status changed | "Delivery update" |
-| `shipment.delivered` | Package delivered | "Delivered!" |
-| `shipment.exception` | Delivery issue | "We're on it!" |
-| `shipment.returned` | Package returned | "Return processed" |
+| **Event**            | **When It Happens** | **Customer Email**    |
+| -------------------- | ------------------- | --------------------- |
+| `shipment.created`   | Label created       | "Order ready to ship" |
+| `shipment.purchased` | Label purchased     | "Processing order"    |
+| `shipment.picked_up` | Package collected   | "Order shipped!"      |
+| `tracker.updated`    | Status changed      | "Delivery update"     |
+| `shipment.delivered` | Package delivered   | "Delivered!"          |
+| `shipment.exception` | Delivery issue      | "We're on it!"        |
+| `shipment.returned`  | Package returned    | "Return processed"    |
 
 ## 🎯 **For Your Boutique Network:**
 
 **Sierra Belle Boutique Example:**
+
 ```
 Customer orders vintage jeans
 ↓

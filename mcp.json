@@ -1,9 +1,7 @@
 {
   "easypost-veeqo": {
     "command": "node",
-    "args": [
-      "./dist/server/fastmcp-server.js"
-    ],
+    "args": ["./dist/server/fastmcp-server.js"],
     "env": {
       "EASYPOST_API_KEY": "",
       "VEEQO_API_KEY": "",
