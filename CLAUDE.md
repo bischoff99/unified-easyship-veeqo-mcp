@@ -1,0 +1,1 @@
+- veqo_easy_mcp_2

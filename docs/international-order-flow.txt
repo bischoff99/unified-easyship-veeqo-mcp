@@ -1,0 +1,45 @@
+🌍 INTERNATIONAL ORDER FLOW DIAGRAM
+=====================================
+
+📦 ORDER CREATION
+├── From: Melrose Trading Post Vintage (LA, CA)
+├── To: DANOND CORKE (Shelf Halifax, UK)
+├── Package: 4x Vintage clothing items ($95, 97.6oz)
+└── Customs: HS Code 6203434010, Origin: US
+
+🔍 RATE CALCULATION
+├── ✅ FedEx International Priority Express: $54.67 (4 days)
+├── ✅ FedEx International Priority: $66.59 (4 days)
+├── ✅ FedEx International Economy: $54.47 (6 days)
+├── ✅ USPS Priority Mail International: $97.20
+├── ✅ USPS Express Mail International: $113.79
+├── ✅ USA Export PBA Export Select: $71.61
+├── ❌ Canada Post: "Outside Canada origin"
+├── ❌ DHL Express: "Doesn't service destination"
+└── ❌ DhlEcs: "Missing customs code"
+
+🏷️ LABEL PURCHASE
+├── Selected: FedEx International Priority Express
+├── Cost: $54.67
+├── Tracking: Generated
+└── Delivery: 4 days guaranteed
+
+📄 DOCUMENT GENERATION
+├── 🖼️ Shipping Label: PNG image (4x6")
+├── 📋 Commercial Invoice: PDF form
+└── ✅ Both submitted electronically
+
+🚚 SHIPMENT READY
+├── Label: ✅ Printed
+├── Invoice: ✅ Generated
+├── Tracking: ✅ Active
+├── Customs: ✅ Compliant
+└── Delivery: 📅 4 days to UK
+
+💡 KEY INSIGHTS:
+- International orders require customs information
+- Multiple carriers available with different rates
+- Commercial invoice automatically generated
+- Some carriers have geographic limitations
+- FedEx provided best value ($54.67 vs $97+ USPS)
+- Full compliance with international shipping regulations

@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(~/bin/cursor:*)",
+      "Bash(~/bin/cursor --install-extension usernamehw.errorlens --force)",
+      "Bash(~/bin/cursor --install-extension eamodio.gitlens --force)",
+      "mcp__filesystem__read_text_file",
+      "Bash(rm:*)",
+      "Bash(npm run lint)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(curl:*)",
+      "Bash(npm run build:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
