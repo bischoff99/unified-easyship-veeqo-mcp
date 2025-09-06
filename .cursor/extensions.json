@@ -1,0 +1,174 @@
+{
+  "recommendations": [
+    // Essential TypeScript & JavaScript
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-next",
+    "xabikos.JavaScriptSnippets",
+    "VisualStudioExptTeam.vscodeintellicode",
+    "VisualStudioExptTeam.intellicode-api-usage-examples",
+
+    // Git & Version Control
+    "eamodio.gitlens",
+    "donjayamanne.githistory",
+    "mhutchie.git-graph",
+    "github.vscode-pull-request-github",
+    "codezombiech.gitignore",
+
+    // Code Quality & Productivity
+    "usernamehw.errorlens",
+    "streetsidesoftware.code-spell-checker",
+    "aaron-bond.better-comments",
+    "naumovs.color-highlight",
+    "oderwat.indent-rainbow",
+    "2gua.rainbow-brackets",
+    "wayou.vscode-todo-highlight",
+    "gruntfuggly.todo-tree",
+    "christian-kohler.path-intellisense",
+    "christian-kohler.npm-intellisense",
+    "formulahendry.auto-rename-tag",
+    "formulahendry.auto-close-tag",
+    "steoates.autoimport",
+
+    // Testing & Debugging
+    "vitest.explorer",
+    "kavod-io.vscode-jest-test-adapter",
+    "ms-vscode.test-adapter-converter",
+    "hbenl.vscode-test-explorer",
+    "msjsdiag.debugger-for-chrome",
+    "ms-vscode.js-debug-nightly",
+
+    // AI & Copilot
+    "github.copilot",
+    "github.copilot-chat",
+    "tabnine.tabnine-vscode",
+    "continue.continue",
+
+    // Docker & DevOps
+    "ms-azuretools.vscode-docker",
+    "ms-vscode-remote.remote-containers",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "redhat.vscode-yaml",
+    "mikestead.dotenv",
+
+    // API Development & Testing
+    "humao.rest-client",
+    "rangav.vscode-thunder-client",
+    "42crunch.vscode-openapi",
+    "arjun.swagger-viewer",
+    "mermade.openapi-lint",
+
+    // Markdown & Documentation
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "bierner.markdown-preview-github-styles",
+    "bierner.markdown-mermaid",
+    "bierner.markdown-emoji",
+    "bierner.markdown-checkbox",
+    "shd101wyy.markdown-preview-enhanced",
+
+    // Icons & Themes
+    "pkief.material-icon-theme",
+    "zhuangtongfa.material-theme",
+    "sdras.night-owl",
+    "dracula-theme.theme-dracula",
+    "equinusocio.vsc-material-theme",
+    "azemoh.one-monokai",
+
+    // Code Navigation & Refactoring
+    "burkeholland.simple-react-snippets",
+    "dsznajder.es7-react-js-snippets",
+    "cpylua.language-postcss",
+    "mrmlnc.vscode-duplicate",
+    "sleistner.vscode-fileutils",
+    "peterjausovec.vscode-explorer-file-icons",
+
+    // Database & Data
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg",
+    "mtxr.sqltools-driver-mysql",
+    "mongodb.mongodb-vscode",
+    "bajdzis.vscode-database",
+
+    // Performance & Analysis
+    "wix.vscode-import-cost",
+    "kisstkondoros.vscode-codemetrics",
+    "pflannery.vscode-versionlens",
+    "yuichinukiyama.vscode-preview-server",
+
+    // Terminal & Shell
+    "tyriar.sort-lines",
+    "tyriar.lorem-ipsum",
+    "ms-vscode.powershell",
+    "timonwong.shellcheck",
+
+    // Project Management
+    "alefragnani.project-manager",
+    "alefragnani.bookmarks",
+    "howardzuo.vscode-favorites",
+
+    // Remote Development
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode-remote.remote-ssh-edit",
+    "ms-vscode-remote.remote-wsl",
+    "ms-vscode-remote.vscode-remote-extensionpack",
+
+    // Node.js Specific
+    "eg2.vscode-npm-script",
+    "jasonnutter.search-node-modules",
+    "bengreenier.vscode-node-readme",
+
+    // Code Formatting & Linting
+    "foxundermoon.shell-format",
+    "timonwong.shellcheck",
+    "johnstoncode.svn-scm",
+
+    // Snippets & Boilerplates
+    "nash.awesome-flutter-snippets",
+    "donjayamanne.jquerysnippets",
+    "abusaidm.html-snippets",
+
+    // Utilities
+    "ritwickdey.liveserver",
+    "ritwickdey.live-sass",
+    "pranaygp.vscode-css-peek",
+    "zignd.html-css-class-completion",
+    "ecmel.vscode-html-css",
+    "nhoizey.gremlins",
+    "vincaslt.highlight-matching-tag",
+    "bradlc.vscode-tailwindcss",
+
+    // Time Tracking & Productivity
+    "wakatime.vscode-wakatime",
+    "softwaredotcom.swdc-vscode",
+
+    // Security & Code Review
+    "snyk-security.snyk-vulnerability-scanner",
+    "42crunch.vscode-openapi",
+
+    // GraphQL
+    "graphql.vscode-graphql",
+    "graphql.vscode-graphql-syntax",
+
+    // CSV & Data Files
+    "mechatroner.rainbow-csv",
+    "janisdd.vscode-edit-csv",
+
+    // Environment & Config
+    "irongeek.vscode-env",
+    "rubbersheep.gi",
+
+    // Fun & Misc
+    "johnpapa.vscode-peacock",
+    "vscode-icons-team.vscode-icons",
+    "coenraads.bracket-pair-colorizer-2"
+  ],
+
+  "unwantedRecommendations": [
+    // Extensions that might conflict or are deprecated
+    "hookyqr.beautify",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "eg2.tslint",
+    "msjsdiag.debugger-for-edge"
+  ]
+}

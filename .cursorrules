@@ -1,0 +1,101 @@
+# Cursor AI Rules for Unified EasyPost-Veeqo MCP Server
+
+## Project Overview
+
+This is a unified MCP (Model Context Protocol) server that integrates EasyPost and Veeqo shipping APIs for comprehensive shipping, inventory, and orchestration capabilities.
+
+## Code Style & Standards
+
+- Use TypeScript with strict type checking
+- Follow ES modules (import/export) syntax
+- Use async/await for all asynchronous operations
+- Implement proper error handling with custom error codes
+- Use pino for structured logging with appropriate log levels
+- Follow RESTful API patterns for external service integration
+
+## Architecture Guidelines
+
+- Keep client classes separate from business logic
+- Use dependency injection for API clients
+- Implement proper retry logic with exponential backoff
+- Use idempotency keys for POST operations
+- Mock responses for development/testing when API key is "mock"
+
+## Environment Variables
+
+- EASYPOST_API_KEY: Required for EasyPost API access (use "mock" for testing)
+- VEEQO_API_KEY: Required for Veeqo API access
+- LOG_LEVEL: Logging level (default: "info")
+- NODE_ENV: Environment mode (development/production)
+
+## API Integration Rules
+
+- Always validate input parameters using Zod schemas
+- Implement proper rate limiting and retry logic
+- Use appropriate HTTP status codes and error messages
+- Handle API timeouts gracefully (30s default)
+- Log all external API calls with request/response details
+
+## MCP Server Guidelines
+
+- Use JSON-RPC 2.0 protocol for all MCP communications
+- Implement proper tool registration and schema validation
+- Return structured responses with appropriate content types
+- Handle tool execution errors gracefully
+- Use UUID for request tracking
+
+## Testing & Development
+
+- Use mock responses when EASYPOST_API_KEY=mock
+- Implement comprehensive error handling
+- Use structured logging for debugging
+- Follow the existing tool pattern for new MCP tools
+
+## Security Considerations
+
+- Never log API keys or sensitive data
+- Use proper authentication headers
+- Implement request validation
+- Handle errors without exposing internal details
+
+## File Organization
+
+- Keep tools in src/tools/ directory
+- Use schemas in src/schemas/ for validation
+- Keep utilities in src/utils/ directory
+- Use proper TypeScript types and interfaces
+
+## Performance
+
+- Implement connection pooling for external APIs
+- Use appropriate timeouts for all requests
+- Cache frequently accessed data when appropriate
+- Monitor and log performance metrics
+
+## AI Integration
+
+- Use Claude Code SDK for shipping optimization
+- Implement AI-powered code analysis
+- Provide intelligent recommendations
+- Use structured prompts for consistent AI responses
+
+## Documentation
+
+- Document all public APIs and interfaces
+- Include examples for complex operations
+- Maintain up-to-date README and API documentation
+- Use JSDoc comments for functions and classes
+
+## Git Workflow
+
+- Use conventional commit messages
+- Create feature branches for new functionality
+- Write descriptive commit messages
+- Use pull requests for code review
+
+## Deployment
+
+- Use Railway for cloud deployment
+- Implement proper health checks
+- Use environment-specific configurations
+- Monitor application performance and errors

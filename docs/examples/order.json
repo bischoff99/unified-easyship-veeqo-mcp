@@ -1,0 +1,99 @@
+{
+  "shipment": {
+    "to_address": {
+      "name": "Mirza Husić",
+      "company": null,
+      "street1": "Maršala Tita 264",
+      "street2": null,
+      "city": "Mostar",
+      "state": "",
+      "zip": "88000",
+      "country": "BA",
+      "phone": "38762836115",
+      "email": "mirzahusic@outlook.com",
+      "residential": null
+    },
+    "from_address": {
+      "name": "John Meyers",
+      "company": "Avenue Thread House",
+      "street1": "71-34 Kessel St",
+      "street2": null,
+      "city": "Flushing",
+      "state": "NY",
+      "zip": "11375",
+      "country": "US",
+      "phone": "6465284644",
+      "email": "johnmeyers@threadhouse.com",
+      "residential": null
+    },
+    "parcel": {
+      "length": 13,
+      "width": 13,
+      "height": 13,
+      "weight": 6.44,
+      "predefined_package": null
+    },
+    "customs_info": {
+      "customs_certify": true,
+      "customs_signer": "John Meyers",
+      "contents_type": "merchandise",
+      "contents_explanation": "Heavy premium denim jeans for personal use",
+      "eel_pfc": null,
+      "non_delivery_option": "return",
+      "restriction_type": "none",
+      "customs_items": [
+        {
+          "description": "Heavy Premium Denim Jeans - Size 32x32, Dark Wash",
+          "quantity": 1,
+          "weight": 1.61,
+          "value": 10.25,
+          "hs_tariff_number": "6203.43.4010",
+          "origin_country": "US"
+        },
+        {
+          "description": "Heavy Premium Denim Jeans - Size 32x32, Light Wash",
+          "quantity": 1,
+          "weight": 1.61,
+          "value": 10.25,
+          "hs_tariff_number": "6203.43.4010",
+          "origin_country": "US"
+        },
+        {
+          "description": "Heavy Premium Denim Jeans - Size 34x32, Black",
+          "quantity": 1,
+          "weight": 1.61,
+          "value": 10.25,
+          "hs_tariff_number": "6203.43.4010",
+          "origin_country": "US"
+        },
+        {
+          "description": "Heavy Premium Denim Jeans - Size 34x32, Medium Wash",
+          "quantity": 1,
+          "weight": 1.61,
+          "value": 10.25,
+          "hs_tariff_number": "6203.43.4010",
+          "origin_country": "US"
+        }
+      ]
+    },
+    "options": {
+      "currency": "USD",
+      "label_format": "PDF",
+      "payment": {
+        "type": "SENDER"
+      }
+    },
+    "reference": "MY-ORDER-2025-001"
+  },
+  "order_summary": {
+    "total_customs_value": 40.99,
+    "currency": "USD",
+    "number_of_items": 4,
+    "total_weight": 6.44,
+    "shipping_service": "FEDEX_INTERNATIONAL_PRIORITY",
+    "estimated_shipping_cost": 199.02,
+    "total_order_cost": 240.01,
+    "delivery_days": 5,
+    "delivery_date": "2025-09-09T18:00:00Z"
+  }
+}

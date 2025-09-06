@@ -1,0 +1,390 @@
+# Unified EasyPost-Veeqo MCP Server
+
+A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shipping services with Veeqo inventory management, enhanced with AI-powered optimization using Claude Code SDK.
+
+## 🚀 Features
+
+### Core Functionality
+
+- **Multi-Carrier Shipping**: EasyPost integration with USPS, UPS, FedEx, DHL, and more
+- **International Shipping**: Full customs support with automatic international order detection
+- **Inventory Management**: Veeqo integration for real-time inventory across multiple locations
+- **AI-Powered Optimization**: Claude Code SDK for intelligent shipping recommendations
+- **Real-time Tracking**: Comprehensive package tracking and status updates
+- **Address Verification**: Automated address validation and correction
+- **Webhook Support**: Real-time delivery status notifications
+
+### Advanced Features
+
+- **FastMCP Framework**: Modern MCP server implementation with session management
+- **Authentication & Authorization**: Role-based access control with API key management
+- **Structured Logging**: Comprehensive logging with pino for observability
+- **Health Monitoring**: Built-in health checks and performance monitoring
+- **Mock Mode**: Development-friendly mock responses for testing
+
+### AI-Powered Features
+
+- **Claude Code SDK**: Advanced AI integration for shipping optimization and code analysis
+- **Smart Shipping Optimization**: AI-powered route and carrier selection with cost analysis
+- **Automated Code Review**: Security, performance, and maintainability analysis
+- **Intelligent Recommendations**: Context-aware shipping strategy suggestions
+- **Real-time Analysis**: Live optimization for shipping scenarios
+
+### Premium Integrations
+
+- **Hugging Face Pro**: AI model access for advanced analytics
+- **Claude Code SDK**: Advanced AI capabilities for shipping optimization
+- **Warp Terminal Pro**: Enhanced terminal experience
+- **Railway Hobby**: Cloud deployment and hosting
+
+## 📊 Project Status
+
+### ✅ **Completed Features**
+- **EasyPost Integration**: Full shipping API with international support
+- **Veeqo Integration**: Complete inventory management with 14 working endpoints
+- **International Shipping**: Customs data structure enforcement
+- **MCP Server**: FastMCP implementation with all tools
+- **Webhook Support**: Delivery status notifications setup
+- **Documentation**: Comprehensive guides and examples
+- **Testing**: Production API testing completed
+
+### 🔄 **Current Status**
+- **Production Ready**: All integrations tested and working
+- **API Coverage**: 100% of working endpoints implemented
+- **Documentation**: Complete setup and usage guides
+- **Webhooks**: Ready for delivery status notifications
+
+### 🎯 **Ready for**
+- **Production Deployment**: All systems tested and validated
+- **Boutique Network**: Multi-location inventory management
+- **International Orders**: Customs-compliant shipping
+- **Real-time Updates**: Webhook-driven notifications
+
+## 📋 Prerequisites
+
+- Node.js 20.0.0 or higher
+- npm or pnpm package manager
+- EasyPost API key
+- Veeqo API key
+- (Optional) Claude Code API key for AI features
+
+## 🛠️ Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository-url>
+   cd unified-easyship-veeqo-mcp
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   # or
+   pnpm install
+   ```
+
+3. **Setup environment variables**
+
+   ```bash
+   cp .env.example .env
+   # Edit .env with your API keys
+   ```
+
+4. **Setup development environment**
+
+   ```bash
+   # Setup Cursor environment
+   ./scripts/setup-cursor.sh
+
+   # Setup premium services (optional)
+   ./scripts/setup-integrated-services.sh
+   ```
+
+## 🚀 Quick Start
+
+### Development Mode
+
+```bash
+# Start legacy MCP server
+npm run dev
+
+# Start FastMCP server (recommended)
+npm run dev:fastmcp
+```
+
+### Production Mode
+
+```bash
+# Build the project
+npm run build
+
+# Start the server
+npm start:fastmcp
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file with the following variables:
+
+```bash
+# EasyPost Configuration
+EASYPOST_API_KEY=your_easypost_api_key_here
+EASYPOST_BASE_URL=https://api.easypost.com/v2
+
+# Veeqo Configuration
+VEEQO_API_KEY=your_veeqo_api_key_here
+VEEQO_BASE_URL=https://api.veeqo.com
+
+# Logging Configuration
+LOG_LEVEL=info
+NODE_ENV=development
+
+# Server Configuration
+PORT=3000
+
+# AI Configuration (Optional)
+ANTHROPIC_API_KEY=your_claude_api_key_here
+HUGGING_FACE_HUB_TOKEN=your_hugging_face_token_here
+```
+
+### Mock Mode
+
+For development and testing, you can use mock mode by setting:
+
+```bash
+EASYPOST_API_KEY=mock
+VEEQO_API_KEY=mock
+```
+
+This will return realistic mock data without making actual API calls.
+
+## 📚 API Documentation
+
+### MCP Tools
+
+#### Shipping Tools
+
+- **`calculate_shipping_rates`**: Calculate shipping rates from multiple carriers
+- **`create_shipping_label`**: Generate shipping labels with tracking
+- **`track_shipment`**: Track packages in real-time
+
+#### Inventory Tools
+
+- **`get_inventory_levels`**: Get current inventory levels across locations
+- **`update_inventory_levels`**: Update inventory levels in bulk
+
+#### AI Tools
+
+- **`optimize_shipping`**: AI-powered shipping optimization
+- **`analyze_shipping_code`**: AI code analysis for shipping logic
+
+### MCP Resources
+
+- **`shipping://rates/{from_zip}/{to_zip}`**: Dynamic shipping rates by ZIP codes
+- **`inventory://status/{product_id}`**: Product inventory status
+
+### MCP Prompts
+
+- **`shipping_optimization`**: Generate AI-powered shipping recommendations
+- **`shipping_code_review`**: Review shipping-related code for best practices
+
+## 🏗️ Architecture
+
+### FastMCP Server
+
+The main server implementation using the FastMCP framework:
+
+```typescript
+import { FastMCP } from 'fastmcp';
+
+const server = new FastMCP({
+  name: 'unified-easyship-veeqo-mcp',
+  version: '1.0.0',
+  authenticate: async (request) => {
+    // API key authentication
+  },
+  // ... configuration
+});
+```
+
+### Enhanced API Clients
+
+#### EasyPost Client
+
+```typescript
+import { EasyPostClient } from './clients/easypost-enhanced.js';
+
+const client = new EasyPostClient();
+const rates = await client.getRates(fromAddress, toAddress, parcel);
+```
+
+#### Veeqo Client
+
+```typescript
+import { VeeqoClient } from './clients/veeqo-enhanced.js';
+
+const client = new VeeqoClient();
+const inventory = await client.getInventoryLevels();
+```
+
+### AI Integration
+
+```typescript
+import { optimizeShipping } from './integrations/claude-code.js';
+
+const optimization = await optimizeShipping({
+  package: packageDetails,
+  requirements: shippingRequirements,
+  origin: 'San Francisco, CA',
+  destination: 'New York, NY',
+});
+```
+
+## 🧪 Testing
+
+```bash
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Test Claude Code SDK integration
+npm run test:claude
+
+# Lint code
+npm run lint
+
+# Format code
+npm run format
+```
+
+## 🚀 Deployment
+
+### Railway Deployment
+
+```bash
+# Deploy to Railway
+npm run deploy:railway
+
+# Check deployment status
+npm run status:railway
+
+# View logs
+npm run logs:railway
+```
+
+### Docker Deployment
+
+```bash
+# Build Docker image
+npm run docker:build
+
+# Run Docker container
+npm run docker:run
+```
+
+## 📊 Monitoring
+
+### Health Checks
+
+- **Endpoint**: `GET /health`
+- **Response**: Server status and version information
+
+### Logging
+
+- **Format**: Structured JSON logging with pino
+- **Levels**: debug, info, warn, error
+- **Fields**: timestamp, level, message, context
+
+### Metrics
+
+- Request timing and success rates
+- API call statistics
+- Error tracking and reporting
+
+## 🔒 Security
+
+### Authentication
+
+- API key-based authentication
+- Role-based access control (admin/user)
+- Secure session management
+
+### Data Protection
+
+- Input validation with Zod schemas
+- Secure error handling
+- No sensitive data in logs
+
+### Best Practices
+
+- HTTPS-only communication
+- Request timeout management
+- Rate limiting and throttling
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+### Documentation
+
+- [Project Structure](PROJECT_STRUCTURE.md)
+- [Cursor Setup Guide](CURSOR_SETUP.md)
+- [Premium Integration Guide](PREMIUM_INTEGRATION_GUIDE.md)
+- [Quick Setup Guide](QUICK_SETUP.md)
+
+### Getting Help
+
+- Check the [Issues](https://github.com/your-repo/issues) page
+- Review the documentation
+- Contact support via email
+
+## 🎯 Roadmap
+
+### Phase 1 (Current)
+
+- ✅ Core MCP server implementation
+- ✅ EasyPost and Veeqo integration
+- ✅ AI-powered optimization
+- ✅ Authentication and security
+
+### Phase 2 (Next)
+
+- 🔄 Advanced analytics dashboard
+- 🔄 Machine learning optimization
+- 🔄 Webhook integration
+- 🔄 Mobile API support
+
+### Phase 3 (Future)
+
+- 📋 Multi-tenant architecture
+- 📋 GraphQL API
+- 📋 Microservices decomposition
+- 📋 Advanced caching layer
+
+## 🙏 Acknowledgments
+
+- [EasyPost](https://www.easypost.com/) for shipping API services
+- [Veeqo](https://www.veeqo.com/) for inventory management
+- [FastMCP](https://github.com/punkpeye/fastmcp) for the MCP framework
+- [Claude](https://www.anthropic.com/) for AI capabilities
+- [Hugging Face](https://huggingface.co/) for AI models
+
+---
+
+## Built with ❤️ for the shipping and logistics community

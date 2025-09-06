@@ -1,0 +1,21 @@
+# Ignore files that shouldn't be deployed to Railway
+node_modules/
+.git/
+.vscode/
+.idea/
+*.log
+.env.local
+.env.development.local
+.env.test.local
+coverage/
+dist/
+build/
+test/
+tests/
+docs/
+scripts/
+eslint-plugin-fastmcp/
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
