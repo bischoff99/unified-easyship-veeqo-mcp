@@ -1,0 +1,30 @@
+# Development Dockerfile with hot reload
+FROM node:20-alpine
+
+# Install dependencies for development
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install all dependencies (including dev dependencies)
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Create logs directory
+RUN mkdir -p /app/logs
+
+# Expose port
+EXPOSE 3000
+
+# Set environment variables for development
+ENV NODE_ENV=development
+ENV PORT=3000
+ENV LOG_LEVEL=debug
+
+# Start development server with hot reload
+CMD ["npm", "run", "dev"]
