@@ -36,11 +36,13 @@ npm run docker:compose:dev
 ## 📋 Available Docker Commands
 
 ### Build Commands
+
 - `npm run docker:build` - Build production image
 - `npm run docker:build:dev` - Build development image
 - `npm run docker:compose:build` - Build all compose services
 
 ### Run Commands
+
 - `npm run docker:run` - Run production container
 - `npm run docker:run:dev` - Run development container with volume mounting
 - `npm run docker:compose:up` - Start all services
@@ -48,6 +50,7 @@ npm run docker:compose:dev
 - `npm run docker:compose:fastmcp` - Start FastMCP variant
 
 ### Management Commands
+
 - `npm run docker:compose:down` - Stop all services
 - `npm run docker:compose:logs` - View logs
 - `npm run docker:clean` - Clean up Docker system
@@ -71,10 +74,12 @@ npm run docker:compose:dev
 ### Environment Variables
 
 Required environment variables:
+
 - `EASYPOST_API_KEY` - EasyPost API key (use "mock" for testing)
 - `VEEQO_API_KEY` - Veeqo API key
 
 Optional environment variables:
+
 - `NODE_ENV` - Environment mode (default: production)
 - `PORT` - Server port (default: 3000)
 - `LOG_LEVEL` - Logging level (default: info)
@@ -96,6 +101,7 @@ Optional environment variables:
 ## 📊 Health Monitoring
 
 All containers include health checks that:
+
 - Check HTTP endpoint `/health` every 30 seconds
 - Timeout after 3 seconds
 - Retry 3 times before marking unhealthy
@@ -104,11 +110,13 @@ All containers include health checks that:
 ## 🗂️ Volume Mounts
 
 ### Development
+
 - Source code mounted for hot reload
 - Node modules volume for performance
 - Logs directory for persistent logging
 
 ### Production
+
 - Logs directory only
 - No source code mounting for security
 

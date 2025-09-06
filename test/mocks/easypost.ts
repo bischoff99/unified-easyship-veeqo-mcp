@@ -2,7 +2,11 @@
  * Mock data and utilities for EasyPost API testing
  */
 
-import type { EasyPostAddress, EasyPostParcel, EasyPostRate } from '@/services/clients/easypost-enhanced';
+import type {
+  EasyPostAddress,
+  EasyPostParcel,
+  EasyPostRate,
+} from '@/services/clients/easypost-enhanced';
 
 export const mockEasyPostAddress: EasyPostAddress = {
   name: 'John Doe',

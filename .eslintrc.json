@@ -26,10 +26,7 @@
     "dist/**/*",
     "*.js"
   ],
-  "plugins": [
-    "@typescript-eslint",
-    "import"
-  ],
+  "plugins": ["@typescript-eslint", "import"],
   "rules": {
     // TypeScript specific rules
     "@typescript-eslint/no-unused-vars": [
@@ -58,10 +55,7 @@
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-require-imports": "off",
     "@typescript-eslint/only-throw-error": "off",
-    "@typescript-eslint/consistent-type-definitions": [
-      "error",
-      "interface"
-    ],
+    "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     "@typescript-eslint/prefer-readonly": "off",
     "@typescript-eslint/array-type": "off",
     "@typescript-eslint/consistent-type-imports": "off",
@@ -70,25 +64,13 @@
     "prefer-const": "error",
     "no-var": "error",
     "no-param-reassign": "error",
-    "eqeqeq": [
-      "error",
-      "always"
-    ],
-    "curly": [
-      "error",
-      "all"
-    ],
-    "brace-style": [
-      "error",
-      "1tbs"
-    ],
+    "eqeqeq": ["error", "always"],
+    "curly": ["error", "all"],
+    "brace-style": ["error", "1tbs"],
     "comma-dangle": "off",
     "indent": "off",
     "quotes": "off",
-    "semi": [
-      "error",
-      "always"
-    ],
+    "semi": ["error", "always"],
     // Security rules for API integrations
     "no-eval": "error",
     "no-implied-eval": "error",
@@ -101,11 +83,7 @@
   },
   "overrides": [
     {
-      "files": [
-        "*.test.ts",
-        "*.spec.ts",
-        "test-*.ts"
-      ],
+      "files": ["*.test.ts", "*.spec.ts", "test-*.ts"],
       "env": {
         "jest": true
       },
@@ -116,9 +94,7 @@
       }
     },
     {
-      "files": [
-        "src/server/fastmcp-server.ts"
-      ],
+      "files": ["src/server/fastmcp-server.ts"],
       "rules": {
         "max-lines": [
           "warn",
@@ -132,9 +108,7 @@
       }
     },
     {
-      "files": [
-        "src/services/clients/*.ts"
-      ],
+      "files": ["src/services/clients/*.ts"],
       "rules": {
         "@typescript-eslint/no-floating-promises": "off",
         "no-magic-numbers": "off"

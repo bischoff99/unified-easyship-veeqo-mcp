@@ -57,18 +57,22 @@ export function trackToolExecution(toolName: string) {
           inputSize,
           outputSize,
           streamingUsed,
-          progressReports,
+          progressReports
         );
 
         // Log memory delta if significant
         const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
-        if (memoryDelta > 10 * 1024 * 1024) { // 10MB+
-          logger.warn({
-            toolName,
-            memoryDelta: Math.round(memoryDelta / 1024 / 1024),
-            inputSize,
-            outputSize,
-          }, 'Tool execution used significant memory');
+        if (memoryDelta > 10 * 1024 * 1024) {
+          // 10MB+
+          logger.warn(
+            {
+              toolName,
+              memoryDelta: Math.round(memoryDelta / 1024 / 1024),
+              inputSize,
+              outputSize,
+            },
+            'Tool execution used significant memory'
+          );
         }
 
         return result;
@@ -79,16 +83,19 @@ export function trackToolExecution(toolName: string) {
           inputSize,
           0,
           streamingUsed,
-          progressReports,
+          progressReports
         );
 
-        logger.error({
-          toolName,
-          error: (error as Error).message,
-          inputSize,
-          streamingUsed,
-          progressReports,
-        }, 'Tool execution failed');
+        logger.error(
+          {
+            toolName,
+            error: (error as Error).message,
+            inputSize,
+            streamingUsed,
+            progressReports,
+          },
+          'Tool execution failed'
+        );
 
         throw error;
       }
@@ -101,10 +108,7 @@ export function trackToolExecution(toolName: string) {
 /**
  * Decorator for tracking API call performance
  */
-export function trackAPICall(
-  apiProvider: 'easypost' | 'veeqo' | 'claude',
-  endpoint: string,
-) {
+export function trackAPICall(apiProvider: 'easypost' | 'veeqo' | 'claude', endpoint: string) {
   return function (_target: any, _propertyName: string, descriptor: PropertyDescriptor) {
     const method = descriptor.value;
 
@@ -132,7 +136,7 @@ export function trackAPICall(
           endpoint,
           statusCode,
           responseSize,
-          retryCount,
+          retryCount
         );
 
         return result;
@@ -148,16 +152,19 @@ export function trackAPICall(
           endpoint,
           statusCode,
           0,
-          retryCount,
+          retryCount
         );
 
-        logger.error({
-          apiProvider,
-          endpoint,
-          error: (error as Error).message,
-          statusCode,
-          retryCount,
-        }, 'API call failed');
+        logger.error(
+          {
+            apiProvider,
+            endpoint,
+            error: (error as Error).message,
+            statusCode,
+            retryCount,
+          },
+          'API call failed'
+        );
 
         throw error;
       }
@@ -173,7 +180,7 @@ export function trackAPICall(
 export async function trackOperation<T>(
   operationName: string,
   operation: () => Promise<T>,
-  metadata?: Record<string, unknown>,
+  metadata?: Record<string, unknown>
 ): Promise<T> {
   const operationId = `op_${operationName}_${randomUUID()}`;
 
@@ -202,19 +209,25 @@ export function createPerformanceMiddleware() {
     },
 
     afterToolExecution: (toolName: string, result: any, duration: number) => {
-      logger.debug({
-        toolName,
-        duration,
-        outputSize: result ? JSON.stringify(result).length : 0,
-      }, 'Tool execution completed');
+      logger.debug(
+        {
+          toolName,
+          duration,
+          outputSize: result ? JSON.stringify(result).length : 0,
+        },
+        'Tool execution completed'
+      );
     },
 
     onError: (toolName: string, error: Error, duration: number) => {
-      logger.error({
-        toolName,
-        error: error.message,
-        duration,
-      }, 'Tool execution failed');
+      logger.error(
+        {
+          toolName,
+          error: error.message,
+          duration,
+        },
+        'Tool execution failed'
+      );
     },
   };
 }
@@ -226,15 +239,15 @@ export function getPerformanceHealth(): {
   status: 'healthy' | 'degraded' | 'critical';
   metrics: ReturnType<typeof performanceMonitor.getPerformanceSummary>;
   recommendations: ReturnType<typeof performanceMonitor.getOptimizationRecommendations>;
-  } {
+} {
   const metrics = performanceMonitor.getPerformanceSummary();
   const recommendations = performanceMonitor.getOptimizationRecommendations();
 
   let status: 'healthy' | 'degraded' | 'critical' = 'healthy';
 
   // Determine health status based on metrics
-  const criticalIssues = recommendations.filter(r => r.severity === 'critical');
-  const warningIssues = recommendations.filter(r => r.severity === 'warning');
+  const criticalIssues = recommendations.filter((r) => r.severity === 'critical');
+  const warningIssues = recommendations.filter((r) => r.severity === 'warning');
 
   if (criticalIssues.length > 0) {
     status = 'critical';

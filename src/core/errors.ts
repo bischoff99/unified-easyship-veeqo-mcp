@@ -43,7 +43,7 @@ export class McpError extends Error {
     code: ErrorCode,
     message: string,
     details?: Record<string, any>,
-    statusCode?: number,
+    statusCode?: number
   ) {
     super(message);
     this.name = 'McpError';
@@ -91,7 +91,7 @@ export function createError(
   code: ErrorCode,
   message: string,
   details?: Record<string, any>,
-  statusCode?: number,
+  statusCode?: number
 ): McpError {
   return new McpError(code, message, details, statusCode);
 }
