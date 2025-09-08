@@ -1,31 +1,3 @@
-# syntax=docker/dockerfile:1.7
-
-ARG NODE_VERSION=20-alpine
-
-FROM node:${NODE_VERSION} AS deps
-WORKDIR /app
-COPY package.json package-lock.json* .npmrc* ./
-RUN npm ci --ignore-scripts
-
-FROM node:${NODE_VERSION} AS build
-WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN npm run build
-
-FROM node:${NODE_VERSION} AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-# Create non-root user
-RUN addgroup -S nodejs && adduser -S nodeuser -G nodejs
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/node_modules ./node_modules
-USER nodeuser
-EXPOSE 3000
-CMD ["node", "dist/server/fastmcp-server.js"]
-
 # Production Dockerfile for Unified EasyPost-Veeqo MCP Server
 FROM node:20-alpine AS builder
 
