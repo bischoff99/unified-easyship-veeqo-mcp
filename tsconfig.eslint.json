@@ -8,7 +8,9 @@
   "include": [
     "src/**/*",
     "tests/**/*",
-    "test/**/*"
+    "test/**/*",
+    "vitest.config.ts",
+    "eslint.config.js"
   ]
 }
 
