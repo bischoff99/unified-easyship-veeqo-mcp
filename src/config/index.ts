@@ -21,14 +21,26 @@ const ServerConfigSchema = z.object({
 });
 
 const EasyPostConfigSchema = z.object({
-  apiKey: z.string().min(1, 'EASYPOST_API_KEY is required'),
+  apiKey: z.string().refine((val) => {
+    // Allow empty/mock keys in test environment or when explicitly in mock mode
+    if (process.env.NODE_ENV === 'test' || val === 'mock') {
+      return true;
+    }
+    return val.length > 0;
+  }, 'EASYPOST_API_KEY is required'),
   baseUrl: z.string().url().default('https://api.easypost.com/v2'),
   timeout: z.number().default(30000),
   mockMode: z.boolean().default(false),
 });
 
 const VeeqoConfigSchema = z.object({
-  apiKey: z.string().min(1, 'VEEQO_API_KEY is required'),
+  apiKey: z.string().refine((val) => {
+    // Allow empty/mock keys in test environment or when explicitly in mock mode
+    if (process.env.NODE_ENV === 'test' || val === 'mock') {
+      return true;
+    }
+    return val.length > 0;
+  }, 'VEEQO_API_KEY is required'),
   baseUrl: z.string().url().default('https://api.veeqo.com'),
   timeout: z.number().default(30000),
   mockMode: z.boolean().default(false),
