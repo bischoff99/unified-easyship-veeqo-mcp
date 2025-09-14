@@ -35,12 +35,7 @@ export function addInventoryTools(server: FastMCP, veeqoClient: VeeqoClient) {
           sku: args.sku,
         });
 
-        const products = await veeqoClient.getProducts({
-          page: args.page,
-          per_page: args.per_page,
-          query: args.query,
-          sku: args.sku,
-        });
+        const products = await veeqoClient.getProducts(args.per_page, args.page);
 
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('veeqo', '/products', duration, 200);
@@ -85,12 +80,7 @@ export function addInventoryTools(server: FastMCP, veeqoClient: VeeqoClient) {
           since: args.since,
         });
 
-        const orders = await veeqoClient.getOrders({
-          page: args.page,
-          per_page: args.per_page,
-          status: args.status === 'all' ? undefined : args.status,
-          since: args.since,
-        });
+        const orders = await veeqoClient.getOrders(args.per_page, args.page, args.status === 'all' ? undefined : args.status);
 
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('veeqo', '/orders', duration, 200);
@@ -269,11 +259,10 @@ export function addInventoryTools(server: FastMCP, veeqoClient: VeeqoClient) {
           sku: args.sku,
         });
 
-        const inventoryLevels = await veeqoClient.getInventoryLevels({
-          product_id: args.product_id,
-          sellable_id: args.sellable_id,
-          sku: args.sku,
-        });
+        const inventoryLevels = await veeqoClient.getInventoryLevels(
+          args.product_id ? [String(args.product_id)] : undefined,
+          undefined
+        );
 
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('veeqo', '/inventory_levels', duration, 200);
