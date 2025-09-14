@@ -32,7 +32,11 @@
       "Bash(gh issue:*)",
       "Bash(gh run list:*)",
       "Bash(gh run view:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(yes)",
+      "Bash(gh run delete:*)",
+      "Bash(do echo:*)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

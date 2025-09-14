@@ -1,0 +1,164 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ master ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  NODE_VERSION: 22
+  PNPM_VERSION: 8.15.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Type check
+        run: pnpm run type-check
+
+      - name: Run tests
+        env:
+          NODE_ENV: test
+          LOG_LEVEL: error
+          EASYPOST_API_KEY: mock-easypost-key
+          VEEQO_API_KEY: mock-veeqo-key
+        run: pnpm run test:ci
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Get version
+        id: version
+        run: |
+          if [[ $GITHUB_REF == refs/tags/v* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+          else
+            VERSION=$(node -p "require('./package.json').version")-$(git rev-parse --short HEAD)
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Create deployment artifact
+        run: |
+          tar -czf deployment-${{ steps.version.outputs.version }}.tar.gz \
+            dist/ \
+            package.json \
+            pnpm-lock.yaml \
+            .env.production \
+            README.md
+
+      - name: Upload deployment artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-${{ steps.version.outputs.version }}
+          path: deployment-${{ steps.version.outputs.version }}.tar.gz
+          retention-days: 30
+
+  deploy-production:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || github.event.inputs.environment == 'production'
+    environment: production
+
+    steps:
+      - name: Download deployment artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-${{ needs.build.outputs.version }}
+
+      - name: Extract deployment artifact
+        run: tar -xzf deployment-${{ needs.build.outputs.version }}.tar.gz
+
+      - name: Deploy to production
+        run: |
+          echo "🚀 Deploying version ${{ needs.build.outputs.version }} to production"
+          echo "📦 Deployment artifact: deployment-${{ needs.build.outputs.version }}.tar.gz"
+          echo "🔧 This is where you would deploy to your production environment"
+          echo "   - Upload to server"
+          echo "   - Install dependencies: pnpm install --prod"
+          echo "   - Start services: pnpm run start:prod"
+          echo "   - Health check: pnpm run health:check"
+
+          # Example deployment commands (uncomment and modify for your setup):
+          # - name: Deploy to Railway/Heroku/Docker
+          # - name: Update production database
+          # - name: Restart services
+          # - name: Verify deployment health
+
+      - name: Create GitHub Release (for tags)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ needs.build.outputs.version }}
+          body: |
+            ## Changes in this Release
+
+            🚀 **Unified EasyPost-Veeqo MCP Server v${{ needs.build.outputs.version }}**
+
+            ### Features
+            - EasyPost shipping integration
+            - Veeqo inventory management
+            - AI-powered shipping optimization
+            - FastMCP server architecture
+
+            ### Deployment
+            - Download the deployment artifact
+            - Extract and install dependencies
+            - Configure environment variables
+            - Start the MCP server
+
+            See [deployment documentation](docs/DEPLOYMENT_READY.md) for details.
+          draft: false
+          prerelease: false
+
+      - name: Notify deployment success
+        if: success()
+        run: |
+          echo "✅ Deployment successful!"
+          echo "📍 Environment: production"
+          echo "🏷️  Version: ${{ needs.build.outputs.version }}"
+          echo "⏰ Deployed at: $(date -u)"
+
+      - name: Notify deployment failure
+        if: failure()
+        run: |
+          echo "❌ Deployment failed!"
+          echo "📍 Environment: production"
+          echo "🏷️  Version: ${{ needs.build.outputs.version }}"
+          echo "⏰ Failed at: $(date -u)"

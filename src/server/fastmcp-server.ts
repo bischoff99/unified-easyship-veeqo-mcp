@@ -153,13 +153,13 @@ server.on('disconnect', (_event) => {
 
 // Error handling
 process.on('uncaughtException', (error) => {
-  logger.error('Uncaught exception:', error);
+  logger.error('Uncaught exception', error);
   monitoring.recordError(error, { context: 'uncaught_exception' });
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  logger.error('Unhandled promise rejection:', { reason, promise });
+  logger.error('Unhandled promise rejection', { reason, promise });
   monitoring.recordMetric('unhandled_rejection', 1, { reason: String(reason) });
 });
 

@@ -1,17 +1,72 @@
 version: 2
 updates:
+  # Enable version updates for npm (pnpm)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "bischoff99"
+    assignees:
+      - "bischoff99"
     commit-message:
-      prefix: "chore(deps)"
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+
+    # Group minor and patch updates
+    groups:
+      production-dependencies:
+        patterns:
+          - "@fastmcp/*"
+          - "easypost"
+          - "axios"
+          - "winston"
+        update-types:
+          - "minor"
+          - "patch"
+
+      dev-dependencies:
+        patterns:
+          - "@types/*"
+          - "eslint*"
+          - "typescript"
+          - "vitest"
+          - "@vitest/*"
+        update-types:
+          - "minor"
+          - "patch"
+
+    # Ignore specific updates that might break compatibility
+    ignore:
+      # Major version updates need manual review
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      # Specific packages to ignore
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+  # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
     open-pull-requests-limit: 5
+    reviewers:
+      - "bischoff99"
+    assignees:
+      - "bischoff99"
     commit-message:
-      prefix: "chore(actions)"
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "github-actions"
+      - "automated"
 

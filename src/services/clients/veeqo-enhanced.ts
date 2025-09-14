@@ -1908,7 +1908,11 @@ export class VeeqoClient {
 
   async updateInventory(params: any): Promise<{ success: boolean; message: string }> {
     // Use existing updateInventoryLevels method
-    await this.updateInventoryLevels(params.sellable_id, params.warehouse_id, params.available_count);
+    await this.updateInventoryLevels([{
+      product_id: params.sellable_id,
+      location_id: params.warehouse_id,
+      quantity: params.available_count
+    }]);
     return {
       success: true,
       message: `Updated inventory for sellable ${params.sellable_id}`
