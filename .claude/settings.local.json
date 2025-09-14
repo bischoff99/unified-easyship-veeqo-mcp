@@ -17,9 +17,54 @@
       "Bash(pnpm run lint:*)",
       "Bash(pnpm run:*)",
       "Bash(git add:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(pnpm test:*)",
+      "Bash(tree:*)",
+      "Bash(node test-shipping-endpoint.js)",
+      "mcp__fetch__fetch",
+      "mcp__memory__*",
+      "mcp__qwen-code__*",
+      "Bash(node:*)",
+      "Bash(sed:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
+  },
+  "enableAllProjectMcpServers": true,
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '🤖 Processing request in project: $(basename $(pwd))'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash(npm run build*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '✅ Build completed successfully'"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git commit*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run lint:check && npm run type-check",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
   }
 }

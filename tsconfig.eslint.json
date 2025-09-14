@@ -7,10 +7,8 @@
   },
   "include": [
     "src/**/*",
-    "tests/**/*",
     "test/**/*",
     "vitest.config.ts",
     "eslint.config.js"
   ]
 }
-

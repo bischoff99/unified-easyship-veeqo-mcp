@@ -3,8 +3,8 @@ import { randomUUID } from 'node:crypto';
 
 import { fetch } from 'undici';
 
-import { ErrorCode, createError } from './utils/errors.js';
-import { logger } from './utils/logger.js';
+import { ErrorCode, createError } from '../utils/errors.js';
+import { logger } from '../utils/logger.js';
 
 const MAX_RETRIES = 3;
 const BASE_DELAY_MS = 1000;

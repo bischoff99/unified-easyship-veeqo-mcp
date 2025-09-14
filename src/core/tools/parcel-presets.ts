@@ -1,8 +1,9 @@
 /**
  * Parcel presets tool
+ * Returns common shipping package presets
  */
 
-export function parcelPresets(_params: any) {
+export async function parcelPresets() {
   return {
     presets: [
       { name: 'Small Box', dimensions: '8x6x4', weight_oz: 16 },

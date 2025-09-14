@@ -1,0 +1,63 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/bischoff666/Projects/unified-easyship-veeqo-mcp"],
+      "description": "Filesystem MCP server for file operations in unified-easyship-veeqo-mcp project directory",
+      "enabled": true
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "description": "Library documentation and development context for shipping automation",
+      "enabled": true
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "description": "GitHub repository integration - issues, PRs, code search",
+      "enabled": true
+    },
+    "git": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git"],
+      "description": "Enhanced git operations and repository management",
+      "enabled": true
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "description": "Persistent memory and context across sessions",
+      "enabled": true
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "description": "HTTP requests and API interactions for EasyPost/Veeqo APIs",
+      "enabled": true
+    },
+    "unified-easyship-veeqo-mcp": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "cwd": "/home/bischoff666/Projects/unified-easyship-veeqo-mcp",
+      "description": "Unified EasyPost-Veeqo MCP server - comprehensive shipping and inventory management",
+      "enabled": true,
+      "env": {
+        "NODE_ENV": "development",
+        "LOG_LEVEL": "debug",
+        "PORT": "3000",
+        "EASYPOST_API_KEY": "mock",
+        "VEEQO_API_KEY": "mock"
+      }
+    },
+    "qwen-code": {
+      "command": "npx",
+      "args": ["-y", "qwen-mcp-tool"],
+      "description": "Qwen AI code analysis and generation capabilities",
+      "enabled": true,
+      "env": {
+        "DASHSCOPE_API_KEY": "sk-3081ca801ab44b4c83c1240b11972d0f"
+      }
+    }
+  }
+}

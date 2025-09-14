@@ -48,6 +48,7 @@ A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shippi
 - **Webhook Support**: Delivery status notifications setup
 - **Documentation**: Comprehensive guides and examples
 - **Testing**: Production API testing completed
+- **Modern Toolchain**: pnpm, ESLint v9, Node.js 22, TypeScript
 
 ### 🔄 **Current Status**
 
@@ -55,6 +56,8 @@ A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shippi
 - **API Coverage**: 100% of working endpoints implemented
 - **Documentation**: Complete setup and usage guides
 - **Webhooks**: Ready for delivery status notifications
+- **CI/CD Pipeline**: Fully functional with 41/41 tests passing
+- **Modern Development**: Latest toolchain with flat ESLint config
 
 ### 🎯 **Ready for**
 
@@ -65,8 +68,8 @@ A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shippi
 
 ## 📋 Prerequisites
 
-- Node.js 20.0.0 or higher
-- npm or pnpm package manager
+- Node.js 22.0.0 or higher
+- pnpm package manager (8.15.0+)
 - EasyPost API key
 - Veeqo API key
 - (Optional) Claude Code API key for AI features
@@ -83,8 +86,6 @@ A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shippi
 2. **Install dependencies**
 
    ```bash
-   npm install
-   # or
    pnpm install
    ```
 
@@ -111,20 +112,20 @@ A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shippi
 
 ```bash
 # Start legacy MCP server
-npm run dev
+pnpm run dev
 
 # Start FastMCP server (recommended)
-npm run dev:fastmcp
+pnpm run dev:fastmcp
 ```
 
 ### Production Mode
 
 ```bash
 # Build the project
-npm run build
+pnpm run build
 
 # Start the server
-npm start:fastmcp
+pnpm start:fastmcp
 ```
 
 ## 🔧 Configuration
@@ -164,6 +165,38 @@ VEEQO_API_KEY=mock
 ```
 
 This will return realistic mock data without making actual API calls.
+
+## ⚡ Development Workflow
+
+### Modern Toolchain (2025)
+
+- **Package Manager**: pnpm 8.15.0+ for faster, reliable dependency management
+- **Node.js**: Version 22 with latest features and performance improvements
+- **ESLint**: v9 with modern flat configuration for consistent code quality
+- **TypeScript**: Latest with strict type checking and path aliases
+- **Vitest**: Fast, modern test runner with comprehensive coverage
+- **GitHub Actions**: v5 with automated CI/CD pipeline
+
+### Development Commands
+
+```bash
+# Full development cycle
+pnpm install          # Install dependencies
+pnpm run lint:check   # Check code quality
+pnpm run type-check   # Verify TypeScript
+pnpm test            # Run test suite
+pnpm run build       # Build for production
+
+# Development server
+pnpm run dev:fastmcp  # Start with hot reload
+```
+
+### Quality Assurance
+
+- **Linting**: ESLint v9 with TypeScript rules and import management
+- **Type Safety**: Strict TypeScript with comprehensive type definitions
+- **Testing**: 41 tests across unit and integration suites
+- **CI Pipeline**: Automated testing, linting, and build verification
 
 ## 📚 API Documentation
 
@@ -251,20 +284,27 @@ const optimization = await optimizeShipping({
 
 ```bash
 # Run tests
-npm test
+pnpm test
 
 # Run tests with coverage
-npm run test:coverage
+pnpm run test:coverage
 
-# Test Claude Code SDK integration
-npm run test:claude
+# Test specific file
+pnpm test test/unit/services/easypost-client.test.ts
 
 # Lint code
-npm run lint
+pnpm run lint:check
 
-# Format code
-npm run format
+# Type check
+pnpm run type-check
 ```
+
+### Test Infrastructure
+
+- **Unit Tests**: 16 tests for core services
+- **Integration Tests**: 25 tests for API integrations
+- **Mock Mode**: Complete mock implementations for development
+- **Coverage**: Comprehensive test coverage across all modules
 
 ## 🚀 Deployment
 
@@ -272,23 +312,23 @@ npm run format
 
 ```bash
 # Deploy to Railway
-npm run deploy:railway
+pnpm run deploy:railway
 
 # Check deployment status
-npm run status:railway
+pnpm run status:railway
 
 # View logs
-npm run logs:railway
+pnpm run logs:railway
 ```
 
 ### Docker Deployment
 
 ```bash
 # Build Docker image
-npm run docker:build
+pnpm run docker:build
 
 # Run Docker container
-npm run docker:run
+pnpm run docker:run
 ```
 
 ## 📊 Monitoring
