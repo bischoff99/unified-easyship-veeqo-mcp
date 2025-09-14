@@ -1915,7 +1915,7 @@ export class VeeqoClient {
     }]);
     return {
       success: true,
-      message: `Updated inventory for sellable ${params.sellable_id}`
+      message: `Updated inventory for product ${params.sellable_id}`
     };
   }
 
