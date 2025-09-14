@@ -20,8 +20,8 @@ const logError = (message: string, error: any) => {
 
 export function addAIIntegrationTools(
   server: FastMCP,
-  easyPostClient: EasyPostClient,
-  veeqoClient: VeeqoClient
+  _easyPostClient: EasyPostClient,
+  _veeqoClient: VeeqoClient
 ) {
   /**
    * AI-powered shipping optimization
@@ -62,15 +62,30 @@ export function addAIIntegrationTools(
           preferences: args.preferences,
         });
 
+        // Convert orders to first order for optimization (API limitation)
+        const firstOrder = args.orders[0];
+        if (!firstOrder) {
+          throw new Error('At least one order is required for optimization');
+        }
+
         const optimization = await optimizeShipping({
-          orders: args.orders,
-          preferences: args.preferences,
-          easyPostClient,
-          veeqoClient,
+          package: {
+            weight: firstOrder.weight,
+            dimensions: firstOrder.dimensions,
+            value: firstOrder.value,
+          },
+          requirements: {
+            delivery_time: firstOrder.priority === 'urgent' ? 'overnight' :
+                          firstOrder.priority === 'expedited' ? 'expedited' : 'standard',
+            cost_priority: args.preferences.cost_weight > 0.6 ? 'lowest' :
+                          args.preferences.speed_weight > 0.6 ? 'fastest' : 'balanced',
+          },
+          origin: 'warehouse', // Default origin
+          destination: `${firstOrder.destination.city}, ${firstOrder.destination.state}, ${firstOrder.destination.country}`,
         });
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('claude-code', '/optimize-shipping', duration, 200);
+        monitoring.recordApiCall('claude-code', '/optimize-shipping', duration, 200, true);
 
         logger.info(`Completed shipping optimization in ${duration}ms`);
         const result = {
@@ -80,7 +95,7 @@ export function addAIIntegrationTools(
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('claude-code', '/optimize-shipping', duration, 500, true);
+        monitoring.recordApiCall('claude-code', '/optimize-shipping', duration, 500, false);
         logError('AI shipping optimization failed', error);
         throw new Error(`Shipping optimization failed: ${error.message}`);
       }
@@ -123,25 +138,33 @@ export function addAIIntegrationTools(
           value: args.order_data.order_value,
         });
 
-        const recommendations = await generateShippingRecommendations({
-          orderData: args.order_data,
-          historicalData: args.historical_data,
-          easyPostClient,
-          veeqoClient,
-        });
+        const context = `Order to ${args.order_data.destination_country}, ${args.order_data.package_weight}lbs, $${args.order_data.order_value} value, ${args.order_data.customer_type} customer, ${args.order_data.urgency} urgency`;
+        const requirements = [
+          `Weight: ${args.order_data.package_weight} lbs`,
+          `Dimensions: ${args.order_data.package_dimensions.length}x${args.order_data.package_dimensions.width}x${args.order_data.package_dimensions.height}`,
+          `Destination: ${args.order_data.destination_country}`,
+          `Customer type: ${args.order_data.customer_type}`,
+          `Urgency: ${args.order_data.urgency}`,
+        ];
+
+        if (args.historical_data?.preferred_carriers) {
+          requirements.push(`Preferred carriers: ${args.historical_data.preferred_carriers.join(', ')}`);
+        }
+
+        const recommendations = await generateShippingRecommendations(context, requirements);
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('claude-code', '/recommendations', duration, 200);
+        monitoring.recordApiCall('claude-code', '/recommendations', duration, 200, true);
 
-        logger.info(`Generated ${recommendations.options.length} shipping recommendations in ${duration}ms`);
+        logger.info(`Generated ${recommendations.length} shipping recommendations in ${duration}ms`);
         const result = {
-          ...recommendations,
+          recommendations,
           processing_time_ms: duration,
         };
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('claude-code', '/recommendations', duration, 500, true);
+        monitoring.recordApiCall('claude-code', '/recommendations', duration, 500, false);
         logError('Failed to generate shipping recommendations', error);
         throw new Error(`Recommendation generation failed: ${error.message}`);
       }
@@ -183,13 +206,14 @@ export function addAIIntegrationTools(
         });
 
         const analysis = await analyzeCode({
-          analysisType: args.analysis_type,
-          data: args.data,
-          focusAreas: args.focus_areas,
+          code: args.data.code || '// No code provided for analysis',
+          language: 'typescript',
+          context: 'shipping',
+          focus_areas: args.focus_areas as ('security' | 'performance' | 'maintainability' | 'testing')[],
         });
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('claude-code', '/analyze', duration, 200);
+        monitoring.recordApiCall('claude-code', '/analyze', duration, 200, true);
 
         logger.info(`Completed ${args.analysis_type} analysis in ${duration}ms`);
         const result = {
@@ -271,8 +295,8 @@ export function addAIIntegrationTools(
 
           return {
             order_id: order.id,
-            assigned_warehouse: optimalWarehouse.id,
-            warehouse_location: optimalWarehouse.location,
+            assigned_warehouse: optimalWarehouse?.id || 'unknown',
+            warehouse_location: optimalWarehouse?.location || 'unknown',
             estimated_processing_time: Math.ceil(Math.random() * 24), // hours
             routing_confidence: Math.min(0.95, 0.7 + Math.random() * 0.25),
             recommendations: [

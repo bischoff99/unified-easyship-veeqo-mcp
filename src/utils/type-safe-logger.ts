@@ -5,12 +5,12 @@
 import { logger } from './logger.js';
 import { monitoring } from './monitoring.js';
 
-// Safe logger wrapper that handles parameter type issues
+// Safe logger wrapper that handles parameter type issues - follows pino format (metadata, message)
 export const safeLogger = {
   info: (message: string, meta?: any) => {
     try {
       if (meta && typeof meta === 'object') {
-        logger.info(message, meta);
+        logger.info(meta, message);
       } else {
         logger.info(message);
       }
@@ -21,8 +21,8 @@ export const safeLogger = {
 
   error: (message: string, error?: any) => {
     try {
-      if (error) {
-        logger.error(message, error);
+      if (error && typeof error === 'object') {
+        logger.error(error, message);
       } else {
         logger.error(message);
       }
@@ -34,7 +34,7 @@ export const safeLogger = {
   warn: (message: string, meta?: any) => {
     try {
       if (meta && typeof meta === 'object') {
-        logger.warn(message, meta);
+        logger.warn(meta, message);
       } else {
         logger.warn(message);
       }
@@ -46,7 +46,7 @@ export const safeLogger = {
   debug: (message: string, meta?: any) => {
     try {
       if (meta && typeof meta === 'object') {
-        logger.debug(message, meta);
+        logger.debug(meta, message);
       } else {
         logger.debug(message);
       }
@@ -58,10 +58,10 @@ export const safeLogger = {
 
 // Safe monitoring wrapper
 export const safeMonitoring = {
-  recordApiCall: (service: string, endpoint: string, duration: number, statusCode = 200, isError = false) => {
+  recordApiCall: (service: string, endpoint: string, duration: number, statusCode = 200, success = true) => {
     try {
       if (monitoring && typeof monitoring.recordApiCall === 'function') {
-        monitoring.recordApiCall(service, endpoint, duration, statusCode, isError);
+        monitoring.recordApiCall(service, endpoint, duration, statusCode, success);
       }
     } catch (_error) {
       console.log(`[MONITORING] API Call: ${service}${endpoint} - ${duration}ms - ${statusCode}`);
