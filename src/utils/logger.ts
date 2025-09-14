@@ -28,10 +28,10 @@ export const logError = (message: string, data?: Record<string, unknown>) => {
 
 // Type-safe logger interface for consistent usage
 export interface Logger {
-  debug: (obj?: Record<string, unknown>, msg?: string, ...args: unknown[]) => void;
-  info: (obj?: Record<string, unknown>, msg?: string, ...args: unknown[]) => void;
-  warn: (obj?: Record<string, unknown>, msg?: string, ...args: unknown[]) => void;
-  error: (obj?: Record<string, unknown>, msg?: string, ...args: unknown[]) => void;
+  debug: (_obj?: Record<string, unknown>, _msg?: string, ..._args: unknown[]) => void;
+  info: (_obj?: Record<string, unknown>, _msg?: string, ..._args: unknown[]) => void;
+  warn: (_obj?: Record<string, unknown>, _msg?: string, ..._args: unknown[]) => void;
+  error: (_obj?: Record<string, unknown>, _msg?: string, ..._args: unknown[]) => void;
 }
 
 // Logger is already exported above
