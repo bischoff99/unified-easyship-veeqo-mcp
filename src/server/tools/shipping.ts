@@ -6,8 +6,11 @@
 import { z } from 'zod';
 import type { FastMCP } from 'fastmcp';
 import { EasyPostClient, type EasyPostAddress } from '../../services/clients/easypost-enhanced.js';
-import { logError, logger } from '../../utils/logger.js';
-import { monitoring } from '../../utils/monitoring.js';
+import { safeLogger as logger, safeMonitoring as monitoring } from '../../utils/type-safe-logger.js';
+
+const logError = (message: string, error: any) => {
+  logger.error(message, error);
+};
 
 export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient) {
   // Address validation schema

@@ -1,4 +1,4 @@
-# Unified EasyPost-Veeqo MCP Server
+****# Unified EasyPost-Veeqo MCP Server
 
 A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shipping services with Veeqo inventory management, enhanced with AI-powered optimization using Claude Code SDK.
 
