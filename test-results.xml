@@ -1,189 +1,189 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="vitest tests" tests="85" failures="0" errors="0" time="9.950615915">
-    <testsuite name="test/integration/error-handling.test.ts" timestamp="2025-09-14T19:03:32.170Z" hostname="DESKTOP-TT7KAU6" tests="21" failures="0" errors="0" skipped="0" time="3.121811478">
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should create MCP errors correctly" time="0.002917419">
+<testsuites name="vitest tests" tests="85" failures="0" errors="0" time="8.889486787">
+    <testsuite name="test/integration/error-handling.test.ts" timestamp="2025-09-14T19:29:46.756Z" hostname="runnervmf4ws1" tests="21" failures="0" errors="0" skipped="0" time="3.636847332">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should create MCP errors correctly" time="0.003252608">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should determine default status codes correctly" time="0.000297224">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should determine default status codes correctly" time="0.000553807">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should identify retryable errors" time="0.000409075">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should identify retryable errors" time="0.0008548">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should calculate retry delays correctly" time="0.00022516">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should calculate retry delays correctly" time="0.000479608">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should identify MCP errors" time="0.000290261">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should identify MCP errors" time="0.00050197">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should create validation errors" time="0.000365023">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should create validation errors" time="0.000803764">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should convert errors to response format" time="0.000259575">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should convert errors to response format" time="0.000550471">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should handle API errors correctly" time="0.000534834">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should handle API errors correctly" time="0.00085479">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Circuit Breaker &gt; should start in CLOSED state" time="0.000137732">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Circuit Breaker &gt; should start in CLOSED state" time="0.000314519">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Circuit Breaker &gt; should execute successful operations" time="0.000534577">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Circuit Breaker &gt; should execute successful operations" time="0.000474097">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Circuit Breaker &gt; should count failures and open when threshold reached" time="0.001381669">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Circuit Breaker &gt; should count failures and open when threshold reached" time="0.00284204">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Circuit Breaker &gt; should transition to HALF_OPEN after reset timeout" time="1.101196107">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Circuit Breaker &gt; should transition to HALF_OPEN after reset timeout" time="1.101281168">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Error Collector &gt; should collect errors" time="0.000852233">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Error Collector &gt; should collect errors" time="0.000636432">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Error Collector &gt; should limit error collection" time="0.000494285">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Error Collector &gt; should limit error collection" time="0.000381073">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Error Collector &gt; should filter errors by code" time="0.001628954">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Error Collector &gt; should filter errors by code" time="0.001564578">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Error Collector &gt; should clear errors" time="0.000370383">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Error Collector &gt; should clear errors" time="0.000381784">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Retry Logic &gt; should retry failed operations" time="0.021266575">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Retry Logic &gt; should retry failed operations" time="0.020078395">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Retry Logic &gt; should not retry non-retryable errors" time="0.000448201">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Retry Logic &gt; should not retry non-retryable errors" time="0.000590806">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Retry Logic &gt; should respect max attempts" time="0.010664775">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Retry Logic &gt; should respect max attempts" time="0.010661534">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Retry Logic &gt; should use default retry options" time="1.974025388">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; Retry Logic &gt; should use default retry options" time="2.485999824">
         </testcase>
-        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should serialize errors to JSON" time="0.000256924">
-        </testcase>
-    </testsuite>
-    <testsuite name="test/integration/fastmcp-server.test.ts" timestamp="2025-09-14T19:03:32.175Z" hostname="DESKTOP-TT7KAU6" tests="20" failures="0" errors="0" skipped="0" time="0.146723507">
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Tool Registration &gt; should have a FastMCP server instance" time="0.001391449">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Tool Registration &gt; should be configured with correct name and version" time="0.000148261">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; External Service Integration &gt; should have EasyPost client configured" time="0.000178566">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; External Service Integration &gt; should have Veeqo client configured" time="0.000146815">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; External Service Integration &gt; should return mocked shipping rates" time="0.001945466">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; External Service Integration &gt; should return mocked inventory data" time="0.000249418">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Label Creation Service &gt; should mock label creation successfully" time="0.000182115">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Label Creation Service &gt; should handle tracking successfully" time="0.000204265">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Inventory Management Integration &gt; should handle inventory levels query" time="0.000694459">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Inventory Management Integration &gt; should handle inventory updates" time="0.000511989">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Order Processing Integration &gt; should handle order retrieval" time="0.0001619">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Order Processing Integration &gt; should handle order updates" time="0.000186893">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Error Handling &gt; should handle API errors in EasyPost client" time="0.001071565">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Error Handling &gt; should handle API errors in Veeqo client" time="0.000214406">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Resource Data Sources &gt; should provide shipping rates via EasyPost integration" time="0.000257938">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Resource Data Sources &gt; should provide product inventory data" time="0.000189689">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; AI Integration &gt; should handle shipping optimization requests" time="0.000256261">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; AI Integration &gt; should handle code analysis requests" time="0.000507912">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Server Configuration &gt; should be properly configured FastMCP server" time="0.000242309">
-        </testcase>
-        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Server Configuration &gt; should have mocked external services" time="0.000113573">
+        <testcase classname="test/integration/error-handling.test.ts" name="Error Handling Integration &gt; should serialize errors to JSON" time="0.000439453">
         </testcase>
     </testsuite>
-    <testsuite name="test/integration/health-check.test.ts" timestamp="2025-09-14T19:03:32.178Z" hostname="DESKTOP-TT7KAU6" tests="11" failures="0" errors="0" skipped="0" time="0.008007706">
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should return basic health status" time="0.003490983">
+    <testsuite name="test/integration/fastmcp-server.test.ts" timestamp="2025-09-14T19:29:46.760Z" hostname="runnervmf4ws1" tests="20" failures="0" errors="0" skipped="0" time="0.180281454">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Tool Registration &gt; should have a FastMCP server instance" time="0.00155429">
         </testcase>
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should return comprehensive health status" time="0.000669346">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Tool Registration &gt; should be configured with correct name and version" time="0.000195195">
         </testcase>
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should detect mock API services" time="0.000308077">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; External Service Integration &gt; should have EasyPost client configured" time="0.000221215">
         </testcase>
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should show monitoring status" time="0.000191651">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; External Service Integration &gt; should have Veeqo client configured" time="0.000188783">
         </testcase>
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should include memory metrics" time="0.000256528">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; External Service Integration &gt; should return mocked shipping rates" time="0.0023504">
         </testcase>
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should include performance metrics" time="0.000217319">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; External Service Integration &gt; should return mocked inventory data" time="0.000301034">
         </testcase>
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should handle health check errors gracefully" time="0.000180608">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Label Creation Service &gt; should mock label creation successfully" time="0.000215853">
         </testcase>
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should execute default health checks" time="0.000418267">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Label Creation Service &gt; should handle tracking successfully" time="0.000295423">
         </testcase>
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should determine overall health status correctly" time="0.00020812">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Inventory Management Integration &gt; should handle inventory levels query" time="0.000831366">
         </testcase>
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should have reasonable uptime" time="0.000169948">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Inventory Management Integration &gt; should handle inventory updates" time="0.000629589">
         </testcase>
-        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should validate timestamp freshness" time="0.000150806">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Order Processing Integration &gt; should handle order retrieval" time="0.000222376">
         </testcase>
-    </testsuite>
-    <testsuite name="test/integration/monitoring.test.ts" timestamp="2025-09-14T19:03:32.180Z" hostname="DESKTOP-TT7KAU6" tests="12" failures="0" errors="0" skipped="0" time="5.01772597">
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should start and stop monitoring system" time="0.002449632">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Order Processing Integration &gt; should handle order updates" time="0.000250068">
         </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should record metrics correctly" time="0.00035949">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Error Handling &gt; should handle API errors in EasyPost client" time="0.001605175">
         </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should record API call metrics" time="0.000263302">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Error Handling &gt; should handle API errors in Veeqo client" time="0.000286256">
         </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should record errors" time="0.005359999">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Resource Data Sources &gt; should provide shipping rates via EasyPost integration" time="0.000305251">
         </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should get health status" time="0.000843667">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Resource Data Sources &gt; should provide product inventory data" time="0.000269605">
         </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should get system metrics" time="0.000565077">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; AI Integration &gt; should handle shipping optimization requests" time="0.000277689">
         </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should emit alerts on slow API calls" time="0.00049124">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; AI Integration &gt; should handle code analysis requests" time="0.000648875">
         </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should register and execute health checks" time="0.001130041">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Server Configuration &gt; should be properly configured FastMCP server" time="0.000168636">
         </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should handle failing health checks" time="0.000307499">
-        </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should handle health check timeouts" time="5.000804281">
-        </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should collect error events" time="0.002261026">
-        </testcase>
-        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should handle memory threshold alerts" time="0.000556334">
+        <testcase classname="test/integration/fastmcp-server.test.ts" name="FastMCP Server Integration &gt; Server Configuration &gt; should have mocked external services" time="0.000139591">
         </testcase>
     </testsuite>
-    <testsuite name="test/integration/server.test.ts" timestamp="2025-09-14T19:03:32.183Z" hostname="DESKTOP-TT7KAU6" tests="2" failures="0" errors="0" skipped="0" time="0.002966565">
-        <testcase classname="test/integration/server.test.ts" name="Server Integration &gt; should pass basic test" time="0.001357701">
+    <testsuite name="test/integration/health-check.test.ts" timestamp="2025-09-14T19:29:46.764Z" hostname="runnervmf4ws1" tests="11" failures="0" errors="0" skipped="0" time="0.008573378">
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should return basic health status" time="0.002696497">
         </testcase>
-        <testcase classname="test/integration/server.test.ts" name="Server Integration &gt; should handle basic operations" time="0.000126026">
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should return comprehensive health status" time="0.000808504">
+        </testcase>
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should detect mock API services" time="0.000316242">
+        </testcase>
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should show monitoring status" time="0.000274184">
+        </testcase>
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should include memory metrics" time="0.000433812">
+        </testcase>
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should include performance metrics" time="0.000314409">
+        </testcase>
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should handle health check errors gracefully" time="0.000275596">
+        </testcase>
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should execute default health checks" time="0.000713636">
+        </testcase>
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should determine overall health status correctly" time="0.00029387">
+        </testcase>
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should have reasonable uptime" time="0.000283421">
+        </testcase>
+        <testcase classname="test/integration/health-check.test.ts" name="Health Check Integration &gt; should validate timestamp freshness" time="0.000246131">
         </testcase>
     </testsuite>
-    <testsuite name="test/integration/shipping-adapters.test.ts" timestamp="2025-09-14T19:03:32.184Z" hostname="DESKTOP-TT7KAU6" tests="2" failures="0" errors="0" skipped="0" time="1.638628397">
-        <testcase classname="test/integration/shipping-adapters.test.ts" name="Shipping Clients (mock mode) &gt; EasyPost client should work in mock mode" time="1.182536295">
+    <testsuite name="test/integration/monitoring.test.ts" timestamp="2025-09-14T19:29:46.766Z" hostname="runnervmf4ws1" tests="12" failures="0" errors="0" skipped="0" time="5.018970456">
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should start and stop monitoring system" time="0.002951995">
         </testcase>
-        <testcase classname="test/integration/shipping-adapters.test.ts" name="Shipping Clients (mock mode) &gt; Veeqo client should work in mock mode" time="0.454233815">
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should record metrics correctly" time="0.000449502">
+        </testcase>
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should record API call metrics" time="0.000337451">
+        </testcase>
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should record errors" time="0.006669204">
+        </testcase>
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should get health status" time="0.001670888">
+        </testcase>
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should get system metrics" time="0.000558775">
+        </testcase>
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should emit alerts on slow API calls" time="0.000583753">
+        </testcase>
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should register and execute health checks" time="0.000402183">
+        </testcase>
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should handle failing health checks" time="0.000346438">
+        </testcase>
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should handle health check timeouts" time="5.000506727">
+        </testcase>
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should collect error events" time="0.001409588">
+        </testcase>
+        <testcase classname="test/integration/monitoring.test.ts" name="Monitoring System Integration &gt; should handle memory threshold alerts" time="0.000323776">
         </testcase>
     </testsuite>
-    <testsuite name="test/unit/example.test.ts" timestamp="2025-09-14T19:03:32.184Z" hostname="DESKTOP-TT7KAU6" tests="4" failures="0" errors="0" skipped="0" time="0.003704578">
-        <testcase classname="test/unit/example.test.ts" name="Example Unit Test &gt; should pass basic assertion" time="0.001030751">
+    <testsuite name="test/integration/server.test.ts" timestamp="2025-09-14T19:29:46.768Z" hostname="runnervmf4ws1" tests="2" failures="0" errors="0" skipped="0" time="0.004794395">
+        <testcase classname="test/integration/server.test.ts" name="Server Integration &gt; should pass basic test" time="0.00204626">
         </testcase>
-        <testcase classname="test/unit/example.test.ts" name="Example Unit Test &gt; should handle string operations" time="0.000152802">
-        </testcase>
-        <testcase classname="test/unit/example.test.ts" name="Example Unit Test &gt; should work with arrays" time="0.000743361">
-        </testcase>
-        <testcase classname="test/unit/example.test.ts" name="Example Unit Test &gt; should handle async operations" time="0.000121393">
+        <testcase classname="test/integration/server.test.ts" name="Server Integration &gt; should handle basic operations" time="0.000248896">
         </testcase>
     </testsuite>
-    <testsuite name="test/unit/services/easypost-client.test.ts" timestamp="2025-09-14T19:03:32.185Z" hostname="DESKTOP-TT7KAU6" tests="13" failures="0" errors="0" skipped="0" time="0.011047714">
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; getRates &gt; should return shipping rates for valid addresses and parcel" time="0.003368377">
+    <testsuite name="test/integration/shipping-adapters.test.ts" timestamp="2025-09-14T19:29:46.769Z" hostname="runnervmf4ws1" tests="2" failures="0" errors="0" skipped="0" time="0.004625939">
+        <testcase classname="test/integration/shipping-adapters.test.ts" name="Shipping Clients (mock mode) &gt; EasyPost client should work in mock mode" time="0.001995706">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; getRates &gt; should handle API errors gracefully" time="0.001771873">
+        <testcase classname="test/integration/shipping-adapters.test.ts" name="Shipping Clients (mock mode) &gt; Veeqo client should work in mock mode" time="0.000786703">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; getRates &gt; should validate input parameters" time="0.000396795">
+    </testsuite>
+    <testsuite name="test/unit/example.test.ts" timestamp="2025-09-14T19:29:46.769Z" hostname="runnervmf4ws1" tests="4" failures="0" errors="0" skipped="0" time="0.004696862">
+        <testcase classname="test/unit/example.test.ts" name="Example Unit Test &gt; should pass basic assertion" time="0.001506971">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; createLabel &gt; should create a shipping label successfully" time="0.000565723">
+        <testcase classname="test/unit/example.test.ts" name="Example Unit Test &gt; should handle string operations" time="0.000229169">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; createLabel &gt; should handle label creation failures" time="0.000336906">
+        <testcase classname="test/unit/example.test.ts" name="Example Unit Test &gt; should work with arrays" time="0.000864498">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; verifyAddress &gt; should verify an address and return validation results" time="0.000366479">
+        <testcase classname="test/unit/example.test.ts" name="Example Unit Test &gt; should handle async operations" time="0.000166261">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; verifyAddress &gt; should handle address verification failures" time="0.000261982">
+    </testsuite>
+    <testsuite name="test/unit/services/easypost-client.test.ts" timestamp="2025-09-14T19:29:46.770Z" hostname="runnervmf4ws1" tests="13" failures="0" errors="0" skipped="0" time="0.030696971">
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; getRates &gt; should return shipping rates for valid addresses and parcel" time="0.004340205">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; trackShipment &gt; should track a shipment by tracking number" time="0.000300755">
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; getRates &gt; should handle API errors gracefully" time="0.001822321">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; trackShipment &gt; should handle tracking failures" time="0.000240089">
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; getRates &gt; should validate input parameters" time="0.000446716">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; error handling &gt; should handle network timeouts" time="0.000379369">
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; createLabel &gt; should create a shipping label successfully" time="0.000739705">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; error handling &gt; should handle rate limiting" time="0.00074805">
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; createLabel &gt; should handle label creation failures" time="0.000457356">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; input validation &gt; should handle API validation errors for invalid addresses" time="0.000309305">
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; verifyAddress &gt; should verify an address and return validation results" time="0.000527337">
         </testcase>
-        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; input validation &gt; should handle API validation errors for invalid parcel dimensions" time="0.000333056">
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; verifyAddress &gt; should handle address verification failures" time="0.000365204">
+        </testcase>
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; trackShipment &gt; should track a shipment by tracking number" time="0.000398375">
+        </testcase>
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; trackShipment &gt; should handle tracking failures" time="0.000339565">
+        </testcase>
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; error handling &gt; should handle network timeouts" time="0.000614129">
+        </testcase>
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; error handling &gt; should handle rate limiting" time="0.017657103">
+        </testcase>
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; input validation &gt; should handle API validation errors for invalid addresses" time="0.000446656">
+        </testcase>
+        <testcase classname="test/unit/services/easypost-client.test.ts" name="EasyPostClient &gt; input validation &gt; should handle API validation errors for invalid parcel dimensions" time="0.000461964">
         </testcase>
     </testsuite>
 </testsuites>
