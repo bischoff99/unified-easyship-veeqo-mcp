@@ -42,6 +42,37 @@ const toolHandlers = new Map<string, (_params: any) => Promise<any>>([
       return weightToOz(params);
     },
   ],
+  [
+    'ep.optimize_shipping',
+    async (params) => {
+      const { optimizeShipping } = await import('./tools/optimize-shipping.js');
+      return optimizeShipping(params);
+    },
+  ],
+  [
+    'ep.get_shipping_rates',
+    async (params) => {
+      const { EasyPostClient } = await import('../services/clients/easypost-enhanced.js');
+      const client = new EasyPostClient();
+      return client.getRates(params.to_address, params.from_address, params.parcel);
+    },
+  ],
+  [
+    'ep.track_shipment',
+    async (params) => {
+      const { EasyPostClient } = await import('../services/clients/easypost-enhanced.js');
+      const client = new EasyPostClient();
+      return client.trackShipment(params.tracking_code);
+    },
+  ],
+  [
+    'ep.create_shipment',
+    async (params) => {
+      const { EasyPostClient } = await import('../services/clients/easypost-enhanced.js');
+      const client = new EasyPostClient();
+      return client.createShipment(params.to_address, params.from_address, params.parcel, params.customs_info);
+    },
+  ],
 ]);
 
 async function handleRequest(request: JsonRpcRequest): Promise<JsonRpcResponse> {

@@ -244,4 +244,71 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
       }
     },
   });
+
+  /**
+   * Advanced shipping optimization with multi-carrier analysis
+   */
+  server.addTool({
+    name: 'optimize_shipping',
+    description: 'Advanced shipping optimization with multi-carrier rate comparison and intelligent recommendations',
+    parameters: z.object({
+      from_address: addressSchema,
+      to_address: addressSchema,
+      parcel: parcelSchema,
+      preferences: z.object({
+        max_cost: z.number().optional().describe('Maximum acceptable cost'),
+        max_delivery_days: z.number().optional().describe('Maximum acceptable delivery days'),
+        preferred_carriers: z.array(z.string()).optional().describe('Preferred carriers (USPS, UPS, FedEx)'),
+        prioritize_speed: z.boolean().default(false).describe('Prioritize fastest delivery'),
+        prioritize_cost: z.boolean().default(true).describe('Prioritize lowest cost'),
+      }).optional(),
+    }),
+    execute: async (args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Optimizing shipping options', {
+          from: `${args.from_address.city}, ${args.from_address.state}`,
+          to: `${args.to_address.city}, ${args.to_address.state}`,
+          weight: args.parcel.weight,
+          preferences: args.preferences,
+        });
+
+        // Use the optimizeShipping function from core tools
+        const { optimizeShipping } = await import('../../core/tools/optimize-shipping.js');
+        const optimizationRequest = {
+          fromAddress: args.from_address,
+          toAddress: args.to_address,
+          parcel: args.parcel,
+          preferences: args.preferences ? {
+            maxCost: args.preferences.max_cost,
+            maxDeliveryDays: args.preferences.max_delivery_days,
+            preferredCarriers: args.preferences.preferred_carriers,
+            prioritizeSpeed: args.preferences.prioritize_speed,
+            prioritizeCost: args.preferences.prioritize_cost,
+          } : undefined,
+        };
+
+        const optimization = await optimizeShipping(optimizationRequest);
+
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/optimize', duration, 200);
+
+        logger.info(`Completed shipping optimization in ${duration}ms`, {
+          totalRates: optimization.totalRatesFound,
+          recommendations: Object.keys(optimization.recommendations || {}),
+        });
+
+        const result = {
+          ...optimization,
+          processing_time_ms: duration,
+        };
+        return JSON.stringify(result, null, 2);
+      } catch (error: any) {
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/optimize', duration, 500, true);
+        logError('Failed to optimize shipping', error);
+        throw new Error(`Shipping optimization failed: ${error.message}`);
+      }
+    },
+  });
 }
