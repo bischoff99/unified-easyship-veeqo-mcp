@@ -219,23 +219,23 @@ export interface GetInventoryLevelsParams {
 
 // Enhanced client interfaces
 export interface EnhancedEasyPostClient {
-  getRates(from: EasyPostAddress, to: EasyPostAddress, parcel: EasyPostParcel): Promise<EasyPostRate[]>;
-  createShipment(from: EasyPostAddress, to: EasyPostAddress, parcel: EasyPostParcel, options?: {
+  getRates(_from: EasyPostAddress, _to: EasyPostAddress, _parcel: EasyPostParcel): Promise<EasyPostRate[]>;
+  createShipment(_from: EasyPostAddress, _to: EasyPostAddress, _parcel: EasyPostParcel, _options?: {
     service?: string;
     carrier?: string;
   }): Promise<EasyPostShipment>;
-  trackPackage(trackingCode: string): Promise<EasyPostTracker>;
-  verifyAddress(address: EasyPostAddress): Promise<EasyPostAddress>;
-  getParcelPresets(carrier?: string): Promise<any[]>;
+  trackPackage(_trackingCode: string): Promise<EasyPostTracker>;
+  verifyAddress(_address: EasyPostAddress): Promise<EasyPostAddress>;
+  getParcelPresets(_carrier?: string): Promise<any[]>;
 }
 
 export interface EnhancedVeeqoClient {
-  getProducts(params?: GetProductsParams): Promise<VeeqoProduct[]>;
-  getOrders(params?: GetOrdersParams): Promise<VeeqoOrder[]>;
-  createFulfillment(params: CreateFulfillmentParams): Promise<VeeqoFulfillment>;
-  updateInventory(params: UpdateInventoryParams): Promise<{ success: boolean; message: string }>;
+  getProducts(_params?: GetProductsParams): Promise<VeeqoProduct[]>;
+  getOrders(_params?: GetOrdersParams): Promise<VeeqoOrder[]>;
+  createFulfillment(_params: CreateFulfillmentParams): Promise<VeeqoFulfillment>;
+  updateInventory(_params: UpdateInventoryParams): Promise<{ success: boolean; message: string }>;
   getWarehouses(): Promise<VeeqoWarehouse[]>;
-  getInventoryLevels(params: GetInventoryLevelsParams): Promise<Array<{
+  getInventoryLevels(_params: GetInventoryLevelsParams): Promise<Array<{
     sellable_id: number;
     warehouse_id: number;
     available: number;
@@ -246,14 +246,14 @@ export interface EnhancedVeeqoClient {
 
 // Monitoring and logging interfaces
 export interface SafeLogger {
-  info(message: string, meta?: Record<string, any>): void;
-  error(message: string, error?: any): void;
-  warn(message: string, meta?: Record<string, any>): void;
-  debug(message: string, meta?: Record<string, any>): void;
+  info(_message: string, _meta?: Record<string, any>): void;
+  error(_message: string, _error?: any): void;
+  warn(_message: string, _meta?: Record<string, any>): void;
+  debug(_message: string, _meta?: Record<string, any>): void;
 }
 
 export interface SafeMonitoring {
-  recordApiCall(service: string, endpoint: string, duration: number, statusCode?: number, isError?: boolean): void;
-  recordMetric(name: string, value: number, labels?: Record<string, string>, metadata?: Record<string, any>): void;
-  recordError(error: Error, context?: Record<string, any>): void;
+  recordApiCall(_service: string, _endpoint: string, _duration: number, _statusCode?: number, _isError?: boolean): void;
+  recordMetric(_name: string, _value: number, _labels?: Record<string, string>, _metadata?: Record<string, any>): void;
+  recordError(_error: Error, _context?: Record<string, any>): void;
 }

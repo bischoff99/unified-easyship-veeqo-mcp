@@ -14,7 +14,7 @@ export const safeLogger = {
       } else {
         logger.info(message);
       }
-    } catch (error) {
+    } catch (_error) {
       console.log(`[INFO] ${message}`, meta ? JSON.stringify(meta) : '');
     }
   },
@@ -26,7 +26,7 @@ export const safeLogger = {
       } else {
         logger.error(message);
       }
-    } catch (err) {
+    } catch (_err) {
       console.error(`[ERROR] ${message}`, error ? error.toString() : '');
     }
   },
@@ -38,7 +38,7 @@ export const safeLogger = {
       } else {
         logger.warn(message);
       }
-    } catch (error) {
+    } catch (_error) {
       console.warn(`[WARN] ${message}`, meta ? JSON.stringify(meta) : '');
     }
   },
@@ -50,7 +50,7 @@ export const safeLogger = {
       } else {
         logger.debug(message);
       }
-    } catch (error) {
+    } catch (_error) {
       console.log(`[DEBUG] ${message}`, meta ? JSON.stringify(meta) : '');
     }
   }
@@ -63,7 +63,7 @@ export const safeMonitoring = {
       if (monitoring && typeof monitoring.recordApiCall === 'function') {
         monitoring.recordApiCall(service, endpoint, duration, statusCode, isError);
       }
-    } catch (error) {
+    } catch (_error) {
       console.log(`[MONITORING] API Call: ${service}${endpoint} - ${duration}ms - ${statusCode}`);
     }
   },
@@ -73,7 +73,7 @@ export const safeMonitoring = {
       if (monitoring && typeof monitoring.recordMetric === 'function') {
         monitoring.recordMetric(name, value, labels);
       }
-    } catch (error) {
+    } catch (_error) {
       console.log(`[MONITORING] Metric: ${name} = ${value}`, labels ? JSON.stringify(labels) : '');
     }
   },
@@ -83,7 +83,7 @@ export const safeMonitoring = {
       if (monitoring && typeof monitoring.recordError === 'function') {
         monitoring.recordError(error, context);
       }
-    } catch (err) {
+    } catch (_err) {
       console.error(`[MONITORING] Error: ${error.message}`, context ? JSON.stringify(context) : '');
     }
   }
