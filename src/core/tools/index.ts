@@ -8,6 +8,7 @@ export { health } from './health.js';
 export { parcelPresets } from './parcel-presets.js';
 export { verifyAddress } from './verify-address.js';
 export { weightToOz } from './weight-to-oz.js';
+export { optimizeShipping } from './optimize-shipping.js';
 
 // Tool metadata for MCP registration
 export const TOOL_DEFINITIONS = [
@@ -15,6 +16,7 @@ export const TOOL_DEFINITIONS = [
   'parcelPresets',
   'verifyAddress',
   'weightToOz',
+  'optimizeShipping',
 ] as const;
 
 export type ToolName = (typeof TOOL_DEFINITIONS)[number];
