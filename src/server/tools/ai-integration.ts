@@ -70,10 +70,11 @@ export function addAIIntegrationTools(
         monitoring.recordApiCall('claude-code', '/optimize-shipping', duration, 200);
 
         logger.info(`Completed shipping optimization in ${duration}ms`);
-        return {
+        const result = {
           ...optimization,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('claude-code', '/optimize-shipping', duration, 500, true);
@@ -130,10 +131,11 @@ export function addAIIntegrationTools(
         monitoring.recordApiCall('claude-code', '/recommendations', duration, 200);
 
         logger.info(`Generated ${recommendations.options.length} shipping recommendations in ${duration}ms`);
-        return {
+        const result = {
           ...recommendations,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('claude-code', '/recommendations', duration, 500, true);
@@ -187,10 +189,11 @@ export function addAIIntegrationTools(
         monitoring.recordApiCall('claude-code', '/analyze', duration, 200);
 
         logger.info(`Completed ${args.analysis_type} analysis in ${duration}ms`);
-        return {
+        const result = {
           ...analysis,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('claude-code', '/analyze', duration, 500, true);
@@ -280,7 +283,7 @@ export function addAIIntegrationTools(
         monitoring.recordApiCall('claude-code', '/routing', duration, 200);
 
         logger.info(`Completed order routing for ${args.orders.length} orders in ${duration}ms`);
-        return {
+        const result = {
           routing_results: routingResults,
           summary: {
             total_orders: args.orders.length,
@@ -288,6 +291,7 @@ export function addAIIntegrationTools(
           },
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('claude-code', '/routing', duration, 500, true);
