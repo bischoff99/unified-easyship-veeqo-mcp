@@ -150,7 +150,6 @@ export function addAIIntegrationTools(
         if (args.historical_data?.preferred_carriers) {
           requirements.push(`Preferred carriers: ${args.historical_data.preferred_carriers.join(', ')}`);
         }
-
         const recommendations = await generateShippingRecommendations(context, requirements);
 
         const duration = Date.now() - startTime;
