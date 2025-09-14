@@ -6,8 +6,6 @@
 // Client services
 export { EasyPostClient } from './clients/easypost-enhanced.js';
 export { VeeqoClient } from './clients/veeqo-enhanced.js';
-export { EasyPostShippingAdapter } from './clients/easypost-shipping-adapter.js';
-export { VeeqoShippingAdapter } from './clients/veeqo-shipping-adapter.js';
 
 // Import types for service registry
 import { EasyPostClient } from './clients/easypost-enhanced.js';

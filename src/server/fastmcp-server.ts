@@ -17,6 +17,7 @@ import {
   optimizeShipping,
 } from '../services/integrations/claude-code.js';
 import { logError, logger } from '../utils/logger.js';
+import { monitoring } from '../utils/monitoring.js';
 
 // Initialize FastMCP server with comprehensive configuration
 const server = new FastMCP({
@@ -399,6 +400,10 @@ server.addTool({
       }
 
       // Select best rate based on priority
+      if (filteredRates.length === 0) {
+        throw new Error('No rates available matching the specified criteria');
+      }
+
       let selectedRate = filteredRates[0];
 
       if (filteredRates.length > 1) {
@@ -406,14 +411,14 @@ server.addTool({
           case 'cost':
             selectedRate = filteredRates.reduce(
               (best, current) =>
-                parseFloat(current.rate) < parseFloat(best.rate) ? current : best,
-              filteredRates[0]
+                parseFloat(current.rate) < parseFloat(best!.rate) ? current : best,
+              filteredRates[0]!
             );
             break;
           case 'speed':
             selectedRate = filteredRates.reduce(
-              (best, current) => (current.delivery_days < best.delivery_days ? current : best),
-              filteredRates[0]
+              (best, current) => (current.delivery_days < best!.delivery_days ? current : best),
+              filteredRates[0]!
             );
             break;
           case 'reliability':
@@ -421,10 +426,10 @@ server.addTool({
           default:
             // Score based on cost and speed (lower is better)
             selectedRate = filteredRates.reduce((best, current) => {
-              const bestScore = parseFloat(best.rate) * 0.6 + best.delivery_days * 0.4;
+              const bestScore = parseFloat(best!.rate) * 0.6 + best!.delivery_days * 0.4;
               const currentScore = parseFloat(current.rate) * 0.6 + current.delivery_days * 0.4;
               return currentScore < bestScore ? current : best;
-            }, filteredRates[0]);
+            }, filteredRates[0]!);
             break;
         }
       }
@@ -537,13 +542,18 @@ server.addTool({
           args.to_address as EasyPostAddress,
           args.parcel
         );
+
+        if (rates.length === 0) {
+          throw new Error('No shipping rates available');
+        }
+
         const cheapestRate = rates.reduce(
-          (best, current) => (parseFloat(current.rate) < parseFloat(best.rate) ? current : best),
-          rates[0]
+          (best, current) => (parseFloat(current.rate) < parseFloat(best!.rate) ? current : best),
+          rates[0]!
         );
 
-        carrier = cheapestRate.carrier;
-        service = cheapestRate.service;
+        carrier = cheapestRate!.carrier;
+        service = cheapestRate!.service;
       }
 
       await reportProgress({ progress: 50, total: 100 });
@@ -1043,29 +1053,33 @@ server.addTool({
       await reportProgress({ progress: 75, total: 100 });
 
       // Select best allocation based on strategy
+      if (allocationOptions.length === 0) {
+        throw new Error('No allocation options available');
+      }
+
       let selectedAllocation = allocationOptions[0];
 
       if (allocationOptions.length > 1) {
         switch (args.allocation_strategy) {
           case 'lowest_cost':
             selectedAllocation = allocationOptions.reduce(
-              (best, current) => (current.estimated_cost < best.estimated_cost ? current : best),
-              allocationOptions[0]
+              (best, current) => (current.estimated_cost < best!.estimated_cost ? current : best),
+              allocationOptions[0]!
             );
             break;
           case 'fastest_shipping':
             selectedAllocation = allocationOptions.reduce(
-              (best, current) => (current.estimated_days < best.estimated_days ? current : best),
-              allocationOptions[0]
+              (best, current) => (current.estimated_days < best!.estimated_days ? current : best),
+              allocationOptions[0]!
             );
             break;
           case 'balanced':
           default:
             selectedAllocation = allocationOptions.reduce((best, current) => {
-              const bestScore = best.estimated_cost * 0.6 + best.estimated_days * 0.4;
+              const bestScore = best!.estimated_cost * 0.6 + best!.estimated_days * 0.4;
               const currentScore = current.estimated_cost * 0.6 + current.estimated_days * 0.4;
               return currentScore < bestScore ? current : best;
-            }, allocationOptions[0]);
+            }, allocationOptions[0]!);
             break;
         }
       }
@@ -1742,6 +1756,592 @@ Focus on shipping-specific concerns like:
 });
 
 // ============================================================================
+// PRODUCT MANAGEMENT TOOLS
+// ============================================================================
+
+/**
+ * Create a new product in Veeqo
+ */
+server.addTool({
+  name: 'create_product',
+  description: 'Create a new product in Veeqo with complete specifications',
+  parameters: z.object({
+    title: z.string(),
+    sku: z.string().optional(),
+    barcode: z.string().optional(),
+    description: z.string().optional(),
+    price: z.number(),
+    cost_price: z.number().optional(),
+    weight: z.number().optional(),
+    length: z.number().optional(),
+    width: z.number().optional(),
+    height: z.number().optional(),
+    variants: z.array(z.object({
+      title: z.string(),
+      sku: z.string(),
+      barcode: z.string().optional(),
+      price: z.number(),
+      cost_price: z.number().optional(),
+      weight: z.number().optional(),
+      length: z.number().optional(),
+      width: z.number().optional(),
+      height: z.number().optional(),
+    })).optional(),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      await reportProgress({ progress: 10, total: 100 });
+
+      const product = await veeqoClient.createProduct(args);
+
+      await reportProgress({ progress: 100, total: 100 });
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Product created successfully!\n\n**Product Details:**\n- ID: ${product.id}\n- Title: ${product.title}\n- SKU: ${product.sku}\n- Price: $${product.price}\n- Created: ${new Date(product.created_at).toLocaleString()}\n\n${product.variants && product.variants.length > 0 ? `**Variants:** ${product.variants.length} created` : 'No variants created'}`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to create product: ${(error as Error).message}`);
+    }
+  },
+});
+
+/**
+ * Update an existing product
+ */
+server.addTool({
+  name: 'update_product',
+  description: 'Update an existing product in Veeqo',
+  parameters: z.object({
+    product_id: z.string(),
+    title: z.string().optional(),
+    sku: z.string().optional(),
+    barcode: z.string().optional(),
+    description: z.string().optional(),
+    price: z.number().optional(),
+    cost_price: z.number().optional(),
+    weight: z.number().optional(),
+    length: z.number().optional(),
+    width: z.number().optional(),
+    height: z.number().optional(),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      const { product_id, ...updates } = args;
+
+      await reportProgress({ progress: 20, total: 100 });
+
+      const product = await veeqoClient.updateProduct(product_id, updates);
+
+      await reportProgress({ progress: 100, total: 100 });
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Product updated successfully!\n\n**Updated Product:**\n- ID: ${product.id}\n- Title: ${product.title}\n- SKU: ${product.sku}\n- Price: $${product.price}\n- Last Updated: ${new Date(product.updated_at).toLocaleString()}\n\n**Changes Applied:** ${Object.keys(updates).join(', ')}`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to update product: ${(error as Error).message}`);
+    }
+  },
+});
+
+/**
+ * Manage product variants
+ */
+server.addTool({
+  name: 'manage_product_variants',
+  description: 'Create or update product variants in Veeqo',
+  parameters: z.object({
+    product_id: z.string(),
+    action: z.enum(['create', 'update']),
+    variant_id: z.string().optional(),
+    variant_data: z.object({
+      title: z.string(),
+      sku: z.string(),
+      barcode: z.string().optional(),
+      price: z.number(),
+      cost_price: z.number().optional(),
+      weight: z.number().optional(),
+      length: z.number().optional(),
+      width: z.number().optional(),
+      height: z.number().optional(),
+    }),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      await reportProgress({ progress: 25, total: 100 });
+
+      let variant;
+      if (args.action === 'create') {
+        variant = await veeqoClient.createProductVariant(args.product_id, args.variant_data);
+      } else if (args.action === 'update' && args.variant_id) {
+        variant = await veeqoClient.updateProductVariant(args.variant_id, args.variant_data);
+      } else {
+        throw new Error('variant_id is required for update action');
+      }
+
+      await reportProgress({ progress: 100, total: 100 });
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Product variant ${args.action}d successfully!\n\n**Variant Details:**\n- ID: ${variant.id}\n- Product ID: ${variant.product_id}\n- Title: ${variant.title}\n- SKU: ${variant.sku}\n- Price: $${variant.price}\n- ${args.action === 'create' ? 'Created' : 'Updated'}: ${new Date(variant.updated_at).toLocaleString()}`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to ${args.action} product variant: ${(error as Error).message}`);
+    }
+  },
+});
+
+/**
+ * Delete a product
+ */
+server.addTool({
+  name: 'delete_product',
+  description: 'Delete a product from Veeqo catalog',
+  parameters: z.object({
+    product_id: z.string(),
+    confirm: z.boolean().default(false),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      if (!args.confirm) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `⚠️ Product deletion requires confirmation. Set 'confirm: true' to proceed with deleting product ${args.product_id}.`,
+            },
+          ],
+        };
+      }
+
+      await reportProgress({ progress: 50, total: 100 });
+
+      await veeqoClient.deleteProduct(args.product_id);
+
+      await reportProgress({ progress: 100, total: 100 });
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Product ${args.product_id} deleted successfully!`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to delete product: ${(error as Error).message}`);
+    }
+  },
+});
+
+// ============================================================================
+// WAREHOUSE/LOCATION MANAGEMENT TOOLS
+// ============================================================================
+
+/**
+ * Create a new warehouse/location
+ */
+server.addTool({
+  name: 'create_warehouse',
+  description: 'Create a new warehouse/location in Veeqo',
+  parameters: z.object({
+    name: z.string(),
+    address: z.object({
+      first_name: z.string(),
+      last_name: z.string(),
+      address1: z.string(),
+      address2: z.string().optional(),
+      city: z.string(),
+      state: z.string(),
+      zip: z.string(),
+      country: z.string().default('US'),
+      phone: z.string().optional(),
+    }),
+    is_default: z.boolean().optional().default(false),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      await reportProgress({ progress: 20, total: 100 });
+
+      const location = await veeqoClient.createLocation(args);
+
+      await reportProgress({ progress: 100, total: 100 });
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Warehouse created successfully!\n\n**Warehouse Details:**\n- ID: ${location.id}\n- Name: ${location.name}\n- Address: ${location.address.address1}, ${location.address.city}, ${location.address.state} ${location.address.zip}\n- Default: ${location.is_default ? 'Yes' : 'No'}\n- Created: ${new Date(location.created_at).toLocaleString()}`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to create warehouse: ${(error as Error).message}`);
+    }
+  },
+});
+
+/**
+ * Update warehouse information
+ */
+server.addTool({
+  name: 'update_warehouse',
+  description: 'Update warehouse/location information in Veeqo',
+  parameters: z.object({
+    location_id: z.string(),
+    name: z.string().optional(),
+    address: z.object({
+      first_name: z.string().optional(),
+      last_name: z.string().optional(),
+      address1: z.string().optional(),
+      address2: z.string().optional(),
+      city: z.string().optional(),
+      state: z.string().optional(),
+      zip: z.string().optional(),
+      country: z.string().optional(),
+      phone: z.string().optional(),
+    }).optional(),
+    is_default: z.boolean().optional(),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      const { location_id, ...updates } = args;
+
+      await reportProgress({ progress: 30, total: 100 });
+
+      const location = await veeqoClient.updateLocation(location_id, updates);
+
+      await reportProgress({ progress: 100, total: 100 });
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Warehouse updated successfully!\n\n**Updated Warehouse:**\n- ID: ${location.id}\n- Name: ${location.name}\n- Address: ${location.address.address1}, ${location.address.city}, ${location.address.state} ${location.address.zip}\n- Default: ${location.is_default ? 'Yes' : 'No'}\n- Last Updated: ${new Date(location.updated_at).toLocaleString()}\n\n**Changes Applied:** ${Object.keys(updates).join(', ')}`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to update warehouse: ${(error as Error).message}`);
+    }
+  },
+});
+
+/**
+ * Manage warehouse routing
+ */
+server.addTool({
+  name: 'manage_warehouse_routing',
+  description: 'Configure warehouse routing and shipping preferences',
+  parameters: z.object({
+    location_id: z.string(),
+    operation: z.enum(['set_default', 'view_settings']),
+    set_as_default: z.boolean().optional(),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      await reportProgress({
+        progress: 25,
+        total: 100,
+      });
+
+      if (args.operation === 'set_default' && args.set_as_default !== undefined) {
+        const location = await veeqoClient.updateLocation(args.location_id, {
+          is_default: args.set_as_default
+        });
+
+        await reportProgress({
+          progress: 100,
+          total: 100,
+        });
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `✅ Warehouse routing updated!\n\n**${location.name}** is ${args.set_as_default ? 'now' : 'no longer'} the default warehouse for shipping.`,
+            },
+          ],
+        };
+      } else {
+        // View current settings
+        const locations = await veeqoClient.getLocations();
+        const currentLocation = locations.find(loc => loc.id.toString() === args.location_id);
+
+        if (!currentLocation) {
+          throw new Error(`Location ${args.location_id} not found`);
+        }
+
+        await reportProgress({
+          progress: 100,
+          total: 100,
+        });
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `📊 **Warehouse Settings for ${currentLocation.name}**\n\n- Default Warehouse: ${currentLocation.is_default ? 'Yes' : 'No'}\n- Location ID: ${currentLocation.id}\n- Address: ${currentLocation.address.address1}, ${currentLocation.address.city}, ${currentLocation.address.state}\n\n**Available Operations:**\n- Set as default shipping warehouse\n- Update warehouse information\n- View inventory levels`,
+            },
+          ],
+        };
+      }
+    } catch (error) {
+      throw new Error(`Failed to manage warehouse routing: ${(error as Error).message}`);
+    }
+  },
+});
+
+/**
+ * Delete a warehouse
+ */
+server.addTool({
+  name: 'delete_warehouse',
+  description: 'Delete a warehouse/location from Veeqo',
+  parameters: z.object({
+    location_id: z.string(),
+    confirm: z.boolean().default(false),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      if (!args.confirm) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `⚠️ Warehouse deletion requires confirmation. Set 'confirm: true' to proceed with deleting warehouse ${args.location_id}. This will permanently remove the warehouse and may affect inventory allocations.`,
+            },
+          ],
+        };
+      }
+
+      await reportProgress({
+        progress: 50,
+        total: 100,
+      });
+
+      await veeqoClient.deleteLocation(args.location_id);
+
+      await reportProgress({
+        progress: 100,
+        total: 100,
+      });
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Warehouse ${args.location_id} deleted successfully!`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to delete warehouse: ${(error as Error).message}`);
+    }
+  },
+});
+
+// ============================================================================
+// ADVANCED SHIPMENT MANAGEMENT TOOLS
+// ============================================================================
+
+/**
+ * Create a shipment directly in Veeqo
+ */
+server.addTool({
+  name: 'create_veeqo_shipment',
+  description: 'Create a shipment directly in Veeqo for an order',
+  parameters: z.object({
+    order_id: z.number(),
+    carrier: z.string().optional(),
+    service: z.string().optional(),
+    line_items: z.array(z.object({
+      product_id: z.number(),
+      variant_id: z.number(),
+      quantity: z.number(),
+    })),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      await reportProgress({
+        progress: 20,
+        total: 100,
+      });
+
+      const shipment = await veeqoClient.createShipment(args);
+
+      await reportProgress({
+        progress: 100,
+        total: 100,
+      });
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Shipment created successfully in Veeqo!\n\n**Shipment Details:**\n- ID: ${shipment.id}\n- Order ID: ${shipment.order_id}\n- Status: ${shipment.status}\n- Carrier: ${shipment.carrier}\n- Service: ${shipment.service}\n- Tracking: ${shipment.tracking_number || 'Pending'}\n- Items: ${shipment.line_items.length}\n- Created: ${new Date(shipment.created_at).toLocaleString()}`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to create shipment: ${(error as Error).message}`);
+    }
+  },
+});
+
+/**
+ * Update shipment status and tracking
+ */
+server.addTool({
+  name: 'update_shipment_status',
+  description: 'Update shipment status, tracking number, and other details',
+  parameters: z.object({
+    shipment_id: z.string(),
+    tracking_number: z.string().optional(),
+    carrier: z.string().optional(),
+    service: z.string().optional(),
+    status: z.enum(['pending', 'shipped', 'delivered', 'returned', 'cancelled']).optional(),
+    shipped_at: z.string().optional(),
+    delivered_at: z.string().optional(),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      const { shipment_id, ...updates } = args;
+
+      await reportProgress({
+        progress: 30,
+        total: 100,
+      });
+
+      const shipment = await veeqoClient.updateShipment(shipment_id, updates);
+
+      await reportProgress({
+        progress: 100,
+        total: 100,
+      });
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Shipment updated successfully!\n\n**Updated Shipment:**\n- ID: ${shipment.id}\n- Status: ${shipment.status}\n- Tracking: ${shipment.tracking_number}\n- Carrier: ${shipment.carrier}\n- Service: ${shipment.service}\n- Shipped: ${shipment.shipped_at ? new Date(shipment.shipped_at).toLocaleString() : 'Not yet shipped'}\n- Last Updated: ${new Date(shipment.updated_at).toLocaleString()}\n\n**Changes Applied:** ${Object.keys(updates).join(', ')}`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to update shipment: ${(error as Error).message}`);
+    }
+  },
+});
+
+/**
+ * Handle partial shipments
+ */
+server.addTool({
+  name: 'handle_partial_shipment',
+  description: 'Create a partial shipment for selected items from an order',
+  parameters: z.object({
+    order_id: z.string(),
+    items: z.array(z.object({
+      product_id: z.number(),
+      variant_id: z.number(),
+      quantity: z.number(),
+    })),
+    carrier: z.string().optional(),
+    service: z.string().optional(),
+    reason: z.string().optional(),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      await reportProgress({
+        progress: 25,
+        total: 100,
+      });
+
+      const shipment = await veeqoClient.createPartialShipment(args.order_id, args.items);
+
+      // Update with carrier/service if provided
+      if (args.carrier || args.service) {
+        await veeqoClient.updateShipment(shipment.id.toString(), {
+          carrier: args.carrier,
+          service: args.service,
+        });
+      }
+
+      await reportProgress({
+        progress: 100,
+        total: 100,
+      });
+
+      const totalItems = args.items.reduce((sum, item) => sum + item.quantity, 0);
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Partial shipment created successfully!\n\n**Shipment Details:**\n- Shipment ID: ${shipment.id}\n- Order ID: ${args.order_id}\n- Items Shipped: ${totalItems} (${args.items.length} different products)\n- Status: ${shipment.status}\n- Carrier: ${args.carrier || 'TBD'}\n- Service: ${args.service || 'TBD'}\n- Reason: ${args.reason || 'Partial availability'}\n\n**Items in Shipment:**\n${args.items.map(item => `- Product ${item.product_id} (Variant ${item.variant_id}): ${item.quantity} units`).join('\n')}`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to create partial shipment: ${(error as Error).message}`);
+    }
+  },
+});
+
+/**
+ * Cancel a shipment
+ */
+server.addTool({
+  name: 'cancel_shipment',
+  description: 'Cancel an existing shipment and restore inventory',
+  parameters: z.object({
+    shipment_id: z.string(),
+    reason: z.string().optional(),
+    restore_inventory: z.boolean().default(true),
+  }),
+  execute: async (args, { reportProgress }) => {
+    try {
+      await reportProgress({
+        progress: 40,
+        total: 100,
+      });
+
+      const cancelledShipment = await veeqoClient.cancelShipment(args.shipment_id);
+
+      await reportProgress({
+        progress: 100,
+        total: 100,
+      });
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✅ Shipment cancelled successfully!\n\n**Cancelled Shipment:**\n- ID: ${cancelledShipment.id}\n- Order ID: ${cancelledShipment.order_id}\n- Previous Status: shipped → cancelled\n- Tracking: ${cancelledShipment.tracking_number}\n- Reason: ${args.reason || 'Not specified'}\n- Inventory Restored: ${args.restore_inventory ? 'Yes' : 'No'}\n- Cancelled: ${new Date(cancelledShipment.updated_at).toLocaleString()}\n\n**Items Returned to Inventory:**\n${cancelledShipment.line_items.map(item => `- Product ${item.product_id}: ${item.quantity} units`).join('\n')}`,
+          },
+        ],
+      };
+    } catch (error) {
+      throw new Error(`Failed to cancel shipment: ${(error as Error).message}`);
+    }
+  },
+});
+
+// ============================================================================
 // SERVER EVENTS
 // ============================================================================
 
@@ -1773,6 +2373,24 @@ server.on('disconnect', () => {
 async function startServer() {
   try {
     logger.info('Starting Unified EasyPost-Veeqo MCP Server...');
+
+    // Initialize monitoring system
+    if (process.env.ENABLE_PERFORMANCE_MONITORING === 'true') {
+      monitoring.startMonitoring();
+      logger.info('Monitoring system started');
+
+      // Set up monitoring event handlers
+      monitoring.on('alert', (alert) => {
+        logger.warn('Monitoring alert', alert);
+      });
+
+      monitoring.on('metric', (metric) => {
+        // Only log important metrics to avoid spam
+        if (metric.name.includes('error') || metric.name.includes('warning')) {
+          logger.debug('Metric recorded', metric);
+        }
+      });
+    }
 
     // Initialize Claude Code integration
     try {
@@ -1815,11 +2433,13 @@ async function startServer() {
 // Handle graceful shutdown
 process.on('SIGINT', () => {
   logger.info('Received SIGINT, shutting down gracefully...');
+  monitoring.stopMonitoring();
   process.exit(0);
 });
 
 process.on('SIGTERM', () => {
   logger.info('Received SIGTERM, shutting down gracefully...');
+  monitoring.stopMonitoring();
   process.exit(0);
 });
 

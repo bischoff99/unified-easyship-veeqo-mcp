@@ -9,7 +9,7 @@ const inputSchema = z.object({
   ounces: z.number().min(0).optional(),
 });
 
-export function weightToOz(params: any) {
+export async function weightToOz(params: unknown) {
   const input = inputSchema.parse(params);
   const totalOz = (input.pounds ?? 0) * 16 + (input.ounces ?? 0);
   if (totalOz === 0) {

@@ -3,9 +3,9 @@ import { stdin, stdout } from 'node:process';
 import { createInterface } from 'node:readline';
 
 import type { JsonRpcRequest, JsonRpcResponse } from './types.js';
-import { loadEnv } from './utils/env.js';
-import { ErrorCode, createError } from './utils/errors.js';
-import { logger } from './utils/logger.js';
+import { loadEnv } from '../utils/env.js';
+import { ErrorCode, createError } from '../utils/errors.js';
+import { logger } from '../utils/logger.js';
 
 loadEnv();
 
@@ -25,14 +25,14 @@ const toolHandlers = new Map<string, (_params: any) => Promise<any>>([
     'ep.health',
     async () => {
       const { health } = await import('./tools/health.js');
-      return health({});
+      return health();
     },
   ],
   [
     'ep.parcel_presets',
     async () => {
       const { parcelPresets } = await import('./tools/parcel-presets.js');
-      return parcelPresets({});
+      return parcelPresets();
     },
   ],
   [

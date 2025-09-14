@@ -13,7 +13,7 @@ config({ path: '.env.test' });
 beforeAll(() => {
   // Set test environment variables
   process.env.NODE_ENV = 'test';
-  process.env.LOG_LEVEL = 'error';
+  process.env.LOG_LEVEL = 'debug';
   process.env.EASYPOST_API_KEY = 'mock-easypost-key';
   process.env.VEEQO_API_KEY = 'mock-veeqo-key';
 

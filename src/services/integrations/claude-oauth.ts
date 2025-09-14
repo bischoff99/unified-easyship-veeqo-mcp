@@ -32,7 +32,7 @@ export async function checkClaudeAuthStatus(): Promise<ClaudeAuthStatus> {
     // Parse the output to determine authentication status
     const isAuthenticated = stdout.includes('authenticated') || stdout.includes('logged in');
     const userMatch = stdout.match(/user[:\s]+([^\n]+)/i);
-    const user = userMatch ? userMatch[1].trim() : undefined;
+    const user = userMatch && userMatch[1] ? userMatch[1].trim() : undefined;
 
     return {
       isAuthenticated,

@@ -8,8 +8,11 @@ export { default as McpServer } from './server.js';
 export { EasyPostClient } from './client.js';
 export * from './types.js';
 
-// Error handling
-export { createError, ErrorCode } from './errors.js';
+// Error handling (now from utils)
+export { createError, ErrorCode } from '../utils/errors.js';
+
+// Tools
+export * from './tools/index.js';
 
 // Constants
 export const SERVER_VERSION = '1.0.0';

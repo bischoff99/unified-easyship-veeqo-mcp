@@ -48,6 +48,10 @@ export function verifyToken(token: string): AuthToken | null {
   try {
     const [headerBase64, payloadBase64, signature] = token.split('.');
 
+    if (!headerBase64 || !payloadBase64 || !signature) {
+      return null;
+    }
+
     const expectedSignature = crypto
       .createHmac('sha256', JWT_SECRET)
       .update(`${headerBase64}.${payloadBase64}`)
