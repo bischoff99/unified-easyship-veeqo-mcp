@@ -138,7 +138,7 @@ export function createConfig(): Config {
     return ConfigSchema.parse(rawConfig);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errorMessages = error.errors.map((err) => `${err.path.join('.')}: ${err.message}`);
+      const errorMessages = error.issues.map((err: any) => `${err.path.join('.')}: ${err.message}`);
       throw new Error(`Configuration validation failed:\n${errorMessages.join('\n')}`);
     }
     throw error;

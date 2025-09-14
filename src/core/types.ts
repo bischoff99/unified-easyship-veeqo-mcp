@@ -67,6 +67,6 @@ export interface ShipmentRequest {
 }
 
 export interface ShippingProvider {
-  getRates(request: ShipmentRequest): Promise<CanonicalRate[]>;
-  buyLabel(request: ShipmentRequest & { rateId?: string; carrier: string; service: string }): Promise<PurchasedLabel>;
+  getRates(_request: ShipmentRequest): Promise<CanonicalRate[]>;
+  buyLabel(_request: ShipmentRequest & { rateId?: string; carrier: string; service: string }): Promise<PurchasedLabel>;
 }

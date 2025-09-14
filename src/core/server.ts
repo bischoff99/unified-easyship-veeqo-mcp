@@ -12,7 +12,7 @@ loadEnv();
 const rl = createInterface({ input: stdin });
 
 // Tool handlers map
-const toolHandlers = new Map<string, (params: any) => Promise<any>>([
+const toolHandlers = new Map<string, (_params: any) => Promise<any>>([
   // EasyPost tools
   [
     'ep.verify_address',

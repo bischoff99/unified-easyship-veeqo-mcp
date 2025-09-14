@@ -337,7 +337,7 @@ server.addTool({
         exclude_carriers: z.array(z.string()).optional(),
       })
       .optional()
-      .default({}),
+      .default(() => ({ priority: "balanced" as const })),
   }),
   annotations: {
     title: 'Smart Rate Selection',
@@ -507,7 +507,7 @@ server.addTool({
           .default('REGULAR_PICKUP'),
       })
       .optional()
-      .default({}),
+      .default(() => ({ prepaid: false, qr_code: false, drop_off_type: "REGULAR_PICKUP" as const })),
   }),
   annotations: {
     title: 'Return Label Generator',
@@ -1662,7 +1662,7 @@ server.addPrompt({
       required: true,
     },
   ],
-  // eslint-disable-next-line @typescript-eslint/require-await
+   
   load: async ({ package_info, requirements, route }) => {
     return `Analyze the following shipping scenario and provide optimization recommendations:
 
@@ -1710,7 +1710,7 @@ server.addPrompt({
       required: false,
     },
   ],
-  // eslint-disable-next-line @typescript-eslint/require-await
+   
   load: async ({ code, context }) => {
     return `Please review the following shipping-related code for best practices, security, and optimization opportunities:
 
