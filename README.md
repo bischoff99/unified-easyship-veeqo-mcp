@@ -1,6 +1,6 @@
 ****# Unified EasyPost-Veeqo MCP Server
 
-A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shipping services with Veeqo inventory management, enhanced with AI-powered optimization using Claude Code SDK.
+A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shipping services with Veeqo inventory management for complete shipping and inventory orchestration.
 
 ## 🚀 Features
 
@@ -9,7 +9,7 @@ A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shippi
 - **Multi-Carrier Shipping**: EasyPost integration with USPS, UPS, FedEx, DHL, and more
 - **International Shipping**: Full customs support with automatic international order detection
 - **Inventory Management**: Veeqo integration for real-time inventory across multiple locations
-- **AI-Powered Optimization**: Claude Code SDK for intelligent shipping recommendations
+- **Shipping Optimization**: Intelligent rate comparison and carrier selection
 - **Real-time Tracking**: Comprehensive package tracking and status updates
 - **Address Verification**: Automated address validation and correction
 - **Webhook Support**: Real-time delivery status notifications
@@ -22,18 +22,17 @@ A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shippi
 - **Health Monitoring**: Built-in health checks and performance monitoring
 - **Mock Mode**: Development-friendly mock responses for testing
 
-### AI-Powered Features
+### Advanced Analytics
 
-- **Claude Code SDK**: Advanced AI integration for shipping optimization and code analysis
-- **Smart Shipping Optimization**: AI-powered route and carrier selection with cost analysis
-- **Automated Code Review**: Security, performance, and maintainability analysis
-- **Intelligent Recommendations**: Context-aware shipping strategy suggestions
-- **Real-time Analysis**: Live optimization for shipping scenarios
+- **Shipping Analytics**: Comprehensive shipping performance and cost analysis
+- **Inventory Analytics**: Real-time inventory tracking and optimization
+- **Performance Monitoring**: Built-in performance metrics and health checks
+- **Cost Optimization**: Intelligent rate comparison and carrier selection
+- **Real-time Insights**: Live shipping and inventory analytics
 
 ### Premium Integrations
 
-- **Hugging Face Pro**: AI model access for advanced analytics
-- **Claude Code SDK**: Advanced AI capabilities for shipping optimization
+- **Advanced Analytics**: Comprehensive shipping and inventory analytics
 - **Warp Terminal Pro**: Enhanced terminal experience
 - **Railway Hobby**: Cloud deployment and hosting
 
@@ -72,7 +71,7 @@ A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shippi
 - pnpm package manager (8.15.0+)
 - EasyPost API key
 - Veeqo API key
-- (Optional) Claude Code API key for AI features
+- (Optional) Additional API keys for extended features
 
 ## 🛠️ Installation
 
@@ -111,11 +110,8 @@ A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shippi
 ### Development Mode
 
 ```bash
-# Start legacy MCP server
+# Start the MCP server
 pnpm run dev
-
-# Start FastMCP server (recommended)
-pnpm run dev:fastmcp
 ```
 
 ### Production Mode
@@ -125,7 +121,7 @@ pnpm run dev:fastmcp
 pnpm run build
 
 # Start the server
-pnpm start:fastmcp
+pnpm start
 ```
 
 ## 🔧 Configuration
@@ -151,8 +147,7 @@ NODE_ENV=development
 PORT=3000
 
 # AI Configuration (Optional)
-ANTHROPIC_API_KEY=your_claude_api_key_here
-HUGGING_FACE_HUB_TOKEN=your_hugging_face_token_here
+# Additional API keys for extended features (optional)
 ```
 
 ### Mock Mode
@@ -188,7 +183,7 @@ pnpm test            # Run test suite
 pnpm run build       # Build for production
 
 # Development server
-pnpm run dev:fastmcp  # Start with hot reload
+pnpm run dev  # Start with hot reload
 ```
 
 ### Quality Assurance
@@ -230,9 +225,9 @@ pnpm run dev:fastmcp  # Start with hot reload
 
 ## 🏗️ Architecture
 
-### FastMCP Server
+### MCP Server
 
-The main server implementation using the FastMCP framework:
+The unified server implementation using the FastMCP framework:
 
 ```typescript
 import { FastMCP } from 'fastmcp';
@@ -270,7 +265,7 @@ const inventory = await client.getInventoryLevels();
 ### AI Integration
 
 ```typescript
-import { optimizeShipping } from './integrations/claude-code.js';
+// AI integration removed - using basic rate comparison
 
 const optimization = await optimizeShipping({
   package: packageDetails,
@@ -425,8 +420,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [EasyPost](https://www.easypost.com/) for shipping API services
 - [Veeqo](https://www.veeqo.com/) for inventory management
 - [FastMCP](https://github.com/punkpeye/fastmcp) for the MCP framework
-- [Claude](https://www.anthropic.com/) for AI capabilities
-- [Hugging Face](https://huggingface.co/) for AI models
 
 ---
 

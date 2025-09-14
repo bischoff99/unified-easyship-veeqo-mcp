@@ -44,8 +44,8 @@ unified-easyship-veeqo-mcp/
 │   │   │   ├── 📄 easypost-enhanced.ts # Enhanced EasyPost client
 │   │   │   └── 📄 veeqo-enhanced.ts    # Enhanced Veeqo client
 │   │   ├── 📁 integrations/         # AI integrations
-│   │   │   ├── 📄 claude-code.ts    # Claude Code SDK integration
-│   │   │   └── 📄 huggingface.ts    # Hugging Face integration
+│   │   │   ├── # Claude Code SDK integration removed
+│   │   │   └── # Hugging Face integration removed
 │   │   └── 📄 index.ts              # Service exports
 │   ├── 📁 config/                   # Configuration management
 │   │   └── 📄 index.ts              # Centralized config
@@ -143,7 +143,7 @@ unified-easyship-veeqo-mcp/
 # API Keys
 EASYPOST_API_KEY="your_easypost_api_key"
 VEEQO_API_KEY="your_veeqo_api_key"
-CLAUDE_CODE_API_KEY="your_claude_code_api_key"
+# CLAUDE_CODE_API_KEY="your_claude_code_api_key" # Claude Code SDK removed
 HUGGING_FACE_HUB_TOKEN="your_hugging_face_hub_token"
 RAILWAY_TOKEN="your_railway_token"
 

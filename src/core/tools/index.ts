@@ -8,7 +8,7 @@ export { health } from './health.js';
 export { parcelPresets } from './parcel-presets.js';
 export { verifyAddress } from './verify-address.js';
 export { weightToOz } from './weight-to-oz.js';
-export { optimizeShipping } from './optimize-shipping.js';
+// optimizeShipping removed - AI integration disabled
 
 // Tool metadata for MCP registration
 export const TOOL_DEFINITIONS = [

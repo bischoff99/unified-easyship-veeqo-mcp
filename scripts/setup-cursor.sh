@@ -173,7 +173,7 @@ VEEQO_API_KEY="your-veeqo-api-key"
 # ------------------------------------------
 # Claude Code SDK for shipping optimization
 ANTHROPIC_API_KEY="your-anthropic-api-key"
-CLAUDE_CODE_API_KEY="your-claude-code-api-key"
+# CLAUDE_CODE_API_KEY="your-claude-code-api-key" # Claude Code SDK removed
 
 # Hugging Face for ML models
 HUGGING_FACE_HUB_TOKEN="your-hugging-face-token"

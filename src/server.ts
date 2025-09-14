@@ -10,19 +10,19 @@
 import { FastMCP } from 'fastmcp';
 import { z } from 'zod';
 
-import { authenticate } from '../middleware/auth.js';
-import { EasyPostClient } from '../services/clients/easypost-enhanced.js';
-import { VeeqoClient } from '../services/clients/veeqo-enhanced.js';
-import { safeLogger as logger, safeMonitoring as monitoring } from '../utils/type-safe-logger.js';
+import { authenticate } from './middleware/auth.js';
+import { EasyPostClient } from './services/clients/easypost-enhanced.js';
+import { VeeqoClient } from './services/clients/veeqo-enhanced.js';
+import { safeLogger as logger, safeMonitoring as monitoring } from './utils/type-safe-logger.js';
 import {
   addShippingTools,
   addInventoryTools,
-  addAIIntegrationTools,
-} from './tools/index.js';
+  // addAIIntegrationTools, // AI integration removed
+} from './server/tools/index.js';
 
 // Initialize FastMCP server with comprehensive configuration
 const server = new FastMCP({
-  name: 'unified-easyship-veeqo-mcp',
+  name: 'unified_easyship_veeqo_mcp',
   version: '1.0.0',
   instructions: `
     This is a unified MCP server that integrates EasyPost and Veeqo shipping APIs
@@ -31,7 +31,7 @@ const server = new FastMCP({
     Key Features:
     - EasyPost integration for shipping rates, labels, and tracking
     - Veeqo integration for inventory management and order processing
-    - AI-powered shipping optimization using Claude Code
+    - Comprehensive shipping and inventory management
     - Real-time shipping recommendations and cost analysis
     - Comprehensive error handling and logging
 
@@ -80,57 +80,9 @@ try {
   logger.error('Failed to load inventory tools:', _error);
 }
 
-try {
-  addAIIntegrationTools(server, easyPostClient, veeqoClient);
-  logger.info('AI integration tools loaded successfully');
-} catch (_error: any) {
-  logger.error('Failed to load AI integration tools:', _error);
-}
+// AI integration tools removed
 
-// Health check endpoint
-server.addTool({
-  name: 'health_check',
-  description: 'Check the health status of all integrated services',
-  parameters: z.object({}),
-  execute: async (_args) => {
-    const startTime = Date.now();
-
-    const healthChecks = {
-      easypost: { status: 'healthy', responseTime: 0 },
-      veeqo: { status: 'healthy', responseTime: 0 },
-      monitoring: { status: 'healthy', uptime: process.uptime() },
-    };
-
-    // Simple health checks - could be enhanced with actual API calls
-    try {
-      const easypostStart = Date.now();
-      // Placeholder for actual health check
-      healthChecks.easypost.responseTime = Date.now() - easypostStart;
-    } catch (_error) {
-      healthChecks.easypost.status = 'unhealthy';
-    }
-
-    try {
-      const veeqoStart = Date.now();
-      // Placeholder for actual health check
-      healthChecks.veeqo.responseTime = Date.now() - veeqoStart;
-    } catch (_error) {
-      healthChecks.veeqo.status = 'unhealthy';
-    }
-
-    const duration = Date.now() - startTime;
-
-    const result = {
-      status: 'operational',
-      services: healthChecks,
-      server_uptime: process.uptime(),
-      processing_time_ms: duration,
-      timestamp: new Date().toISOString(),
-    };
-
-    return JSON.stringify(result, null, 2);
-  },
-});
+// Health check endpoint is now handled in shipping tools to avoid duplication
 
 // Server startup and lifecycle management
 server.on('connect', (event) => {

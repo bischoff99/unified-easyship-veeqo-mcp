@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # FastMCP Server
+  fastmcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: unified-easyship-veeqo-mcp
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - LOG_LEVEL=info
+      - EASYPOST_API_KEY=${EASYPOST_API_KEY}
+      - VEEQO_API_KEY=${VEEQO_API_KEY}
+      - EASYPOST_BASE_URL=${EASYPOST_BASE_URL:-https://api.easypost.com/v2}
+      - VEEQO_BASE_URL=${VEEQO_BASE_URL:-https://api.veeqo.com}
+      - EASYPOST_TIMEOUT=${EASYPOST_TIMEOUT:-30000}
+      - VEEQO_TIMEOUT=${VEEQO_TIMEOUT:-30000}
+    env_file:
+      - .env.production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - fastmcp-network
+
+  # Development version with hot reload
+  fastmcp-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: unified-easyship-veeqo-mcp-dev
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - LOG_LEVEL=debug
+      - EASYPOST_API_KEY=${EASYPOST_API_KEY}
+      - VEEQO_API_KEY=${VEEQO_API_KEY}
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+    networks:
+      - fastmcp-network
+    profiles:
+      - dev
+
+networks:
+  fastmcp-network:
+    driver: bridge
+
+volumes:
+  node_modules:

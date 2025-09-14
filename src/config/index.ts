@@ -47,11 +47,7 @@ const VeeqoConfigSchema = z.object({
 });
 
 const AIConfigSchema = z.object({
-  claudeCodeApiKey: z.string().optional(),
-  huggingFaceToken: z.string().optional(),
-  claudeModel: z.string().default('claude-3-5-sonnet-20241022'),
-  enableAI: z.boolean().default(false),
-  claudeCodeEndpoint: z.string().default('https://api.claude.ai'),
+  // Claude Code integration removed
 });
 
 const DatabaseConfigSchema = z.object({
@@ -119,11 +115,7 @@ export function createConfig(): Config {
       mockMode: process.env.VEEQO_API_KEY === 'mock',
     },
     ai: {
-      claudeCodeApiKey: process.env.CLAUDE_CODE_API_KEY,
-      huggingFaceToken: process.env.HUGGING_FACE_HUB_TOKEN,
-      claudeModel: process.env.CLAUDE_MODEL ?? 'claude-3-5-sonnet-20241022',
-      enableAI: Boolean(process.env.CLAUDE_CODE_API_KEY),
-      claudeCodeEndpoint: process.env.CLAUDE_CODE_ENDPOINT ?? 'https://api.claude.ai',
+      // Claude Code integration removed
     },
     database: {
       url: process.env.DATABASE_URL,

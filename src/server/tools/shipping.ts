@@ -274,7 +274,7 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         });
 
         // Use the optimizeShipping function from core tools
-        const { optimizeShipping } = await import('../../core/tools/optimize-shipping.js');
+        // optimizeShipping removed - AI integration disabled
         const optimizationRequest = {
           fromAddress: args.from_address,
           toAddress: args.to_address,
@@ -288,13 +288,29 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
           } : undefined,
         };
 
-        const optimization = await optimizeShipping(optimizationRequest);
+        // AI optimization disabled - returning basic rate comparison instead
+        const rates = await easyPostClient.getRates(optimizationRequest.fromAddress, optimizationRequest.toAddress, optimizationRequest.parcel);
+        const optimization = {
+          recommendations: rates.map(rate => ({
+            carrier: rate.carrier,
+            service: rate.service,
+            cost: parseFloat(rate.rate),
+            delivery_days: rate.delivery_days || 3,
+            confidence_score: 0.8,
+            reasoning: `Basic rate comparison for ${rate.carrier} ${rate.service}`
+          })),
+          total_options: rates.length,
+          optimization_metadata: {
+            method: 'basic_rate_comparison',
+            ai_enabled: false
+          }
+        };
 
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('easypost', '/optimize', duration, 200);
 
         logger.info(`Completed shipping optimization in ${duration}ms`, {
-          totalRates: optimization.totalRatesFound,
+          totalRates: optimization.total_options,
           recommendations: Object.keys(optimization.recommendations || {}),
         });
 
@@ -308,6 +324,409 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         monitoring.recordApiCall('easypost', '/optimize', duration, 500, true);
         logError('Failed to optimize shipping', error);
         throw new Error(`Shipping optimization failed: ${error.message}`);
+      }
+    },
+  });
+
+  /**
+   * Convert weight units to ounces
+   */
+  server.addTool({
+    name: 'weight_to_oz',
+    description: 'Convert weight from various units to ounces',
+    parameters: z.object({
+      weight: z.number().positive().describe('Weight value to convert'),
+      unit: z.enum(['lb', 'kg', 'g', 'oz']).describe('Unit to convert from'),
+    }),
+    execute: async (args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Converting weight to ounces', {
+          weight: args.weight,
+          unit: args.unit,
+        });
+
+        const { weightToOz } = await import('../../core/tools/weight-to-oz.js');
+        const result = await weightToOz(args);
+
+        const duration = Date.now() - startTime;
+        logger.info(`Weight conversion completed in ${duration}ms`);
+
+        return JSON.stringify({
+          ...result,
+          processing_time_ms: duration,
+        }, null, 2);
+      } catch (error: any) {
+        logError('Failed to convert weight', error);
+        throw new Error(`Weight conversion failed: ${error.message}`);
+      }
+    },
+  });
+
+  /**
+   * System health check
+   */
+  server.addTool({
+    name: 'health_check',
+    description: 'Check system health and external API connectivity',
+    parameters: z.object({
+      verbose: z.boolean().optional().default(false).describe('Include detailed metrics'),
+    }),
+    execute: async (args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Running health check', { verbose: args.verbose });
+
+        const { health } = await import('../../core/tools/health.js');
+        const healthStatus = await health();
+
+        const duration = Date.now() - startTime;
+        logger.info(`Health check completed in ${duration}ms`);
+
+        return JSON.stringify({
+          ...healthStatus,
+          processing_time_ms: duration,
+        }, null, 2);
+      } catch (error: any) {
+        logError('Health check failed', error);
+        throw new Error(`Health check failed: ${error.message}`);
+      }
+    },
+  });
+
+  // ============================================================================
+  // ADVANCED EASYPOST TOOLS
+  // ============================================================================
+
+  /**
+   * Get available carriers and their services
+   */
+  server.addTool({
+    name: 'get_carriers',
+    description: 'Get list of available carriers and their services',
+    parameters: z.object({}),
+    execute: async (_args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Fetching available carriers');
+
+        const carriers = await easyPostClient.getCarriers();
+
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/carriers', duration, 200);
+
+        logger.info(`Retrieved ${carriers.length} carriers in ${duration}ms`);
+        const result = {
+          carriers,
+          count: carriers.length,
+          processing_time_ms: duration,
+        };
+        return JSON.stringify(result, null, 2);
+      } catch (error: any) {
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/carriers', duration, 500, true);
+        logError('Failed to get carriers', error);
+        throw new Error(`Failed to get carriers: ${error.message}`);
+      }
+    },
+  });
+
+  /**
+   * Get rates from specific carriers
+   */
+  server.addTool({
+    name: 'get_rates_by_carriers',
+    description: 'Get shipping rates from specific carriers only',
+    parameters: z.object({
+      from_address: addressSchema,
+      to_address: addressSchema,
+      parcel: parcelSchema,
+      carriers: z.array(z.string()).describe('Array of carrier names (USPS, UPS, FedEx, DHL)'),
+    }),
+    execute: async (args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Getting rates by carriers', {
+          carriers: args.carriers,
+          from: `${args.from_address.city}, ${args.from_address.state}`,
+          to: `${args.to_address.city}, ${args.to_address.state}`,
+        });
+
+        const rates = await easyPostClient.getRatesByCarriers(
+          args.from_address as EasyPostAddress,
+          args.to_address as EasyPostAddress,
+          args.parcel,
+          args.carriers
+        );
+
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/rates/by-carriers', duration, 200);
+
+        logger.info(`Found ${rates.length} carrier-specific rates in ${duration}ms`);
+        const result = {
+          rates,
+          count: rates.length,
+          requested_carriers: args.carriers,
+          processing_time_ms: duration,
+        };
+        return JSON.stringify(result, null, 2);
+      } catch (error: any) {
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/rates/by-carriers', duration, 500, true);
+        logError('Failed to get rates by carriers', error);
+        throw new Error(`Failed to get rates by carriers: ${error.message}`);
+      }
+    },
+  });
+
+  /**
+   * Get international shipping rates
+   */
+  server.addTool({
+    name: 'get_international_rates',
+    description: 'Get international shipping rates with customs support',
+    parameters: z.object({
+      from_address: addressSchema,
+      to_address: addressSchema,
+      parcel: parcelSchema,
+      customs_info: z.object({
+        contents_type: z.enum(['merchandise', 'documents', 'gift', 'returned_goods', 'sample', 'other']),
+        contents_explanation: z.string().optional(),
+        customs_certify: z.boolean().default(true),
+        customs_signer: z.string(),
+        customs_items: z.array(z.object({
+          description: z.string(),
+          quantity: z.number(),
+          weight: z.number(),
+          value: z.number(),
+          origin_country: z.string(),
+        })),
+      }).optional(),
+    }),
+    execute: async (args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Getting international rates', {
+          from: `${args.from_address.city}, ${args.from_address.state}`,
+          to: `${args.to_address.city}, ${args.to_address.state}`,
+          to_country: args.to_address.country,
+        });
+
+        const rates = await easyPostClient.getInternationalRates(
+          args.from_address as EasyPostAddress,
+          args.to_address as EasyPostAddress,
+          args.parcel,
+          args.customs_info
+        );
+
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/rates/international', duration, 200);
+
+        logger.info(`Found ${rates.length} international rates in ${duration}ms`);
+        const result = {
+          rates,
+          count: rates.length,
+          is_international: args.from_address.country !== args.to_address.country,
+          processing_time_ms: duration,
+        };
+        return JSON.stringify(result, null, 2);
+      } catch (error: any) {
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/rates/international', duration, 500, true);
+        logError('Failed to get international rates', error);
+        throw new Error(`Failed to get international rates: ${error.message}`);
+      }
+    },
+  });
+
+  /**
+   * Get carrier account information
+   */
+  server.addTool({
+    name: 'get_carrier_accounts',
+    description: 'Get carrier account information and status',
+    parameters: z.object({}),
+    execute: async (_args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Fetching carrier accounts');
+
+        const accounts = await easyPostClient.getCarrierAccounts();
+
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/carrier_accounts', duration, 200);
+
+        logger.info(`Retrieved ${accounts.length} carrier accounts in ${duration}ms`);
+        const result = {
+          accounts,
+          count: accounts.length,
+          processing_time_ms: duration,
+        };
+        return JSON.stringify(result, null, 2);
+      } catch (error: any) {
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/carrier_accounts', duration, 500, true);
+        logError('Failed to get carrier accounts', error);
+        throw new Error(`Failed to get carrier accounts: ${error.message}`);
+      }
+    },
+  });
+
+  /**
+   * Purchase shipment with specific carrier
+   */
+  server.addTool({
+    name: 'purchase_shipment_with_carrier',
+    description: 'Purchase a shipment with a specific carrier and service',
+    parameters: z.object({
+      shipment_id: z.string().describe('Shipment ID to purchase'),
+      carrier: z.string().describe('Carrier name (USPS, UPS, FedEx, DHL)'),
+      service: z.string().describe('Service type (Ground, Priority, Express, etc.)'),
+    }),
+    execute: async (args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Purchasing shipment with carrier', {
+          shipment_id: args.shipment_id,
+          carrier: args.carrier,
+          service: args.service,
+        });
+
+        const shipment = await easyPostClient.purchaseShipmentWithCarrier(
+          args.shipment_id,
+          args.carrier,
+          args.service
+        );
+
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/shipments/purchase', duration, 200);
+
+        logger.info(`Purchased shipment ${shipment.id} in ${duration}ms`);
+        const result = {
+          ...shipment,
+          processing_time_ms: duration,
+        };
+        return JSON.stringify(result, null, 2);
+      } catch (error: any) {
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/shipments/purchase', duration, 500, true);
+        logError('Failed to purchase shipment', error);
+        throw new Error(`Failed to purchase shipment: ${error.message}`);
+      }
+    },
+  });
+
+  /**
+   * Get rates by ZIP codes (simplified)
+   */
+  server.addTool({
+    name: 'get_rates_by_zip',
+    description: 'Get shipping rates by ZIP codes (simplified method)',
+    parameters: z.object({
+      from_zip: z.string().describe('Origin ZIP code'),
+      to_zip: z.string().describe('Destination ZIP code'),
+    }),
+    execute: async (args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Getting rates by ZIP codes', {
+          from_zip: args.from_zip,
+          to_zip: args.to_zip,
+        });
+
+        const rates = await easyPostClient.getRatesByZip(args.from_zip, args.to_zip);
+
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/rates/by-zip', duration, 200);
+
+        logger.info(`Found ${rates.length} rates by ZIP in ${duration}ms`);
+        const result = {
+          rates,
+          count: rates.length,
+          from_zip: args.from_zip,
+          to_zip: args.to_zip,
+          processing_time_ms: duration,
+        };
+        return JSON.stringify(result, null, 2);
+      } catch (error: any) {
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/rates/by-zip', duration, 500, true);
+        logError('Failed to get rates by ZIP', error);
+        throw new Error(`Failed to get rates by ZIP: ${error.message}`);
+      }
+    },
+  });
+
+  /**
+   * Track a package (alias for trackShipment)
+   */
+  server.addTool({
+    name: 'track_package',
+    description: 'Track a package using tracking code (alias for trackShipment)',
+    parameters: z.object({
+      tracking_code: z.string().describe('Tracking number or code'),
+    }),
+    execute: async (args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Tracking package', {
+          tracking_code: args.tracking_code,
+        });
+
+        const trackingInfo = await easyPostClient.trackPackage(args.tracking_code);
+
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/trackers/package', duration, 200);
+
+        logger.info(`Retrieved package tracking info for ${args.tracking_code} in ${duration}ms`);
+        const result = {
+          ...trackingInfo,
+          processing_time_ms: duration,
+        };
+        return JSON.stringify(result, null, 2);
+      } catch (error: any) {
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/trackers/package', duration, 500, true);
+        logError('Failed to track package', error);
+        throw new Error(`Package tracking failed: ${error.message}`);
+      }
+    },
+  });
+
+  /**
+   * Verify and normalize an address
+   */
+  server.addTool({
+    name: 'verify_address',
+    description: 'Verify and normalize a shipping address',
+    parameters: z.object({
+      address: addressSchema,
+    }),
+    execute: async (args) => {
+      const startTime = Date.now();
+      try {
+        logger.info('Verifying address', {
+          city: args.address.city,
+          state: args.address.state,
+          zip: args.address.zip,
+        });
+
+        const verifiedAddress = await easyPostClient.verifyAddress(args.address as EasyPostAddress);
+
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 200);
+
+        logger.info(`Verified address in ${duration}ms`);
+        const result = {
+          ...verifiedAddress,
+          processing_time_ms: duration,
+        };
+        return JSON.stringify(result, null, 2);
+      } catch (error: any) {
+        const duration = Date.now() - startTime;
+        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 500, true);
+        logError('Failed to verify address', error);
+        throw new Error(`Address verification failed: ${error.message}`);
       }
     },
   });

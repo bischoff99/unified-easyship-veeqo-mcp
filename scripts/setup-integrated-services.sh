@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Integrated Services Setup Script
-# This script sets up all your premium services: Hugging Face Pro, Claude Max, Warp Terminal Pro, and Railway Hobby
+# This script sets up premium services: Warp Terminal Pro, and Railway Hobby
 
 set -e
 
@@ -25,9 +25,7 @@ echo "✅ Node.js and npm are available"
 echo "🚂 Installing Railway CLI..."
 npm install -g @railway/cli
 
-# Install Hugging Face Hub
-echo "🤗 Installing Hugging Face Hub..."
-npm install -g huggingface-hub
+# # Hugging Face integration removed
 
 # Install vibe-tools globally
 echo "📦 Installing vibe-tools globally..."
@@ -49,10 +47,7 @@ if [ ! -f .env ]; then
 # PREMIUM SERVICES CONFIGURATION
 # ===========================================
 
-# Hugging Face Pro (Email-based subscription)
-HF_TOKEN="your-huggingface-token-here"
-HF_HOME="$HOME/.cache/huggingface"
-HF_HUB_CACHE="$HF_HOME/hub"
+# # Hugging Face integration removed
 
 # Claude Max (Email-based subscription - no API key needed)
 # Configure in Cursor Settings > Models > Anthropic
@@ -104,7 +99,7 @@ RAILWAY_PROJECT_ID=""
 RAILWAY_SERVICE_ID=""
 RAILWAY_ENVIRONMENT="production"
 
-# Hugging Face Spaces (for model deployment)
+# # Hugging Face Spaces (for model deployment)
 HF_SPACE_ID=""
 HF_SPACE_HARDWARE="cpu-basic"
 
@@ -143,19 +138,7 @@ cat > railway.json << 'EOF'
 }
 EOF
 
-# Create Hugging Face configuration
-echo "🤗 Creating Hugging Face configuration..."
-mkdir -p .huggingface
-cat > .huggingface/config.json << 'EOF'
-{
-  "cache_dir": "~/.cache/huggingface",
-  "default_repo_type": "model",
-  "default_repo_id": "unified-easyship-veeqo-mcp",
-  "endpoint": "https://huggingface.co",
-  "local_files_only": false,
-  "use_auth_token": true
-}
-EOF
+# # Hugging Face integration removed
 
 # Create Warp Terminal workflows
 echo "⚡ Creating Warp Terminal workflows..."
@@ -234,22 +217,10 @@ cat > vibe-tools.config.json << 'EOF'
           "/home/bischoff666/unified-easyship-veeqo-mcp"
         ]
       },
-      "huggingface": {
-        "command": "npx",
-        "args": [
-          "-y",
-          "@huggingface/hub",
-          "--token",
-          "${HF_TOKEN}"
-        ]
-      }
+      // # Hugging Face integration removed
     }
   },
-  "huggingface": {
-    "token": "${HF_TOKEN}",
-    "cache_dir": "${HF_HOME}",
-    "default_repo_type": "model"
-  },
+  // # Hugging Face integration removed
   "railway": {
     "token": "${RAILWAY_TOKEN}",
     "project_id": "${RAILWAY_PROJECT_ID}",
@@ -314,34 +285,8 @@ railway domain
 echo "✅ Deployment complete!"
 EOF
 
-# Hugging Face deployment script
-cat > scripts/deployment/deploy-huggingface.sh << 'EOF'
-#!/bin/bash
-set -e
-
-echo "🤗 Deploying to Hugging Face..."
-
-# Check if HF token is set
-if [ -z "$HF_TOKEN" ]; then
-    echo "❌ HF_TOKEN not set. Please set it in your .env file."
-    exit 1
-fi
-
-# Login to Hugging Face
-echo "🔐 Logging into Hugging Face..."
-huggingface-cli login --token $HF_TOKEN
-
-# Create a Space for the MCP server
-echo "🚀 Creating Hugging Face Space..."
-huggingface-cli repo create unified-easyship-veeqo-mcp --type space --private
-
-# Upload the application
-echo "📤 Uploading application files..."
-huggingface-cli upload unified-easyship-veeqo-mcp . --repo-type space
-
-echo "✅ Deployment to Hugging Face complete!"
-echo "🌐 Your Space: https://huggingface.co/spaces/$(whoami)/unified-easyship-veeqo-mcp"
-EOF
+# # Hugging Face deployment script
+# # Hugging Face deployment script removed
 
 # Make scripts executable
 chmod +x scripts/deployment/*.sh
@@ -359,7 +304,7 @@ This guide helps you set up and use all your premium services with the Unified E
 
 ## 🎯 Your Premium Services
 
-### 1. **Hugging Face Pro** (Email-based subscription)
+### 1. **# Hugging Face Pro** (Email-based subscription)
 - **Access**: Unlimited model downloads and inference
 - **Features**: Private repositories, advanced model hosting
 - **Setup**: Configure `HF_TOKEN` in `.env` file
@@ -385,8 +330,8 @@ This guide helps you set up and use all your premium services with the Unified E
 Edit your `.env` file with your actual tokens:
 
 ```bash
-# Get your Hugging Face token
-# Visit: https://huggingface.co/settings/tokens
+# Get your # Hugging Face token
+# # Hugging Face integration removed
 HF_TOKEN="hf_your_token_here"
 
 # Get your Railway token
@@ -403,9 +348,9 @@ GEMINI_API_KEY="your_gemini_key"
 ./scripts/deployment/deploy-railway.sh
 ```
 
-### 3. Deploy to Hugging Face
+### 3. Deploy to # Hugging Face
 ```bash
-./scripts/deployment/deploy-huggingface.sh
+# # Hugging Face deployment removed
 ```
 
 ### 4. Use AI-Powered Development
@@ -422,20 +367,20 @@ vibe-tools browser act "Deploy to Railway" --url "https://railway.app"
 
 ## 🔧 Service-Specific Features
 
-### Hugging Face Pro Integration
-- **Model Hosting**: Deploy your MCP server as a Hugging Face Space
-- **Model Access**: Use any model from the Hugging Face Hub
+### # Hugging Face Pro Integration
+- **Model Hosting**: Deploy your MCP server as a # Hugging Face Space
+- **Model Access**: Use any model from the # Hugging Face Hub
 - **Private Repos**: Keep your models and data private
 
 ```bash
 # List available models
-huggingface-cli repo list
+# huggingface-cli repo list
 
 # Download a model
-huggingface-cli download microsoft/DialoGPT-medium
+# huggingface-cli download microsoft/DialoGPT-medium
 
 # Create a new model repository
-huggingface-cli repo create my-mcp-model --type model
+# huggingface-cli repo create my-mcp-model --type model
 ```
 
 ### Claude Max in Cursor
@@ -492,11 +437,11 @@ vibe-tools browser act "test the deployed MCP server" --url "https://your-app.ra
 
 ### 2. Model Integration Workflow
 ```bash
-# 1. Find relevant models on Hugging Face
-huggingface-cli search "shipping logistics"
+# 1. Find relevant models on # Hugging Face
+# huggingface-cli search "shipping logistics"
 
 # 2. Download and integrate model
-huggingface-cli download model-name
+# huggingface-cli download model-name
 
 # 3. Deploy updated server
 railway up
@@ -507,8 +452,8 @@ railway up
 # Deploy to Railway (production)
 ./scripts/deployment/deploy-railway.sh
 
-# Deploy to Hugging Face (demo)
-./scripts/deployment/deploy-huggingface.sh
+# Deploy to # Hugging Face (demo)
+# # Hugging Face deployment removed
 
 # Test both deployments
 vibe-tools browser act "test both deployments" --url "https://your-app.railway.app"
@@ -528,13 +473,13 @@ railway status
 railway ssh
 ```
 
-### Hugging Face Monitoring
+### # Hugging Face Monitoring
 ```bash
 # Check Space status
-huggingface-cli repo info unified-easyship-veeqo-mcp --repo-type space
+# huggingface-cli repo info unified-easyship-veeqo-mcp --repo-type space
 
 # View Space logs
-# Visit: https://huggingface.co/spaces/your-username/unified-easyship-veeqo-mcp
+# Visit: https://# huggingface.co/spaces/your-username/unified-easyship-veeqo-mcp
 ```
 
 ## 🎉 You're All Set!
@@ -554,7 +499,7 @@ vibe-tools browser act "test the MCP server endpoints" --url "https://your-app.r
 
 ## 📚 Resources
 
-- [Hugging Face Hub Documentation](https://huggingface.co/docs/hub)
+- [# Hugging Face Hub Documentation](https://# huggingface.co/docs/hub)
 - [Railway Documentation](https://docs.railway.app)
 - [Warp Terminal Documentation](https://docs.warp.dev)
 - [Cursor Documentation](https://docs.cursor.com)
@@ -569,20 +514,20 @@ echo ""
 echo "📋 Next steps:"
 echo "1. Edit .env file with your actual API keys and tokens"
 echo "2. Login to Railway: railway login"
-echo "3. Login to Hugging Face: huggingface-cli login"
+echo "3. Login to # Hugging Face: # huggingface-cli login"
 echo "4. Configure Claude Max in Cursor Settings > Models > Anthropic"
 echo "5. Configure Warp Terminal Pro in Warp Settings"
 echo ""
 echo "🚀 Try these commands:"
 echo "   - vibe-tools repo 'explain the project architecture'"
 echo "   - railway up (to deploy)"
-echo "   - huggingface-cli repo list (to see your models)"
+echo "   - # huggingface-cli repo list (to see your models)"
 echo ""
 echo "📚 Read INTEGRATED_SERVICES_SETUP.md for detailed instructions"
 echo ""
 echo "🔗 Useful resources:"
 echo "   - Railway Dashboard: https://railway.app/dashboard"
-echo "   - Hugging Face Hub: https://huggingface.co"
+echo "   - # Hugging Face Hub: https://# huggingface.co"
 echo "   - Cursor Settings: Ctrl/⌘ + Shift + J"
 echo "   - Warp Settings: Cmd + ,"
 echo ""

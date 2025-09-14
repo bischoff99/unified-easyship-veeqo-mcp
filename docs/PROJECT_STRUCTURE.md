@@ -12,7 +12,7 @@ unified-easyship-veeqo-mcp/
 │   │   │   ├── easypost-enhanced.ts # EasyPost integration
 │   │   │   └── veeqo-enhanced.ts    # Veeqo integration
 │   │   ├── 📁 integrations/         # AI integrations
-│   │   │   └── claude-code.ts       # Claude Code SDK
+│   │   │   └── # Claude Code SDK removed
 │   │   └── index.ts                 # Service exports
 │   ├── 📁 middleware/               # Middleware functions
 │   ├── 📁 utils/                    # Utility functions

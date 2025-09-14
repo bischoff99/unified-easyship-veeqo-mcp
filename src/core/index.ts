@@ -3,8 +3,8 @@
  * Exports core server functionality and types
  */
 
-// Core server components
-export { default as McpServer } from './server.js';
+// Core server components (legacy server archived)
+// export { default as McpServer } from './server.js';
 export { EasyPostClient } from './client.js';
 export * from './types.js';
 
@@ -32,7 +32,7 @@ export interface ServerConfig {
 }
 
 export const DEFAULT_SERVER_CONFIG: ServerConfig = {
-  name: 'unified-easyship-veeqo-mcp',
+  name: 'unified_easyship_veeqo_mcp',
   version: SERVER_VERSION,
   description: 'Unified MCP server for EasyPost and Veeqo shipping, inventory, and orchestration',
   timeout: DEFAULT_TIMEOUT,

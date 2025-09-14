@@ -37,7 +37,11 @@
       "Bash(gh run delete:*)",
       "Bash(do echo:*)",
       "Bash(done)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(NODE_ENV=test EASYPOST_API_KEY=mock VEEQO_API_KEY=mock pnpm run type-check)",
+      "Bash(NODE_ENV=test EASYPOST_API_KEY=mock VEEQO_API_KEY=mock pnpm test test/integration/shipping-adapters.test.ts)",
+      "mcp__filesystem__write_file",
+      "mcp__unified-easyship-veeqo-mcp__calculate_shipping_rates"
     ],
     "deny": [],
     "ask": []

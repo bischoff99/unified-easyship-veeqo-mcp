@@ -5,4 +5,4 @@
 
 export { addShippingTools } from './shipping.js';
 export { addInventoryTools } from './inventory.js';
-export { addAIIntegrationTools } from './ai-integration.js';
+// AI integration tools removed

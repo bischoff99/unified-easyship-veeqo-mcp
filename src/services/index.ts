@@ -11,20 +11,7 @@ export { VeeqoClient } from './clients/veeqo-enhanced.js';
 import { EasyPostClient } from './clients/easypost-enhanced.js';
 import { VeeqoClient } from './clients/veeqo-enhanced.js';
 
-// Integration services
-export {
-  analyzeCode,
-  generateShippingRecommendations,
-  optimizeShipping,
-} from './integrations/claude-code.js';
-
-// Hugging Face integration (currently disabled for testing)
-export {
-  analyzeShippingPatterns,
-  forecastDemand,
-  generateInsights,
-  optimizeInventoryLevels,
-} from './integrations/huggingface.js';
+// Integration services removed - AI integrations disabled
 
 // Service types
 export interface ServiceHealth {

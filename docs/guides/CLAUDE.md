@@ -1,11 +1,11 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (
-claude.ai/code) when working with code in this repository.
+# Claude Code SDK integration removed
 
 ## Project Overview
 
-Unified MCP server integrating EasyPost shipping services with Veeqo inventory management, optionally enhanced with AI-powered optimization using Claude Code SDK.
+Unified MCP server integrating EasyPost shipping services with Veeqo inventory management for comprehensive shipping and inventory orchestration.
 
 ## Essential Commands
 
@@ -33,7 +33,7 @@ npm run format
 
 - `src/server/fastmcp-server.ts` - Main MCP server implementation
 - `src/services/clients/` - API client implementations
-- `src/services/integrations/claude-code.ts` - AI integration
+- `src/services/integrations/` - AI integrations removed
 - `package.json` - Dependencies and scripts
 - `tsconfig.json` - TypeScript configuration
 
@@ -42,7 +42,7 @@ npm run format
 - Uses TypeScript with strict type checking
 - Implements FastMCP framework for MCP server
 - Integrates EasyPost and Veeqo APIs
-- Includes AI-powered shipping optimization
+- Includes shipping optimization and analytics
 - Follows structured logging with pino
 - Uses Zod for schema validation
 

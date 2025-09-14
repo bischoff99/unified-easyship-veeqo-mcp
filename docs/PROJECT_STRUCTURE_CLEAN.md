@@ -48,9 +48,9 @@ unified-easyship-veeqo-mcp/
 │   │   │   ├── veeqo-shipping-adapter.ts # Veeqo adapter
 │   │   │   └── veeqo.ts                  # Basic Veeqo client
 │   │   ├── 📁 integrations/         # Third-party integrations
-│   │   │   ├── claude-code.ts       # Claude Code SDK integration
+│   │   │   ├── # Claude Code SDK integration removed
 │   │   │   ├── claude-oauth.ts      # Claude OAuth integration
-│   │   │   └── huggingface.ts       # Hugging Face integration
+│   │   │   └── # Hugging Face integration removed
 │   │   └── index.ts                 # Services exports
 │   │
 │   └── 📁 utils/                    # Shared utilities

@@ -1,0 +1,34 @@
+# Development Dockerfile for FastMCP Server with hot reload
+FROM node:22-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm@8.15.0
+
+# Install tsx for development hot reload
+RUN npm install -g tsx
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install all dependencies (including dev dependencies)
+RUN pnpm install
+
+# Copy source code
+COPY . .
+
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S fastmcp -u 1001
+
+# Change ownership of the app directory
+RUN chown -R fastmcp:nodejs /app
+USER fastmcp
+
+# Expose port
+EXPOSE 3000
+
+# Start the application in development mode with hot reload
+CMD ["pnpm", "run", "dev"]

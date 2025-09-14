@@ -6,9 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "dev:fastmcp": "tsx watch src/server/fastmcp-server.ts",
     "start": "node dist/server.js",
-    "start:fastmcp": "node dist/server/fastmcp-server.js",
     "build": "tsc",
     "build:optimize": "node scripts/build-optimize.js",
     "build:production": "NODE_ENV=production pnpm run build:optimize",
@@ -17,7 +15,6 @@
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "lint:check": "eslint . --ext .ts,.js --max-warnings 500",
-    "lint:fastmcp": "eslint . --ext .ts,.js -c .eslintrc-fastmcp.json",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
@@ -32,7 +29,7 @@
     "test:e2e": "pnpm run build && bash scripts/validate.sh",
     "perf:analyze": "node -e \"import('./dist/utils/performance-monitor.js').then(m => console.log(JSON.stringify(m.performanceMonitor.getPerformanceSummary(), null, 2)))\"",
     "perf:recommendations": "node -e \"import('./dist/utils/performance-monitor.js').then(m => console.log(JSON.stringify(m.performanceMonitor.getOptimizationRecommendations(), null, 2)))\"",
-    "perf:monitor": "NODE_ENV=development pnpm run start:fastmcp",
+    "perf:monitor": "NODE_ENV=development pnpm run start",
     "docs:generate": "node scripts/generate-docs.js",
     "docs:jsdoc": "jsdoc -c jsdoc.config.json",
     "docs:build": "pnpm run docs:generate && pnpm run docs:jsdoc",
@@ -58,17 +55,13 @@
     "docker:compose:up": "docker-compose up -d",
     "docker:compose:down": "docker-compose down",
     "docker:compose:dev": "docker-compose --profile dev up -d",
-    "docker:compose:fastmcp": "docker-compose --profile fastmcp up -d",
     "docker:compose:logs": "docker-compose logs -f",
     "docker:compose:build": "docker-compose build",
     "docker:clean": "docker system prune -f && docker volume prune -f",
     "setup:premium": "bash scripts/setup-integrated-services.sh",
     "deploy:railway": "railway up",
     "logs:railway": "railway logs --follow",
-    "status:railway": "railway status",
-    "ai:analyze": "vibe-tools repo 'analyze shipping patterns and optimization opportunities'",
-    "ai:help": "vibe-tools web 'latest TypeScript and MCP server best practices'",
-    "test:claude": "node test-claude-integration.js"
+    "status:railway": "railway status"
   },
   "dependencies": {
     "@easypost/api": "^8.2.0",
@@ -83,9 +76,6 @@
     "zod": "^4.1.5"
   },
   "devDependencies": {
-    "@anthropic-ai/claude-code": "^1.0.107",
-    "@huggingface/inference": "^4.7.1",
-    "@instantlyeasy/claude-code-sdk-ts": "^0.3.0",
     "@railway/cli": "^4.6.3",
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.9",
