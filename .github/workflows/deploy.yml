@@ -55,7 +55,7 @@ jobs:
           LOG_LEVEL: error
           EASYPOST_API_KEY: mock-easypost-key
           VEEQO_API_KEY: mock-veeqo-key
-        run: pnpm run test:ci
+        run: pnpm test
 
       - name: Build
         run: pnpm run build
