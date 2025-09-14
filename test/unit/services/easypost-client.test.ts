@@ -17,6 +17,8 @@ vi.mock('@/config/index.js', () => ({
     easypost: {
       apiKey: 'test-key',
       baseUrl: 'https://api.easypost.com/v2',
+      timeout: 30000,
+      mockMode: false,
     },
   },
 }));
@@ -31,11 +33,9 @@ vi.mock('@/utils/logger.js', () => ({
   },
 }));
 
-// Mock undici for HTTP requests
-const mockRequest = vi.fn();
-vi.mock('undici', () => ({
-  request: mockRequest,
-}));
+// Mock fetch since the client uses fetch
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
 
 describe('EasyPostClient', () => {
   let client: EasyPostClient;
@@ -47,14 +47,13 @@ describe('EasyPostClient', () => {
 
   describe('getRates', () => {
     it('should return shipping rates for valid addresses and parcel', async () => {
-      mockRequest.mockResolvedValueOnce({
-        statusCode: 200,
-        body: {
-          json: () =>
-            Promise.resolve({
-              rates: mockEasyPostRates,
-            }),
-        },
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            rates: mockEasyPostRates,
+          }),
       });
 
       const rates = await client.getRates(

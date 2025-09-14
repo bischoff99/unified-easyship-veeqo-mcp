@@ -16,7 +16,8 @@
       "Bash(pnpm run lint:check:*)",
       "Bash(pnpm run lint:*)",
       "Bash(pnpm run:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

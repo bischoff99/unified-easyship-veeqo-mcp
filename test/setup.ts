@@ -13,9 +13,17 @@ config({ path: '.env.test' });
 beforeAll(() => {
   // Set test environment variables
   process.env.NODE_ENV = 'test';
-  process.env.LOG_LEVEL = 'silent';
+  process.env.LOG_LEVEL = 'error';
   process.env.EASYPOST_API_KEY = 'mock-easypost-key';
   process.env.VEEQO_API_KEY = 'mock-veeqo-key';
+
+  // Set optional environment variables with defaults for testing
+  process.env.PORT = '3001';
+  process.env.HOST = 'localhost';
+  process.env.EASYPOST_BASE_URL = 'https://api.easypost.com/v2';
+  process.env.EASYPOST_TIMEOUT = '30000';
+  process.env.VEEQO_BASE_URL = 'https://api.veeqo.com';
+  process.env.VEEQO_TIMEOUT = '30000';
 });
 
 afterAll(() => {
