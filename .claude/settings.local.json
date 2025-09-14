@@ -26,7 +26,12 @@
       "mcp__qwen-code__*",
       "Bash(node:*)",
       "Bash(sed:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git commit:*)",
+      "Bash(gh workflow:*)",
+      "Bash(gh issue:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)"
     ],
     "deny": [],
     "ask": []
