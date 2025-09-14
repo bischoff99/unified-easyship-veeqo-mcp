@@ -53,8 +53,8 @@ jobs:
         env:
           NODE_ENV: test
           LOG_LEVEL: error
-          EASYPOST_API_KEY: mock-easypost-key
-          VEEQO_API_KEY: mock-veeqo-key
+          EASYPOST_API_KEY: ${{ secrets.EASYPOST_API_KEY }}
+          VEEQO_API_KEY: ${{ secrets.VEEQO_API_KEY }}
         run: pnpm test
 
       - name: Build
