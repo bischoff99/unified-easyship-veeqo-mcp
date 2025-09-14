@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "unified_easyship_veeqo_mcp": {
+      "command": "node",
+      "args": ["dist/server.js"],
+      "cwd": "/home/bischoff666/Projects/unified-easyship-veeqo-mcp",
+      "description": "Unified EasyPost-Veeqo MCP server",
+      "enabled": true,
+      "env": {
+        "NODE_ENV": "development",
+        "EASYPOST_API_KEY": "${EASYPOST_API_KEY}",
+        "VEEQO_API_KEY": "${VEEQO_API_KEY}"
+      }
+    }
+  }
+}

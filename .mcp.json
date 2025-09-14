@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "unified_easyship_veeqo_mcp": {
+      "command": "node",
+      "args": ["dist/server.js"],
+      "cwd": "/home/bischoff666/Projects/unified-easyship-veeqo-mcp",
+      "description": "Unified EasyPost-Veeqo MCP server - comprehensive shipping and inventory management",
+      "enabled": true,
+      "env": {
+        "NODE_ENV": "development",
+        "LOG_LEVEL": "info",
+        "EASYPOST_API_KEY": "${EASYPOST_API_KEY}",
+        "VEEQO_API_KEY": "${VEEQO_API_KEY}"
+      }
+    },
+    "qwen-code": {
+      "command": "npx",
+      "args": ["-y", "qwen-mcp-tool"],
+      "description": "Qwen AI code analysis and generation capabilities",
+      "enabled": false
+    }
+  }
+}
