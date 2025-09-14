@@ -37,16 +37,20 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
-            Please review this pull request and provide feedback on:
-            - Code quality and best practices
-            - Potential bugs or issues
-            - Performance considerations
-            - Security concerns
-            - Test coverage
-            
-            Use the repository's CLAUDE.md for guidance on style and conventions. Be constructive and helpful in your feedback.
+            Review this pull request for the unified EasyPost-Veeqo MCP server project:
 
-            Use `gh pr comment` with your Bash tool to leave your review as a comment on the PR.
+            **Focus Areas:**
+            - TypeScript/JavaScript code quality and MCP server patterns
+            - API integration security (EasyPost/Veeqo)
+            - Error handling and monitoring implementation
+            - Test coverage for shipping/inventory features
+            - Performance for high-volume shipping operations
+            - FastMCP framework best practices
+
+            **Context:** This is a shipping automation server integrating EasyPost and Veeqo APIs.
+
+            Use the repository's CLAUDE.md for style guidance. Provide specific, actionable feedback.
+            Use `gh pr comment` to post your review.
           
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://docs.anthropic.com/en/docs/claude-code/sdk#command-line for available options

@@ -1,0 +1,66 @@
+name: 🐛 Bug Report
+description: Report a bug in the unified EasyPost-Veeqo MCP server
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug! Please fill out the sections below.
+
+  - type: checkboxes
+    id: component
+    attributes:
+      label: Affected Component
+      description: Which part of the system is affected?
+      options:
+        - label: EasyPost integration (shipping rates, labels, tracking)
+        - label: Veeqo integration (inventory, orders, fulfillment)
+        - label: FastMCP server (tools, resources, authentication)
+        - label: AI integration (Claude Code, optimization)
+        - label: Monitoring and logging
+        - label: CI/CD and deployment
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the bug
+      placeholder: Describe what happened...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Call MCP tool with parameters...
+        2. Expected result...
+        3. Actual result...
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Your environment details
+      placeholder: |
+        - Node.js version:
+        - npm/pnpm version:
+        - Operating System:
+        - EasyPost API mode (test/production):
+        - Veeqo API environment:
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs
+      description: Any error messages or logs
+      render: shell

@@ -31,8 +31,19 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Cache TypeScript build
+        uses: actions/cache@v4
+        with:
+          path: |
+            dist/
+            .tsbuildinfo
+          key: ${{ runner.os }}-typescript-${{ hashFiles('**/tsconfig*.json') }}-${{ hashFiles('src/**/*.ts') }}
+          restore-keys: |
+            ${{ runner.os }}-typescript-${{ hashFiles('**/tsconfig*.json') }}-
+            ${{ runner.os }}-typescript-
+
       - name: Lint
-        run: pnpm run lint:check
+        run: pnpm run lint
 
       - name: Type check
         run: pnpm run type-check
