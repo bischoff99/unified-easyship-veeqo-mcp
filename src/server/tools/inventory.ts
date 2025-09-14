@@ -43,13 +43,14 @@ export function addInventoryTools(server: FastMCP, veeqoClient: VeeqoClient) {
         monitoring.recordApiCall('veeqo', '/products', duration, 200);
 
         logger.info(`Retrieved ${products.length} products in ${duration}ms`);
-        return {
+        const result = {
           products,
           count: products.length,
           page: args.page,
           per_page: args.per_page,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('veeqo', '/products', duration, 500, true);
@@ -92,13 +93,14 @@ export function addInventoryTools(server: FastMCP, veeqoClient: VeeqoClient) {
         monitoring.recordApiCall('veeqo', '/orders', duration, 200);
 
         logger.info(`Retrieved ${orders.length} orders in ${duration}ms`);
-        return {
+        const result = {
           orders,
           count: orders.length,
           page: args.page,
           per_page: args.per_page,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('veeqo', '/orders', duration, 500, true);
@@ -147,10 +149,11 @@ export function addInventoryTools(server: FastMCP, veeqoClient: VeeqoClient) {
         monitoring.recordApiCall('veeqo', '/fulfillments', duration, 200);
 
         logger.info(`Created fulfillment ${fulfillment.id} in ${duration}ms`);
-        return {
+        const result = {
           ...fulfillment,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('veeqo', '/fulfillments', duration, 500, true);
@@ -192,10 +195,11 @@ export function addInventoryTools(server: FastMCP, veeqoClient: VeeqoClient) {
         monitoring.recordApiCall('veeqo', '/inventory', duration, 200);
 
         logger.info(`Updated inventory for sellable ${args.sellable_id} in ${duration}ms`);
-        return {
+        const finalResult = {
           ...result,
           processing_time_ms: duration,
         };
+        return JSON.stringify(finalResult, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('veeqo', '/inventory', duration, 500, true);
@@ -223,11 +227,12 @@ export function addInventoryTools(server: FastMCP, veeqoClient: VeeqoClient) {
         monitoring.recordApiCall('veeqo', '/warehouses', duration, 200);
 
         logger.info(`Retrieved ${warehouses.length} warehouses in ${duration}ms`);
-        return {
+        const result = {
           warehouses,
           count: warehouses.length,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('veeqo', '/warehouses', duration, 500, true);
@@ -271,10 +276,11 @@ export function addInventoryTools(server: FastMCP, veeqoClient: VeeqoClient) {
         monitoring.recordApiCall('veeqo', '/inventory_levels', duration, 200);
 
         logger.info(`Retrieved inventory levels in ${duration}ms`);
-        return {
+        const result = {
           inventory_levels: inventoryLevels,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('veeqo', '/inventory_levels', duration, 500, true);

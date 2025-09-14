@@ -8,6 +8,7 @@
  */
 
 import { FastMCP } from 'fastmcp';
+import { z } from 'zod';
 
 import { authenticate } from '../middleware/auth.js';
 import { EasyPostClient } from '../services/clients/easypost-enhanced.js';
@@ -91,7 +92,7 @@ try {
 server.addTool({
   name: 'health_check',
   description: 'Check the health status of all integrated services',
-  parameters: {},
+  parameters: z.object({}),
   execute: async (_args) => {
     const startTime = Date.now();
 
@@ -120,62 +121,65 @@ server.addTool({
 
     const duration = Date.now() - startTime;
 
-    return {
+    const result = {
       status: 'operational',
       services: healthChecks,
       server_uptime: process.uptime(),
       processing_time_ms: duration,
       timestamp: new Date().toISOString(),
     };
+
+    return JSON.stringify(result, null, 2);
   },
 });
 
 // Server startup and lifecycle management
 server.on('connect', (event) => {
+  const clientName = (event.session.clientCapabilities as any)?.clientInfo?.name || 'unknown';
+
   logger.info('Client connected', {
-    clientId: event.session.clientCapabilities?.clientInfo?.name || 'unknown',
+    clientId: clientName,
     capabilities: event.session.clientCapabilities,
   });
 
-  monitoring.recordEvent('client_connect', {
-    client: event.session.clientCapabilities?.clientInfo?.name || 'unknown',
+  monitoring.recordMetric('client_connect', 1, {
+    client: clientName,
   });
 });
 
 server.on('disconnect', (_event) => {
   logger.info('Client disconnected');
-  monitoring.recordEvent('client_disconnect', {});
+  monitoring.recordMetric('client_disconnect', 1);
 });
 
 // Error handling
 process.on('uncaughtException', (error) => {
   logger.error('Uncaught exception:', error);
-  monitoring.recordEvent('uncaught_exception', { error: error.message });
+  monitoring.recordError(error, { context: 'uncaught_exception' });
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   logger.error('Unhandled promise rejection:', { reason, promise });
-  monitoring.recordEvent('unhandled_rejection', { reason });
+  monitoring.recordMetric('unhandled_rejection', 1, { reason: String(reason) });
 });
 
 // Graceful shutdown
 process.on('SIGTERM', async () => {
   logger.info('SIGTERM received, shutting down gracefully...');
-  monitoring.recordEvent('server_shutdown', { signal: 'SIGTERM' });
+  monitoring.recordMetric('server_shutdown', 1, { signal: 'SIGTERM' });
   process.exit(0);
 });
 
 process.on('SIGINT', async () => {
   logger.info('SIGINT received, shutting down gracefully...');
-  monitoring.recordEvent('server_shutdown', { signal: 'SIGINT' });
+  monitoring.recordMetric('server_shutdown', 1, { signal: 'SIGINT' });
   process.exit(0);
 });
 
 logger.info('FastMCP server initialized successfully');
 logger.info(`Server version: 1.0.0`);
-logger.info(`Available tools: ${server.tools?.size || 0}`);
-logger.info(`Available resources: ${server.resources?.size || 0}`);
+logger.info('Server tools and resources loaded');
 
 export default server;
 

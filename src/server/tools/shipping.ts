@@ -67,11 +67,12 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         monitoring.recordApiCall('easypost', '/rates', duration, 200);
 
         logger.info(`Found ${filteredRates.length} shipping rates in ${duration}ms`);
-        return {
+        const result = {
           rates: filteredRates,
           count: filteredRates.length,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('easypost', '/rates', duration, 500, true);
@@ -116,10 +117,11 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         monitoring.recordApiCall('easypost', '/shipments', duration, 200);
 
         logger.info(`Created shipping label ${label.tracking_code} in ${duration}ms`);
-        return {
+        const result = {
           ...label,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('easypost', '/shipments', duration, 500, true);
@@ -153,10 +155,11 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         monitoring.recordApiCall('easypost', '/trackers', duration, 200);
 
         logger.info(`Retrieved tracking info for ${args.tracking_code} in ${duration}ms`);
-        return {
+        const result = {
           ...trackingInfo,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('easypost', '/trackers', duration, 500, true);
@@ -190,10 +193,11 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         monitoring.recordApiCall('easypost', '/addresses/verify', duration, 200);
 
         logger.info(`Validated address in ${duration}ms`);
-        return {
+        const result = {
           ...validatedAddress,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('easypost', '/addresses/verify', duration, 500, true);
@@ -223,11 +227,12 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         monitoring.recordApiCall('easypost', '/parcel_presets', duration, 200);
 
         logger.info(`Retrieved ${presets.length} parcel presets in ${duration}ms`);
-        return {
+        const result = {
           presets,
           count: presets.length,
           processing_time_ms: duration,
         };
+        return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
         monitoring.recordApiCall('easypost', '/parcel_presets', duration, 500, true);
