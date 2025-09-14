@@ -12,8 +12,11 @@ import {
   generateShippingRecommendations,
   optimizeShipping,
 } from '../../services/integrations/claude-code.js';
-import { logError, logger } from '../../utils/logger.js';
-import { monitoring } from '../../utils/monitoring.js';
+import { safeLogger as logger, safeMonitoring as monitoring } from '../../utils/type-safe-logger.js';
+
+const logError = (message: string, error: any) => {
+  logger.error(message, error);
+};
 
 export function addAIIntegrationTools(
   server: FastMCP,

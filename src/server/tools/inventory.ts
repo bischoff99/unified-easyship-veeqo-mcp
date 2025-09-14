@@ -6,8 +6,11 @@
 import { z } from 'zod';
 import type { FastMCP } from 'fastmcp';
 import { VeeqoClient } from '../../services/clients/veeqo-enhanced.js';
-import { logError, logger } from '../../utils/logger.js';
-import { monitoring } from '../../utils/monitoring.js';
+import { safeLogger as logger, safeMonitoring as monitoring } from '../../utils/type-safe-logger.js';
+
+const logError = (message: string, error: any) => {
+  logger.error(message, error);
+};
 
 export function addInventoryTools(server: FastMCP, veeqoClient: VeeqoClient) {
   /**

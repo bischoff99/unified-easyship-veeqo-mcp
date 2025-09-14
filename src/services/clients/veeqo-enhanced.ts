@@ -1892,4 +1892,31 @@ export class VeeqoClient {
       updated_at: new Date().toISOString(),
     };
   }
+
+  // Alias methods for compatibility with tool implementations
+  async createFulfillment(params: any): Promise<any> {
+    // Use existing createShipment method as base
+    return this.createShipment({
+      order_id: params.order_id,
+      line_items: params.line_items,
+      tracking_number: params.tracking_number,
+      carrier: params.carrier || 'USPS',
+      service: params.service || 'Ground',
+      notify_customer: params.notify_customer !== false,
+    });
+  }
+
+  async updateInventory(params: any): Promise<{ success: boolean; message: string }> {
+    // Use existing updateInventoryLevels method
+    await this.updateInventoryLevels(params.sellable_id, params.warehouse_id, params.available_count);
+    return {
+      success: true,
+      message: `Updated inventory for sellable ${params.sellable_id}`
+    };
+  }
+
+  async getWarehouses(): Promise<any[]> {
+    // Use existing getLocations method (warehouses are locations in Veeqo)
+    return this.getLocations();
+  }
 }

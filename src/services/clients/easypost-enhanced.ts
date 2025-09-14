@@ -361,6 +361,13 @@ export class EasyPostClient {
   }
 
   /**
+   * Track a package (alias for trackShipment)
+   */
+  async trackPackage(trackingCode: string): Promise<EasyPostTracker> {
+    return this.trackShipment(trackingCode);
+  }
+
+  /**
    * Verify an address
    */
   async verifyAddress(address: EasyPostAddress): Promise<EasyPostAddress> {
@@ -391,7 +398,7 @@ export class EasyPostClient {
   /**
    * Get parcel presets
    */
-  async getParcelPresets(): Promise<any[]> {
+  async getParcelPresets(_carrier?: string): Promise<any[]> {
     if (this.mockMode) {
       return [
         { name: 'Small Box', length: 10, width: 8, height: 4, weight: 1 },
