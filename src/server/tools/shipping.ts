@@ -8,25 +8,15 @@ import type { FastMCP } from 'fastmcp';
 import { EasyPostClient, type EasyPostAddress } from '../../services/clients/easypost-enhanced.js';
 import { safeLogger as logger, safeMonitoring as monitoring } from '../../utils/type-safe-logger.js';
 import { createApiHandler } from '../../utils/response-formatter.js';
+import { AddressSchema } from '../../api/schemas/address.js';
 
 const logError = (message: string, error: any) => {
   logger.error(message, error);
 };
 
 export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient) {
-  // Address validation schema
-  const addressSchema = z.object({
-    name: z.string(),
-    company: z.string().optional(),
-    street1: z.string(),
-    street2: z.string().optional(),
-    city: z.string(),
-    state: z.string(),
-    zip: z.string(),
-    country: z.string().default('US'),
-    phone: z.string().optional(),
-    email: z.string().optional(),
-  });
+  // Use canonical AddressSchema from schemas
+  const addressSchema = AddressSchema;
 
   const parcelSchema = z.object({
     length: z.number().min(0.1),

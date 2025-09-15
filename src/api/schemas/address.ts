@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const AddressSchema = z.object({
-  name: z.string().optional(),
+  name: z.string(),
   company: z.string().optional(),
   street1: z.string(),
   street2: z.string().optional(),

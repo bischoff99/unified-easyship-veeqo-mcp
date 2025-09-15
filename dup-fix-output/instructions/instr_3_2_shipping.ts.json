@@ -1,9 +1,0 @@
-{
-  "cluster_id": "cluster_3",
-  "cluster_tokens": 0,
-  "module": "dup-fix-output/extracted/cluster_3_EXTRACTED_3.ts",
-  "export_name": "EXTRACTED_3",
-  "target_file": "src/server/tools/shipping.ts",
-  "start": 18,
-  "end": 27
-}
