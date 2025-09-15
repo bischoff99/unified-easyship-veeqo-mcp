@@ -55,7 +55,14 @@ validate_input() {
       fi
       ;;
     "path")
-      if [[ "$value" != "$ROOT"/* ]]; then
+      # Convert to absolute path for validation
+      local abs_path
+      if [[ "$value" = /* ]]; then
+        abs_path="$value"
+      else
+        abs_path="$ROOT/$value"
+      fi
+      if [[ "$abs_path" != "$ROOT"/* ]]; then
         echo "ERROR: Path outside project root: $value"
         return 1
       fi
@@ -91,8 +98,22 @@ calculate_relative_path() {
   local target_file="$1"
   local module_file="$2"
   
+  # Convert to absolute paths for validation
+  local abs_target abs_module
+  if [[ "$target_file" = /* ]]; then
+    abs_target="$target_file"
+  else
+    abs_target="$ROOT/$target_file"
+  fi
+  
+  if [[ "$module_file" = /* ]]; then
+    abs_module="$module_file"
+  else
+    abs_module="$ROOT/$module_file"
+  fi
+  
   # Validate paths are within project root
-  if ! validate_input "$target_file" "path" || ! validate_input "$module_file" "path"; then
+  if ! validate_input "$abs_target" "path" || ! validate_input "$abs_module" "path"; then
     return 1
   fi
   
@@ -121,7 +142,7 @@ try:
 except Exception as e:
     print(f'ERROR: Path calculation failed: {e}', file=sys.stderr)
     sys.exit(1)
-" "$target_file" "$module_file"
+" "$abs_target" "$abs_module"
 }
 
 if ! command -v pnpm >/dev/null 2>&1; then echo "ERROR: pnpm required"; exit 1; fi
