@@ -8,7 +8,6 @@
  */
 
 import { FastMCP } from 'fastmcp';
-import { z } from 'zod';
 
 import { authenticate } from './middleware/auth.js';
 import { EasyPostClient } from './services/clients/easypost-enhanced.js';

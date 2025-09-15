@@ -6,12 +6,20 @@ This is a unified MCP (Model Context Protocol) server that integrates EasyPost a
 
 ## Code Style & Standards
 
-- Use TypeScript with strict type checking
+- Use TypeScript with strict type checking (`strict: true` in tsconfig.json)
 - Follow ES modules (import/export) syntax
 - Use async/await for all asynchronous operations
 - Implement proper error handling with custom error codes
 - Use pino for structured logging with appropriate log levels
 - Follow RESTful API patterns for external service integration
+- Use meaningful variable and function names
+- Prefer const over let, avoid var
+- Use template literals for string interpolation
+- Implement proper TypeScript interfaces for all data structures
+- Use Zod for runtime type validation
+- Implement proper null/undefined checks
+- Use readonly for immutable data structures
+- Prefer composition over inheritance
 
 ## Architecture Guidelines
 
@@ -35,6 +43,11 @@ This is a unified MCP (Model Context Protocol) server that integrates EasyPost a
 - Use appropriate HTTP status codes and error messages
 - Handle API timeouts gracefully (30s default)
 - Log all external API calls with request/response details
+- Implement circuit breaker pattern for external API calls
+- Use idempotency keys for POST operations
+- Implement proper request/response logging
+- Handle rate limiting with exponential backoff
+- Validate all API responses against expected schemas
 
 ## MCP Server Guidelines
 
@@ -74,9 +87,9 @@ This is a unified MCP (Model Context Protocol) server that integrates EasyPost a
 
 ## AI Integration
 
-- Use Claude Code SDK for shipping optimization
-- Implement AI-powered code analysis
-- Provide intelligent recommendations
+- Use MCP (Model Context Protocol) for AI tool integration
+- Implement intelligent shipping optimization algorithms
+- Provide data-driven recommendations based on shipping patterns
 - Use structured prompts for consistent AI responses
 
 ## Documentation
@@ -99,3 +112,61 @@ This is a unified MCP (Model Context Protocol) server that integrates EasyPost a
 - Implement proper health checks
 - Use environment-specific configurations
 - Monitor application performance and errors
+
+## Code Generation Guidelines
+
+- Always generate complete, runnable code examples
+- Include proper error handling in all generated functions
+- Add JSDoc comments for all public functions and classes
+- Use consistent naming conventions (camelCase for variables, PascalCase for classes)
+- Generate TypeScript interfaces for all API responses
+- Include input validation using Zod schemas
+- Add proper logging statements for debugging
+
+## File Structure Conventions
+
+- Use kebab-case for file names (e.g., `shipping-tools.ts`)
+- Group related functionality in dedicated directories
+- Keep configuration files in the root directory
+- Use index.ts files for clean exports
+- Separate concerns: tools, schemas, utilities, and services
+
+## Error Handling Patterns
+
+- Use custom error classes that extend Error
+- Include error codes for programmatic error handling
+- Log errors with appropriate context and stack traces
+- Return meaningful error messages to clients
+- Implement circuit breaker patterns for external API calls
+
+## Testing Requirements
+
+- Write unit tests for all business logic
+- Use mock data for external API dependencies
+- Test error scenarios and edge cases
+- Maintain test coverage above 80%
+- Use descriptive test names that explain the scenario
+
+## Performance Optimization
+
+- Implement request caching where appropriate
+- Use connection pooling for database/external API connections
+- Optimize bundle size by using tree shaking
+- Implement lazy loading for non-critical modules
+- Monitor and log performance metrics
+
+## Security Best Practices
+
+- Validate all input data using Zod schemas
+- Sanitize user inputs to prevent injection attacks
+- Use environment variables for sensitive configuration
+- Implement rate limiting for API endpoints
+- Log security events for monitoring
+
+## Documentation Standards
+
+- Write clear README files with setup instructions
+- Document all environment variables and their purposes
+- Include API documentation with examples
+- Maintain changelog for version tracking
+- Use inline comments for complex business logic

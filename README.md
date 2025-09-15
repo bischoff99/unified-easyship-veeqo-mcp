@@ -208,10 +208,20 @@ pnpm run dev  # Start with hot reload
 - **`get_inventory_levels`**: Get current inventory levels across locations
 - **`update_inventory_levels`**: Update inventory levels in bulk
 
-#### AI Tools
+#### Advanced Tools
 
-- **`optimize_shipping`**: AI-powered shipping optimization
-- **`analyze_shipping_code`**: AI code analysis for shipping logic
+- **`get_carriers`**: Retrieve available shipping carriers
+- **`get_rates_by_carriers`**: Get rates from specific carriers
+- **`get_international_rates`**: Calculate international shipping rates
+- **`track_package`**: Real-time package tracking
+- **`verify_address`**: Address validation and correction
+- **`create_address`**: Create new address records
+- **`create_parcel`**: Create custom parcel definitions
+- **`create_customs_info`**: International customs information
+- **`create_insurance`**: Shipping insurance management
+- **`create_pickup`**: Schedule package pickups
+- **`create_report`**: Generate shipping reports
+- **`create_webhook`**: Setup delivery notifications
 
 ### MCP Resources
 
@@ -220,8 +230,8 @@ pnpm run dev  # Start with hot reload
 
 ### MCP Prompts
 
-- **`shipping_optimization`**: Generate AI-powered shipping recommendations
-- **`shipping_code_review`**: Review shipping-related code for best practices
+- **`shipping_optimization`**: Generate shipping recommendations based on rate comparison
+- **`inventory_management`**: Inventory optimization and stock management guidance
 
 ## 🏗️ Architecture
 
@@ -262,17 +272,18 @@ const client = new VeeqoClient();
 const inventory = await client.getInventoryLevels();
 ```
 
-### AI Integration
+### Advanced Shipping Features
 
 ```typescript
-// AI integration removed - using basic rate comparison
-
+// Comprehensive shipping rate comparison
 const optimization = await optimizeShipping({
   package: packageDetails,
   requirements: shippingRequirements,
   origin: 'San Francisco, CA',
   destination: 'New York, NY',
 });
+
+// Returns multiple carrier options with cost comparison
 ```
 
 ## 🧪 Testing
@@ -398,15 +409,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - ✅ Core MCP server implementation
 - ✅ EasyPost and Veeqo integration
-- ✅ AI-powered optimization
+- ✅ 40+ advanced shipping and inventory tools
+- ✅ Docker containerization
 - ✅ Authentication and security
 
 ### Phase 2 (Next)
 
 - 🔄 Advanced analytics dashboard
-- 🔄 Machine learning optimization
-- 🔄 Webhook integration
+- 🔄 Enhanced webhook integration
 - 🔄 Mobile API support
+- 🔄 Performance optimization
 
 ### Phase 3 (Future)
 

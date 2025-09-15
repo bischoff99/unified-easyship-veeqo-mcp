@@ -14,6 +14,7 @@ export class EasyPostClient {
   private readonly apiKey: string;
   private readonly baseUrl: string;
   private readonly idempotencyKeys = new Map<string, string>();
+  private readonly idempotencyTimers = new Map<string, NodeJS.Timeout>();
 
   constructor(apiKey?: string, baseUrl?: string) {
     this.apiKey = apiKey ?? process.env.EASYPOST_API_KEY ?? '';
@@ -21,6 +22,16 @@ export class EasyPostClient {
     if (!this.apiKey) {
       throw createError(ErrorCode.INVALID_PARAMS, 'EASYPOST_API_KEY is required');
     }
+  }
+
+  // Clean up method for graceful shutdown
+  cleanup(): void {
+    // Clear all pending timers
+    for (const timer of this.idempotencyTimers.values()) {
+      clearTimeout(timer);
+    }
+    this.idempotencyTimers.clear();
+    this.idempotencyKeys.clear();
   }
 
   async request(endpoint: string, options: any = {}): Promise<any> {
@@ -101,7 +112,12 @@ export class EasyPostClient {
     const cacheKey = `${endpoint}:${body}`;
     if (!this.idempotencyKeys.has(cacheKey)) {
       this.idempotencyKeys.set(cacheKey, randomUUID());
-      setTimeout(() => this.idempotencyKeys.delete(cacheKey), 24 * 60 * 60 * 1000);
+      // Store timer reference for cleanup
+      const timer = setTimeout(() => {
+        this.idempotencyKeys.delete(cacheKey);
+        this.idempotencyTimers.delete(cacheKey);
+      }, 24 * 60 * 60 * 1000);
+      this.idempotencyTimers.set(cacheKey, timer);
     }
     return this.idempotencyKeys.get(cacheKey)!;
   }

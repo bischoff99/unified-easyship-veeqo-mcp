@@ -15,7 +15,8 @@ export const safeLogger = {
         logger.info(message);
       }
     } catch (_error) {
-      console.log(`[INFO] ${message}`, meta ? JSON.stringify(meta) : '');
+      // Fallback silently - logging infrastructure failure shouldn't crash the app
+      // In production, this would be sent to a fallback logging service
     }
   },
 
@@ -27,7 +28,8 @@ export const safeLogger = {
         logger.error(message);
       }
     } catch (_err) {
-      console.error(`[ERROR] ${message}`, error ? error.toString() : '');
+      // Fallback silently - logging infrastructure failure shouldn't crash the app
+      // Critical errors should be sent to monitoring service or stderr in production
     }
   },
 
@@ -39,7 +41,7 @@ export const safeLogger = {
         logger.warn(message);
       }
     } catch (_error) {
-      console.warn(`[WARN] ${message}`, meta ? JSON.stringify(meta) : '');
+      // Fallback silently - logging infrastructure failure shouldn't crash the app
     }
   },
 
@@ -51,7 +53,7 @@ export const safeLogger = {
         logger.debug(message);
       }
     } catch (_error) {
-      console.log(`[DEBUG] ${message}`, meta ? JSON.stringify(meta) : '');
+      // Fallback silently - debug logs can be safely ignored in fallback
     }
   }
 };
@@ -64,7 +66,7 @@ export const safeMonitoring = {
         monitoring.recordApiCall(service, endpoint, duration, statusCode, success);
       }
     } catch (_error) {
-      console.log(`[MONITORING] API Call: ${service}${endpoint} - ${duration}ms - ${statusCode}`);
+      // Monitoring failures should not impact application flow
     }
   },
 
@@ -74,7 +76,7 @@ export const safeMonitoring = {
         monitoring.recordMetric(name, value, labels);
       }
     } catch (_error) {
-      console.log(`[MONITORING] Metric: ${name} = ${value}`, labels ? JSON.stringify(labels) : '');
+      // Metrics recording failure - continue without disruption
     }
   },
 
@@ -84,7 +86,7 @@ export const safeMonitoring = {
         monitoring.recordError(error, context);
       }
     } catch (_err) {
-      console.error(`[MONITORING] Error: ${error.message}`, context ? JSON.stringify(context) : '');
+      // Error recording failure - avoid recursive error logging
     }
   }
 };

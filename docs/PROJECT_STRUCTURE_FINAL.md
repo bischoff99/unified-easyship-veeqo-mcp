@@ -96,12 +96,12 @@ unified-easyship-veeqo-mcp/
   - Order processing
   - Demand forecasting
 
-### 🤖 AI-Powered Features
+### 🚀 Advanced Features
 
-- **Claude Code SDK**: AI-powered shipping optimization
-- **Hugging Face**: ML models for pattern analysis
-- **Smart Recommendations**: Automated shipping suggestions
-- **Demand Forecasting**: Predictive inventory management
+- **40+ MCP Tools**: Comprehensive shipping and inventory management
+- **Docker Support**: Full containerization with multiple deployment options
+- **Rate Optimization**: Intelligent carrier and service selection
+- **Real-time Tracking**: Live package and inventory status updates
 
 ### 🛠 Development Tools
 
@@ -122,10 +122,10 @@ unified-easyship-veeqo-mcp/
 
 ### API Integrations
 
-- **EasyPost API**: Shipping and logistics
-- **Veeqo API**: Inventory management
-- **Claude Code SDK**: AI optimization
-- **Hugging Face**: Machine learning models
+- **EasyPost API**: Shipping and logistics (40+ endpoints)
+- **Veeqo API**: Inventory management (30+ endpoints)
+- **MCP Protocol**: Model Context Protocol for AI integration
+- **Docker**: Containerized deployment and development
 
 ### Development Tools
 
@@ -143,8 +143,6 @@ unified-easyship-veeqo-mcp/
 # API Keys
 EASYPOST_API_KEY="your_easypost_api_key"
 VEEQO_API_KEY="your_veeqo_api_key"
-# CLAUDE_CODE_API_KEY="your_claude_code_api_key" # Claude Code SDK removed
-HUGGING_FACE_HUB_TOKEN="your_hugging_face_hub_token"
 RAILWAY_TOKEN="your_railway_token"
 
 # Optional Configuration
@@ -182,11 +180,12 @@ npm run logs:railway     # View Railway logs
 npm run status:railway   # Check Railway status
 ```
 
-### AI Tools
+### Docker Tools
 
 ```bash
-npm run ai:analyze       # Analyze shipping patterns
-npm run ai:help          # Get AI assistance
+npm run docker:build     # Build Docker image
+npm run docker:run       # Run Docker container
+npm run docker:dev       # Run development container
 ```
 
 ## MCP Tools Available
@@ -207,11 +206,18 @@ npm run ai:help          # Get AI assistance
 - `vq.get_orders` - Retrieve orders
 - `vq.create_order` - Create new order
 
-### AI-Powered Tools
+### Advanced Tools
 
-- `ai.optimize_shipping` - AI shipping optimization
-- `ai.forecast_demand` - Demand forecasting
-- `ai.analyze_patterns` - Shipping pattern analysis
+- `get_carriers` - Retrieve available shipping carriers
+- `get_international_rates` - International shipping rates
+- `create_customs_info` - International customs information
+- `create_insurance` - Shipping insurance management
+- `create_pickup` - Schedule package pickups
+- `create_webhook` - Setup delivery notifications
+- `get_customers` - Customer management
+- `get_suppliers` - Supplier management
+- `create_purchase_order` - Purchase order management
+- `get_demand_forecast` - Demand forecasting
 
 ## Best Practices
 
