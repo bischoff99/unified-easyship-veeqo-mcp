@@ -24,9 +24,12 @@ TOP_N=3
 EXTRACT_DIR="${OUTDIR}/extracted"
 INSTR_DIR="${OUTDIR}/instructions"
 
+# Initialize tmp variable
+tmp=""
+
 # Cleanup function for temporary files
 cleanup() {
-  rm -f "$tmp" 2>/dev/null || true
+  rm -f "${tmp:-}" 2>/dev/null || true
 }
 trap cleanup EXIT
 
