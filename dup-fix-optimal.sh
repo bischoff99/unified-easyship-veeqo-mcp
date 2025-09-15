@@ -137,27 +137,40 @@ rm -rf "$OUTDIR"
 mkdir -p "$OUTDIR" "$EXTRACT_DIR" "$INSTR_DIR"
 
 echo "1) Running jscpd (min tokens = $MIN_TOKENS)..."
-pnpm dlx jscpd --min-tokens "$MIN_TOKENS" --reporters console,json --output "$REPORT" src/ || true
-if [ ! -f "$REPORT" ]; then echo "ERROR: jscpd report not produced"; exit 1; fi
+pnpm dlx jscpd --min-tokens "$MIN_TOKENS" --reporters console,json --output "$OUTDIR" src/ || true
+
+# Handle jscpd output - it might create a directory or file
+if [ -d "$REPORT" ]; then
+  # If it created a directory, look for the report file inside
+  REPORT_FILE="${REPORT}/jscpd-report.json"
+elif [ -f "$REPORT" ]; then
+  # If it created a file directly
+  REPORT_FILE="$REPORT"
+else
+  echo "ERROR: jscpd report not produced"
+  exit 1
+fi
+
+if [ ! -f "$REPORT_FILE" ]; then echo "ERROR: jscpd report file not found at $REPORT_FILE"; exit 1; fi
 
 # Validate jscpd report structure
-if ! jq -e '.duplicates' "$REPORT" >/dev/null 2>&1; then
+if ! jq -e '.duplicates' "$REPORT_FILE" >/dev/null 2>&1; then
   echo "ERROR: Invalid jscpd report format"
   exit 1
 fi
 
-DUP_COUNT=$(jq '.duplicates | length' "$REPORT")
+DUP_COUNT=$(jq '.duplicates | length' "$REPORT_FILE")
 echo "jscpd clusters found: $DUP_COUNT"
 
 if [ "$DUP_COUNT" -eq 0 ]; then echo "No duplication found. Exiting."; exit 0; fi
 
 # Build top-N clusters array
-jq -r ".duplicates | sort_by(-.tokens) | .[0:$TOP_N] | to_entries | .[]" "$REPORT" > "${OUTDIR}/top_clusters.json"
+jq -r ".duplicates | sort_by(-.tokens) | .[0:$TOP_N] | to_entries | .[]" "$REPORT_FILE" > "${OUTDIR}/top_clusters.json"
 
-python3 - <<'PY'
+python3 - <<PY
 import json, os, re, pathlib
 ROOT=os.getcwd()
-REPORT=os.path.join("dup-fix-output","jscpd-report.json")
+REPORT="$REPORT_FILE"
 OUTDIR=os.path.join("dup-fix-output")
 EXTRACT_DIR=os.path.join(OUTDIR,"extracted")
 INSTR_DIR=os.path.join(OUTDIR,"instructions")
