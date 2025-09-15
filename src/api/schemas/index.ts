@@ -6,18 +6,9 @@
 import { z } from 'zod';
 
 // Common schemas
-export const AddressSchema = z.object({
-  name: z.string().optional(),
-  company: z.string().optional(),
-  street1: z.string(),
-  street2: z.string().optional(),
-  city: z.string(),
-  state: z.string(),
-  zip: z.string(),
-  country: z.string().default('US'),
-  phone: z.string().optional(),
-  email: z.string().email().optional(),
-});
+// Import AddressSchema from the canonical location
+import { AddressSchema, type Address } from './address';
+export { AddressSchema, type Address };
 
 export const ParcelSchema = z.object({
   length: z.number().positive(),
@@ -112,7 +103,6 @@ export const API_SCHEMAS = {
 } as const;
 
 // Type exports
-export type Address = z.infer<typeof AddressSchema>;
 export type Parcel = z.infer<typeof ParcelSchema>;
 export type CreateShipmentRequest = z.infer<typeof CreateShipmentSchema>;
 export type TrackShipmentRequest = z.infer<typeof TrackShipmentSchema>;

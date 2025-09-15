@@ -7,6 +7,7 @@ import { z } from 'zod';
 import type { FastMCP } from 'fastmcp';
 import { EasyPostClient, type EasyPostAddress } from '../../services/clients/easypost-enhanced.js';
 import { safeLogger as logger, safeMonitoring as monitoring } from '../../utils/type-safe-logger.js';
+import { createApiHandler } from '../../utils/response-formatter.js';
 
 const logError = (message: string, error: any) => {
   logger.error(message, error);
@@ -146,6 +147,8 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
     }),
     execute: async (args) => {
       const startTime = Date.now();
+      const apiHandler = createApiHandler('easypost', '/trackers', 'track shipment');
+      
       try {
         logger.info('Tracking shipment', {
           tracking_code: args.tracking_code,
@@ -153,20 +156,12 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         });
 
         const trackingInfo = await easyPostClient.trackPackage(args.tracking_code);
+        monitoring.recordApiCall('easypost', '/trackers', Date.now() - startTime, 200);
 
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/trackers', duration, 200);
-
-        logger.info(`Retrieved tracking info for ${args.tracking_code} in ${duration}ms`);
-        const result = {
-          ...trackingInfo,
-          processing_time_ms: duration,
-        };
-        return JSON.stringify(result, null, 2);
+        logger.info(`Retrieved tracking info for ${args.tracking_code} in ${Date.now() - startTime}ms`);
+        return apiHandler.success(trackingInfo, startTime);
       } catch (error: any) {
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/trackers', duration, 500, true);
-        logError('Failed to track shipment', error);
+        apiHandler.error(error, startTime);
         throw new Error(`Shipment tracking failed: ${error.message}`);
       }
     },
@@ -183,6 +178,8 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
     }),
     execute: async (args) => {
       const startTime = Date.now();
+      const apiHandler = createApiHandler('easypost', '/addresses/verify', 'validate address');
+      
       try {
         logger.info('Validating address', {
           city: args.address.city,
@@ -191,20 +188,12 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         });
 
         const validatedAddress = await easyPostClient.verifyAddress(args.address as EasyPostAddress);
+        monitoring.recordApiCall('easypost', '/addresses/verify', Date.now() - startTime, 200);
 
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 200);
-
-        logger.info(`Validated address in ${duration}ms`);
-        const result = {
-          ...validatedAddress,
-          processing_time_ms: duration,
-        };
-        return JSON.stringify(result, null, 2);
+        logger.info(`Validated address in ${Date.now() - startTime}ms`);
+        return apiHandler.success(validatedAddress, startTime);
       } catch (error: any) {
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 500, true);
-        logError('Failed to validate address', error);
+        apiHandler.error(error, startTime);
         throw new Error(`Address validation failed: ${error.message}`);
       }
     },
@@ -668,26 +657,20 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
     }),
     execute: async (args) => {
       const startTime = Date.now();
+      const apiHandler = createApiHandler('easypost', '/trackers/package', 'track package');
+      
       try {
         logger.info('Tracking package', {
           tracking_code: args.tracking_code,
         });
 
         const trackingInfo = await easyPostClient.trackPackage(args.tracking_code);
+        monitoring.recordApiCall('easypost', '/trackers/package', Date.now() - startTime, 200);
 
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/trackers/package', duration, 200);
-
-        logger.info(`Retrieved package tracking info for ${args.tracking_code} in ${duration}ms`);
-        const result = {
-          ...trackingInfo,
-          processing_time_ms: duration,
-        };
-        return JSON.stringify(result, null, 2);
+        logger.info(`Retrieved package tracking info for ${args.tracking_code} in ${Date.now() - startTime}ms`);
+        return apiHandler.success(trackingInfo, startTime);
       } catch (error: any) {
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/trackers/package', duration, 500, true);
-        logError('Failed to track package', error);
+        apiHandler.error(error, startTime);
         throw new Error(`Package tracking failed: ${error.message}`);
       }
     },
@@ -704,6 +687,8 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
     }),
     execute: async (args) => {
       const startTime = Date.now();
+      const apiHandler = createApiHandler('easypost', '/addresses/verify', 'verify address');
+      
       try {
         logger.info('Verifying address', {
           city: args.address.city,
@@ -712,20 +697,12 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         });
 
         const verifiedAddress = await easyPostClient.verifyAddress(args.address as EasyPostAddress);
+        monitoring.recordApiCall('easypost', '/addresses/verify', Date.now() - startTime, 200);
 
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 200);
-
-        logger.info(`Verified address in ${duration}ms`);
-        const result = {
-          ...verifiedAddress,
-          processing_time_ms: duration,
-        };
-        return JSON.stringify(result, null, 2);
+        logger.info(`Verified address in ${Date.now() - startTime}ms`);
+        return apiHandler.success(verifiedAddress, startTime);
       } catch (error: any) {
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 500, true);
-        logError('Failed to verify address', error);
+        apiHandler.error(error, startTime);
         throw new Error(`Address verification failed: ${error.message}`);
       }
     },

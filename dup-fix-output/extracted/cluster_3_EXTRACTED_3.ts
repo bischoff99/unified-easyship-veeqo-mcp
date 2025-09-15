@@ -1,7 +1,7 @@
-import { z } from 'zod';
+// AUTO-EXTRACTED: cluster_3
+// Review before merging.
 
-export const AddressSchema = z.object({
-  name: z.string().optional(),
+(),
   company: z.string().optional(),
   street1: z.string(),
   street2: z.string().optional(),
@@ -10,7 +10,4 @@ export const AddressSchema = z.object({
   zip: z.string(),
   country: z.string().default('US'),
   phone: z.string().optional(),
-  email: z.string().email().optional(),
-});
-
-export type Address = z.infer<typeof AddressSchema>;
+  email: z.string().email

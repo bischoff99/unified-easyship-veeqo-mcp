@@ -1,16 +1,114 @@
 {
   "mcpServers": {
+    "Everything": {
+      "_creator": "mcp_linker",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-everything"
+      ],
+      "command": "npx",
+      "id": "15642228-2a6e-46d0-8469-c92ae1554280",
+      "name": "Everything",
+      "updated_at": "2025-09-15T13:10:39.751997600+00:00"
+    },
+    "MCP_DOCKER": {
+      "_creator": "mcp_linker",
+      "args": [
+        "mcp",
+        "gateway",
+        "run"
+      ],
+      "command": "docker",
+      "env": {
+        "LOCALAPPDATA": "C:\\Users\\bischoff\\AppData\\Local",
+        "ProgramData": "C:\\ProgramData",
+        "ProgramFiles": "C:\\Program Files"
+      },
+      "id": "f846a416-97b6-4695-9cef-82ebd807c2b8",
+      "name": "MCP_DOCKER",
+      "updated_at": "2025-09-15T13:10:39.720593+00:00"
+    },
+    "Sequential Thinking": {
+      "_creator": "mcp_linker",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "command": "npx",
+      "id": "54b05161-a66c-45ed-9628-12380eb62f02",
+      "name": "Sequential Thinking",
+      "updated_at": "2025-09-15T13:10:39.690261700+00:00"
+    },
+    "desktop-commander": {
+      "_creator": "mcp_linker",
+      "args": [
+        "-y",
+        "@wonderwhy-er/desktop-commander"
+      ],
+      "command": "npx",
+      "id": "4953125a-b0df-43dc-ae9e-0420f301e669",
+      "name": "desktop-commander",
+      "updated_at": "2025-09-15T13:10:39.661338200+00:00"
+    },
+    "playwright": {
+      "_creator": "mcp_linker",
+      "args": [
+        "@playwright/mcp@latest"
+      ],
+      "command": "npx",
+      "id": "c0e1e969-fa12-49eb-921d-30d924f71f80",
+      "name": "playwright",
+      "updated_at": "2025-09-15T13:10:39.633068900+00:00"
+    },
+    "railway-mcp": {
+      "_creator": "mcp_linker",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "@jason-tan-swe/railway-mcp",
+        "--key",
+        "42a5f315-6698-4388-9265-bc61d3d6cde9",
+        "--profile",
+        "prepared-parrotfish-S7DUNY"
+      ],
+      "command": "cmd",
+      "id": "109c5def-bf74-4c5b-aae2-837ada6c7266",
+      "name": "railway-mcp",
+      "updated_at": "2025-09-15T13:10:39.610683100+00:00"
+    },
     "unified_easyship_veeqo_mcp": {
+      "args": [
+        "dist/server.js"
+      ],
       "command": "node",
-      "args": ["dist/server.js"],
       "cwd": "/home/bischoff666/Projects/unified-easyship-veeqo-mcp",
       "description": "Unified EasyPost-Veeqo MCP server",
       "enabled": true,
       "env": {
-        "NODE_ENV": "development",
         "EASYPOST_API_KEY": "${EASYPOST_API_KEY}",
+        "NODE_ENV": "development",
         "VEEQO_API_KEY": "${VEEQO_API_KEY}"
       }
+    },
+    "veeqo": {
+      "_creator": "mcp_linker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "VEEQO_API_KEY=Vqt/577d78212b6c99a6781dd844f42b284a",
+        "veeqo-mcp",
+        "python",
+        "server.py"
+      ],
+      "command": "docker",
+      "id": "73307343-1780-4395-b890-3c21f7d9229e",
+      "name": "veeqo",
+      "updated_at": "2025-09-15T13:10:39.585052700+00:00"
     }
   }
 }

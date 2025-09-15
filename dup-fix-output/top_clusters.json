@@ -1,0 +1,117 @@
+{
+  "key": 0,
+  "value": {
+    "format": "typescript",
+    "lines": 9,
+    "fragment": "${args.tracking_code} in ${duration}ms`);\n        const result = {\n          ...trackingInfo,\n          processing_time_ms: duration,\n        };\n        return JSON.stringify(result, null, 2);\n      } catch (error: any) {\n        const duration = Date.now() - startTime;\n        monitoring.recordApiCall('easypost', '/trackers/package'",
+    "tokens": 0,
+    "firstFile": {
+      "name": "src/server/tools/shipping.ts",
+      "start": 681,
+      "end": 689,
+      "startLoc": {
+        "line": 681,
+        "column": 38,
+        "position": 6332
+      },
+      "endLoc": {
+        "line": 689,
+        "column": 20,
+        "position": 6427
+      }
+    },
+    "secondFile": {
+      "name": "src/server/tools/shipping.ts",
+      "start": 160,
+      "end": 168,
+      "startLoc": {
+        "line": 160,
+        "column": 30,
+        "position": 1537
+      },
+      "endLoc": {
+        "line": 168,
+        "column": 12,
+        "position": 1632
+      }
+    }
+  }
+}
+{
+  "key": 1,
+  "value": {
+    "format": "typescript",
+    "lines": 8,
+    "fragment": ",\n          processing_time_ms: duration,\n        };\n        return JSON.stringify(result, null, 2);\n      } catch (error: any) {\n        const duration = Date.now() - startTime;\n        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 500, true);\n        logError('Failed to verify address'",
+    "tokens": 0,
+    "firstFile": {
+      "name": "src/server/tools/shipping.ts",
+      "start": 721,
+      "end": 728,
+      "startLoc": {
+        "line": 721,
+        "column": 16,
+        "position": 6694
+      },
+      "endLoc": {
+        "line": 728,
+        "column": 27,
+        "position": 6780
+      }
+    },
+    "secondFile": {
+      "name": "src/server/tools/shipping.ts",
+      "start": 200,
+      "end": 207,
+      "startLoc": {
+        "line": 200,
+        "column": 17,
+        "position": 1899
+      },
+      "endLoc": {
+        "line": 207,
+        "column": 29,
+        "position": 1985
+      }
+    }
+  }
+}
+{
+  "key": 2,
+  "value": {
+    "format": "typescript",
+    "lines": 10,
+    "fragment": "(),\n  company: z.string().optional(),\n  street1: z.string(),\n  street2: z.string().optional(),\n  city: z.string(),\n  state: z.string(),\n  zip: z.string(),\n  country: z.string().default('US'),\n  phone: z.string().optional(),\n  email: z.string().email",
+    "tokens": 0,
+    "firstFile": {
+      "name": "src/api/schemas/index.ts",
+      "start": 10,
+      "end": 19,
+      "startLoc": {
+        "line": 10,
+        "column": 9,
+        "position": 44
+      },
+      "endLoc": {
+        "line": 19,
+        "column": 6,
+        "position": 163
+      }
+    },
+    "secondFile": {
+      "name": "src/server/tools/shipping.ts",
+      "start": 18,
+      "end": 27,
+      "startLoc": {
+        "line": 18,
+        "column": 7,
+        "position": 156
+      },
+      "endLoc": {
+        "line": 27,
+        "column": 9,
+        "position": 275
+      }
+    }
+  }
+}
