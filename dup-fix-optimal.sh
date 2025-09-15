@@ -197,12 +197,17 @@ def detect_name(fragment):
     return None
 
 for idx, cl in enumerate(dups, start=1):
-    cid = cl.get("id", f"cluster_{idx}")
+    cid = f"cluster_{idx}"
     tokens = cl.get("tokens",0)
     fragment = cl.get("fragment","").rstrip()
-    instances = cl.get("instances",[])
-    if not instances:
+    
+    # Handle jscpd format with firstFile and secondFile
+    first_file = cl.get("firstFile", {})
+    second_file = cl.get("secondFile", {})
+    
+    if not first_file or not second_file:
         continue
+        
     name = detect_name(fragment) or f"EXTRACTED_{idx}"
     # canonical module path
     mod_fname = f"cluster_{idx}_{name}.ts"
@@ -214,25 +219,27 @@ for idx, cl in enumerate(dups, start=1):
     with open(mod_path, "w", encoding="utf8") as mf:
         mf.write(header + fragment + "\n")
     print(f"WROTE {mod_path}")
-    # produce instructions for other instances (keep first as canonical)
-    for inst_i, inst in enumerate(instances[1:], start=2):
-        path = inst.get("path")
-        start = inst.get("start")
-        end = inst.get("end")
+    
+    # Create instruction for second file (first file becomes canonical)
+    second_path = second_file.get("name")
+    second_start = second_file.get("start")
+    second_end = second_file.get("end")
+    
+    if second_path and second_start and second_end:
         instr = {
             "cluster_id": cid,
             "cluster_tokens": tokens,
             "module": mod_path,
             "export_name": name,
-            "target_file": path,
-            "start": start,
-            "end": end
+            "target_file": second_path,
+            "start": second_start,
+            "end": second_end
         }
-        instr_path = os.path.join(INSTR_DIR, f"instr_{idx}_{inst_i}_{os.path.basename(path)}.json")
+        instr_path = os.path.join(INSTR_DIR, f"instr_{idx}_2_{os.path.basename(second_path)}.json")
         pathlib.Path(os.path.dirname(instr_path)).mkdir(parents=True, exist_ok=True)
         with open(instr_path,"w",encoding="utf8") as f:
             json.dump(instr,f,indent=2)
-        print(f"INSTR {instr_path} -> replace {path}:{start}-{end}")
+        print(f"INSTR {instr_path} -> replace {second_path}:{second_start}-{second_end}")
 print("\nAll instruction files are in: dup-fix-output/instructions")
 PY
 
