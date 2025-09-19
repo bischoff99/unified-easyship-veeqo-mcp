@@ -1,17 +1,19 @@
-import { resolve } from 'node:path';
-import { config } from 'dotenv';
+import { resolve } from "node:path";
+import { config } from "dotenv";
 
 /**
  * Environment variable utilities
  */
 
 export function loadEnv(): void {
-  config({ path: resolve(process.cwd(), '.env') });
+  config({ path: resolve(process.cwd(), ".env") });
 
-  const required = ['EASYPOST_API_KEY'];
+  const required = ["EASYPOST_API_KEY"];
   const missing = required.filter((k) => !process.env[k]);
-  if (missing.length > 0 && process.env.EASYPOST_API_KEY !== 'mock') {
-    throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+  if (missing.length > 0 && process.env.EASYPOST_API_KEY !== "mock") {
+    throw new Error(
+      `Missing required environment variables: ${missing.join(", ")}`,
+    );
   }
 }
 
@@ -41,7 +43,10 @@ export function getEnvVarAsNumber(name: string, defaultValue?: number): number {
   return parsed;
 }
 
-export function getEnvVarAsBoolean(name: string, defaultValue?: boolean): boolean {
+export function getEnvVarAsBoolean(
+  name: string,
+  defaultValue?: boolean,
+): boolean {
   const value = process.env[name];
   if (value === undefined) {
     if (defaultValue !== undefined) {
@@ -49,5 +54,5 @@ export function getEnvVarAsBoolean(name: string, defaultValue?: boolean): boolea
     }
     throw new Error(`Environment variable ${name} is required`);
   }
-  return value.toLowerCase() === 'true';
+  return value.toLowerCase() === "true";
 }

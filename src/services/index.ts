@@ -4,19 +4,19 @@
  */
 
 // Client services
-export { EasyPostClient } from './clients/easypost-enhanced.js';
-export { VeeqoClient } from './clients/veeqo-enhanced.js';
+export { EasyPostClient } from "./clients/easypost-enhanced.js";
+export { VeeqoClient } from "./clients/veeqo-enhanced.js";
 
 // Import types for service registry
-import { EasyPostClient } from './clients/easypost-enhanced.js';
-import { VeeqoClient } from './clients/veeqo-enhanced.js';
+import { EasyPostClient } from "./clients/easypost-enhanced.js";
+import { VeeqoClient } from "./clients/veeqo-enhanced.js";
 
 // Integration services removed - AI integrations disabled
 
 // Service types
 export interface ServiceHealth {
   service: string;
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: "healthy" | "degraded" | "unhealthy";
   lastCheck: string;
   responseTime?: number;
   error?: string;
@@ -40,7 +40,10 @@ export function createServiceRegistry(): ServiceRegistry {
 
 // Health check utilities
 export function checkServiceHealth(services: ServiceRegistry): ServiceHealth[] {
-  const healthChecks = [checkEasyPostHealth(services.easypost), checkVeeqoHealth(services.veeqo)];
+  const healthChecks = [
+    checkEasyPostHealth(services.easypost),
+    checkVeeqoHealth(services.veeqo),
+  ];
 
   return healthChecks;
 }
@@ -51,15 +54,15 @@ function checkEasyPostHealth(_client: EasyPostClient): ServiceHealth {
     // Simple health check - could be improved with actual API call
     const responseTime = Date.now() - startTime;
     return {
-      service: 'easypost',
-      status: 'healthy',
+      service: "easypost",
+      status: "healthy",
       lastCheck: new Date().toISOString(),
       responseTime,
     };
   } catch (error: any) {
     return {
-      service: 'easypost',
-      status: 'unhealthy',
+      service: "easypost",
+      status: "unhealthy",
       lastCheck: new Date().toISOString(),
       error: error.message,
     };
@@ -72,15 +75,15 @@ function checkVeeqoHealth(_client: VeeqoClient): ServiceHealth {
     // Simple health check - could be improved with actual API call
     const responseTime = Date.now() - startTime;
     return {
-      service: 'veeqo',
-      status: 'healthy',
+      service: "veeqo",
+      status: "healthy",
       lastCheck: new Date().toISOString(),
       responseTime,
     };
   } catch (error: any) {
     return {
-      service: 'veeqo',
-      status: 'unhealthy',
+      service: "veeqo",
+      status: "unhealthy",
       lastCheck: new Date().toISOString(),
       error: error.message,
     };

@@ -4,19 +4,19 @@
  * Provides comprehensive authentication and authorization for the MCP server
  */
 
-import * as crypto from 'crypto';
+import * as crypto from "crypto";
 
-import * as jwt from 'jsonwebtoken';
-import { z } from 'zod';
+import * as jwt from "jsonwebtoken";
+import { z } from "zod";
 
-import { config } from '../config/index.js';
-import { logger } from '../utils/logger.js';
+import { config } from "../config/index.js";
+import { logger } from "../utils/logger.js";
 
 // Auth schemas
 export const ApiKeySchema = z.object({
   key: z.string().min(32),
   userId: z.string(),
-  role: z.enum(['admin', 'user', 'readonly']),
+  role: z.enum(["admin", "user", "readonly"]),
   scopes: z.array(z.string()).optional(),
   createdAt: z.date(),
   expiresAt: z.date().optional(),
@@ -25,7 +25,7 @@ export const ApiKeySchema = z.object({
 
 export const JWTPayloadSchema = z.object({
   userId: z.string(),
-  role: z.enum(['admin', 'user', 'readonly']),
+  role: z.enum(["admin", "user", "readonly"]),
   scopes: z.array(z.string()).optional(),
   iat: z.number(),
   exp: z.number(),
@@ -33,7 +33,7 @@ export const JWTPayloadSchema = z.object({
 
 export type ApiKey = z.infer<typeof ApiKeySchema>;
 export type JWTPayload = z.infer<typeof JWTPayloadSchema>;
-export type AuthRole = 'admin' | 'user' | 'readonly';
+export type AuthRole = "admin" | "user" | "readonly";
 
 /**
  * Auth service for managing authentication
@@ -46,7 +46,7 @@ export class AuthService {
     this.jwtSecret = config.security.jwtSecret || this.generateSecret();
 
     // Initialize with default API keys in development
-    if (config.server.nodeEnv === 'development') {
+    if (config.server.nodeEnv === "development") {
       this.initializeDevKeys();
     }
   }
@@ -55,7 +55,7 @@ export class AuthService {
    * Generate a secure random secret
    */
   private generateSecret(): string {
-    return crypto.randomBytes(32).toString('hex');
+    return crypto.randomBytes(32).toString("hex");
   }
 
   /**
@@ -63,31 +63,31 @@ export class AuthService {
    */
   private initializeDevKeys(): void {
     // Admin key for development
-    const adminKey = 'admin_dev_key_' + crypto.randomBytes(16).toString('hex');
+    const adminKey = "admin_dev_key_" + crypto.randomBytes(16).toString("hex");
     this.apiKeys.set(adminKey, {
       key: adminKey,
-      userId: 'dev_admin',
-      role: 'admin',
-      scopes: ['*'],
+      userId: "dev_admin",
+      role: "admin",
+      scopes: ["*"],
       createdAt: new Date(),
     });
 
     // User key for development
-    const userKey = 'user_dev_key_' + crypto.randomBytes(16).toString('hex');
+    const userKey = "user_dev_key_" + crypto.randomBytes(16).toString("hex");
     this.apiKeys.set(userKey, {
       key: userKey,
-      userId: 'dev_user',
-      role: 'user',
-      scopes: ['read', 'write'],
+      userId: "dev_user",
+      role: "user",
+      scopes: ["read", "write"],
       createdAt: new Date(),
     });
 
     logger.info(
       {
-        adminKey: adminKey.substring(0, 16) + '...',
-        userKey: userKey.substring(0, 16) + '...',
+        adminKey: adminKey.substring(0, 16) + "...",
+        userKey: userKey.substring(0, 16) + "...",
       },
-      'Development API keys initialized'
+      "Development API keys initialized",
     );
   }
 
@@ -100,9 +100,9 @@ export class AuthService {
     if (!key) {
       logger.warn(
         {
-          keyPrefix: apiKey.substring(0, 10) + '...',
+          keyPrefix: apiKey.substring(0, 10) + "...",
         },
-        'Invalid API key attempted'
+        "Invalid API key attempted",
       );
       return null;
     }
@@ -114,7 +114,7 @@ export class AuthService {
           userId: key.userId,
           expiredAt: key.expiresAt,
         },
-        'Expired API key used'
+        "Expired API key used",
       );
       return null;
     }
@@ -128,7 +128,7 @@ export class AuthService {
         userId: key.userId,
         role: key.role,
       },
-      'API key validated'
+      "API key validated",
     );
 
     return key;
@@ -157,7 +157,7 @@ export class AuthService {
       const decoded = jwt.verify(token, this.jwtSecret) as any;
       return JWTPayloadSchema.parse(decoded);
     } catch (error) {
-      logger.warn({ error: (error as Error).message }, 'Invalid JWT token');
+      logger.warn({ error: (error as Error).message }, "Invalid JWT token");
       return null;
     }
   }
@@ -166,7 +166,7 @@ export class AuthService {
    * Create new API key
    */
   createApiKey(userId: string, role: AuthRole, scopes?: string[]): string {
-    const key = `${role}_${crypto.randomBytes(24).toString('hex')}`;
+    const key = `${role}_${crypto.randomBytes(24).toString("hex")}`;
 
     this.apiKeys.set(key, {
       key,
@@ -180,9 +180,9 @@ export class AuthService {
       {
         userId,
         role,
-        keyPrefix: key.substring(0, 10) + '...',
+        keyPrefix: key.substring(0, 10) + "...",
       },
-      'New API key created'
+      "New API key created",
     );
 
     return key;
@@ -197,9 +197,9 @@ export class AuthService {
     if (deleted) {
       logger.info(
         {
-          keyPrefix: apiKey.substring(0, 10) + '...',
+          keyPrefix: apiKey.substring(0, 10) + "...",
         },
-        'API key revoked'
+        "API key revoked",
       );
     }
 
@@ -211,13 +211,13 @@ export class AuthService {
    */
   hasPermission(role: AuthRole, action: string): boolean {
     const permissions: Record<AuthRole, string[]> = {
-      admin: ['*'],
-      user: ['read', 'write', 'execute'],
-      readonly: ['read'],
+      admin: ["*"],
+      user: ["read", "write", "execute"],
+      readonly: ["read"],
     };
 
     const rolePermissions = permissions[role];
-    return rolePermissions.includes('*') || rolePermissions.includes(action);
+    return rolePermissions.includes("*") || rolePermissions.includes(action);
   }
 
   /**
@@ -227,13 +227,14 @@ export class AuthService {
     if (!scopes) {
       return false;
     }
-    return scopes.includes('*') || scopes.includes(requiredScope);
+    return scopes.includes("*") || scopes.includes(requiredScope);
   }
 
   /**
    * Rate limiting check
    */
-  private readonly rateLimitMap: Map<string, { count: number; resetAt: Date }> = new Map();
+  private readonly rateLimitMap: Map<string, { count: number; resetAt: Date }> =
+    new Map();
 
   checkRateLimit(userId: string): boolean {
     const now = new Date();
@@ -255,7 +256,7 @@ export class AuthService {
           count: limit.count,
           resetAt: limit.resetAt,
         },
-        'Rate limit exceeded'
+        "Rate limit exceeded",
       );
       return false;
     }
@@ -269,8 +270,10 @@ export class AuthService {
    * Hash password for secure storage
    */
   hashPassword(password: string): string {
-    const salt = crypto.randomBytes(16).toString('hex');
-    const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+    const salt = crypto.randomBytes(16).toString("hex");
+    const hash = crypto
+      .pbkdf2Sync(password, salt, 10000, 64, "sha512")
+      .toString("hex");
     return `${salt}:${hash}`;
   }
 
@@ -278,11 +281,13 @@ export class AuthService {
    * Verify password against hash
    */
   verifyPassword(password: string, hashedPassword: string): boolean {
-    const [salt, hash] = hashedPassword.split(':');
+    const [salt, hash] = hashedPassword.split(":");
     if (!salt || !hash) {
       return false;
     }
-    const verifyHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+    const verifyHash = crypto
+      .pbkdf2Sync(password, salt, 10000, 64, "sha512")
+      .toString("hex");
     return hash === verifyHash;
   }
 }
@@ -294,8 +299,8 @@ export const authService = new AuthService();
  * Authentication middleware for FastMCP
  */
 export async function authenticate(request: any): Promise<any> {
-  const apiKey = request.headers['x-api-key'] as string;
-  const authHeader = request.headers['authorization'] as string;
+  const apiKey = request.headers["x-api-key"] as string;
+  const authHeader = request.headers["authorization"] as string;
 
   // Try API key authentication first
   if (apiKey) {
@@ -305,7 +310,7 @@ export async function authenticate(request: any): Promise<any> {
       if (!authService.checkRateLimit(key.userId)) {
         throw new Response(null, {
           status: 429,
-          statusText: 'Rate limit exceeded',
+          statusText: "Rate limit exceeded",
         });
       }
 
@@ -319,7 +324,7 @@ export async function authenticate(request: any): Promise<any> {
   }
 
   // Try JWT authentication
-  if (authHeader && authHeader.startsWith('Bearer ')) {
+  if (authHeader && authHeader.startsWith("Bearer ")) {
     const token = authHeader.substring(7);
     const payload = authService.validateJWT(token);
 
@@ -328,7 +333,7 @@ export async function authenticate(request: any): Promise<any> {
       if (!authService.checkRateLimit(payload.userId)) {
         throw new Response(null, {
           status: 429,
-          statusText: 'Rate limit exceeded',
+          statusText: "Rate limit exceeded",
         });
       }
 
@@ -343,7 +348,7 @@ export async function authenticate(request: any): Promise<any> {
   // No valid authentication found
   throw new Response(null, {
     status: 401,
-    statusText: 'Authentication required',
+    statusText: "Authentication required",
   });
 }
 

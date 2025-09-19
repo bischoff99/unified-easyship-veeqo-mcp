@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const ParcelSchema = z.object({
   length: z.number().positive(),

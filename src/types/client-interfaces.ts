@@ -21,6 +21,8 @@ export interface PaginatedResponse<T> {
 
 // EasyPost specific interfaces
 export interface EasyPostAddress {
+  id?: string;
+  object?: string;
   name: string;
   company?: string;
   street1: string;
@@ -35,6 +37,9 @@ export interface EasyPostAddress {
   carrier_facility?: string;
   federal_tax_id?: string;
   state_tax_id?: string;
+  created_at?: string;
+  updated_at?: string;
+  mode?: string;
 }
 
 export interface EasyPostParcel {
@@ -219,11 +224,20 @@ export interface GetInventoryLevelsParams {
 
 // Enhanced client interfaces
 export interface EnhancedEasyPostClient {
-  getRates(_from: EasyPostAddress, _to: EasyPostAddress, _parcel: EasyPostParcel): Promise<EasyPostRate[]>;
-  createShipment(_from: EasyPostAddress, _to: EasyPostAddress, _parcel: EasyPostParcel, _options?: {
-    service?: string;
-    carrier?: string;
-  }): Promise<EasyPostShipment>;
+  getRates(
+    _from: EasyPostAddress,
+    _to: EasyPostAddress,
+    _parcel: EasyPostParcel,
+  ): Promise<EasyPostRate[]>;
+  createShipment(
+    _from: EasyPostAddress,
+    _to: EasyPostAddress,
+    _parcel: EasyPostParcel,
+    _options?: {
+      service?: string;
+      carrier?: string;
+    },
+  ): Promise<EasyPostShipment>;
   trackPackage(_trackingCode: string): Promise<EasyPostTracker>;
   verifyAddress(_address: EasyPostAddress): Promise<EasyPostAddress>;
   getParcelPresets(_carrier?: string): Promise<any[]>;
@@ -232,16 +246,22 @@ export interface EnhancedEasyPostClient {
 export interface EnhancedVeeqoClient {
   getProducts(_params?: GetProductsParams): Promise<VeeqoProduct[]>;
   getOrders(_params?: GetOrdersParams): Promise<VeeqoOrder[]>;
-  createFulfillment(_params: CreateFulfillmentParams): Promise<VeeqoFulfillment>;
-  updateInventory(_params: UpdateInventoryParams): Promise<{ success: boolean; message: string }>;
+  createFulfillment(
+    _params: CreateFulfillmentParams,
+  ): Promise<VeeqoFulfillment>;
+  updateInventory(
+    _params: UpdateInventoryParams,
+  ): Promise<{ success: boolean; message: string }>;
   getWarehouses(): Promise<VeeqoWarehouse[]>;
-  getInventoryLevels(_params: GetInventoryLevelsParams): Promise<Array<{
-    sellable_id: number;
-    warehouse_id: number;
-    available: number;
-    allocated: number;
-    incoming: number;
-  }>>;
+  getInventoryLevels(_params: GetInventoryLevelsParams): Promise<
+    Array<{
+      sellable_id: number;
+      warehouse_id: number;
+      available: number;
+      allocated: number;
+      incoming: number;
+    }>
+  >;
 }
 
 // Monitoring and logging interfaces
@@ -253,7 +273,18 @@ export interface SafeLogger {
 }
 
 export interface SafeMonitoring {
-  recordApiCall(_service: string, _endpoint: string, _duration: number, _statusCode?: number, _isError?: boolean): void;
-  recordMetric(_name: string, _value: number, _labels?: Record<string, string>, _metadata?: Record<string, any>): void;
+  recordApiCall(
+    _service: string,
+    _endpoint: string,
+    _duration: number,
+    _statusCode?: number,
+    _isError?: boolean,
+  ): void;
+  recordMetric(
+    _name: string,
+    _value: number,
+    _labels?: Record<string, string>,
+    _metadata?: Record<string, any>,
+  ): void;
   recordError(_error: Error, _context?: Record<string, any>): void;
 }

@@ -7,21 +7,25 @@ Always follow these instructions first and only fall back to additional search o
 ### Bootstrap, Build, and Test the Repository
 
 1. **Install dependencies** (takes ~30 seconds):
+
    ```bash
    pnpm install --frozen-lockfile
    ```
 
 2. **Type check** (takes ~3 seconds):
+
    ```bash
    pnpm run type-check
    ```
 
 3. **Build the project** (takes ~3 seconds):
+
    ```bash
    pnpm run build
    ```
 
 4. **Run linting** (takes ~5 seconds):
+
    ```bash
    pnpm run lint:check
    ```
@@ -34,11 +38,13 @@ Always follow these instructions first and only fall back to additional search o
 ### Development Workflow
 
 - **Development server with hot reload**:
+
   ```bash
   EASYPOST_API_KEY="mock" VEEQO_API_KEY="mock" pnpm run dev:fastmcp
   ```
 
 - **Production server**:
+
   ```bash
   EASYPOST_API_KEY="mock" VEEQO_API_KEY="mock" pnpm run start:fastmcp
   ```
@@ -75,13 +81,14 @@ pnpm run test:ci          # Runs tests with coverage and JUnit output
 Always manually validate changes by:
 
 1. **Building and starting the server**:
+
    ```bash
    pnpm run build
    EASYPOST_API_KEY="mock" VEEQO_API_KEY="mock" pnpm run start:fastmcp
    ```
 
 2. **Verify server starts correctly** - should see logs showing:
-   - "Development API keys initialized"  
+   - "Development API keys initialized"
    - "EasyPost client initialized in mock mode"
    - "Veeqo client initialized in mock mode"
    - "Server tools and resources loaded"
@@ -89,6 +96,7 @@ Always manually validate changes by:
    - "Client connected"
 
 3. **Test development hot reload**:
+
    ```bash
    EASYPOST_API_KEY="mock" VEEQO_API_KEY="mock" pnpm run dev:fastmcp
    ```
@@ -138,6 +146,7 @@ pnpm run test:unit
 ### Built Output
 
 After running `pnpm run build`, the compiled JavaScript is in:
+
 - **`dist/server/fastmcp-server.js`** - Main server entry point
 - **`dist/`** - All compiled TypeScript files
 
@@ -256,7 +265,7 @@ bash scripts/deployment-validation.sh   # Validates environment, dependencies, c
 
 # Individual pre-deployment checks
 pnpm run lint:check        # Code linting (passes)
-pnpm run type-check        # TypeScript validation (passes)  
+pnpm run type-check        # TypeScript validation (passes)
 pnpm run test:ci          # Full test suite with coverage
 pnpm run build:production  # Production build
 ```

@@ -1,22 +1,22 @@
-import { describe, it, expect, beforeAll } from 'vitest';
-import { EasyPostClient } from '../../src/services/clients/easypost-enhanced.js';
-import { VeeqoClient } from '../../src/services/clients/veeqo-enhanced.js';
+import { describe, it, expect, beforeAll } from "vitest";
+import { EasyPostClient } from "../../src/services/clients/easypost-enhanced.js";
+import { VeeqoClient } from "../../src/services/clients/veeqo-enhanced.js";
 
-describe('Shipping Clients (mock mode)', () => {
+describe("Shipping Clients (mock mode)", () => {
   beforeAll(() => {
-    process.env.EASYPOST_API_KEY = 'mock';
-    process.env.VEEQO_API_KEY = 'mock';
-    process.env.NODE_ENV = 'test';
-    process.env.LOG_LEVEL = 'debug';
+    process.env.EASYPOST_API_KEY = "mock";
+    process.env.VEEQO_API_KEY = "mock";
+    process.env.NODE_ENV = "test";
+    process.env.LOG_LEVEL = "debug";
   });
 
   const mockAddress = {
-    name: 'Test User',
-    street1: '123 Main St',
-    city: 'San Francisco',
-    state: 'CA',
-    zip: '94105',
-    country: 'US',
+    name: "Test User",
+    street1: "123 Main St",
+    city: "San Francisco",
+    state: "CA",
+    zip: "94105",
+    country: "US",
   };
 
   const mockParcel = {
@@ -26,7 +26,7 @@ describe('Shipping Clients (mock mode)', () => {
     weight: 1, // 1 lb
   };
 
-  it('EasyPost client should work in mock mode', async () => {
+  it("EasyPost client should work in mock mode", async () => {
     const easyPost = new EasyPostClient();
 
     // Test rate retrieval
@@ -39,7 +39,7 @@ describe('Shipping Clients (mock mode)', () => {
     expect(rate.service).toBeDefined();
   });
 
-  it('Veeqo client should work in mock mode', async () => {
+  it("Veeqo client should work in mock mode", async () => {
     const veeqo = new VeeqoClient();
 
     // Test getting products

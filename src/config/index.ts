@@ -4,45 +4,34 @@
  * Centralized configuration for the Unified EasyPost-Veeqo MCP Server
  */
 
-import { resolve } from 'node:path';
+import { resolve } from "node:path";
 
-import { config as loadDotenv } from 'dotenv';
-import { z } from 'zod';
+import { config as loadDotenv } from "dotenv";
+import { z } from "zod";
+import { createApiKeyValidator, configValidators } from "./validators.js";
 
 // Load environment variables
-loadDotenv({ path: resolve(process.cwd(), '.env') });
+loadDotenv({ path: resolve(process.cwd(), ".env") });
 
 // Configuration schemas
 const ServerConfigSchema = z.object({
   port: z.number().default(3000),
-  host: z.string().default('localhost'),
-  nodeEnv: z.enum(['development', 'production', 'test']).default('development'),
-  logLevel: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
+  host: z.string().default("localhost"),
+  nodeEnv: z.enum(["development", "production", "test"]).default("development"),
+  logLevel: z.enum(["debug", "info", "warn", "error"]).default("info"),
 });
 
 const EasyPostConfigSchema = z.object({
-  apiKey: z.string().refine((val) => {
-    // Allow empty/mock keys in test environment or when explicitly in mock mode
-    if (process.env.NODE_ENV === 'test' || val === 'mock') {
-      return true;
-    }
-    return val.length > 0;
-  }, 'EASYPOST_API_KEY is required'),
-  baseUrl: z.string().url().default('https://api.easypost.com/v2'),
-  timeout: z.number().default(30000),
-  mockMode: z.boolean().default(false),
+  apiKey: createApiKeyValidator("EASYPOST_API_KEY"),
+  baseUrl: configValidators.url.default("https://api.easypost.com/v2"),
+  timeout: configValidators.timeout,
+  mockMode: configValidators.boolean,
 });
 
 const VeeqoConfigSchema = z.object({
-  apiKey: z.string().refine((val) => {
-    // Allow empty/mock keys in test environment or when explicitly in mock mode
-    if (process.env.NODE_ENV === 'test' || val === 'mock') {
-      return true;
-    }
-    return val.length > 0;
-  }, 'VEEQO_API_KEY is required'),
-  baseUrl: z.string().url().default('https://api.veeqo.com'),
-  timeout: z.number().default(30000),
+  apiKey: createApiKeyValidator("VEEQO_API_KEY"),
+  baseUrl: configValidators.url.default("https://api.veeqo.com"),
+  timeout: configValidators.timeout,
   mockMode: z.boolean().default(false),
 });
 
@@ -52,13 +41,13 @@ const AIConfigSchema = z.object({
 
 const DatabaseConfigSchema = z.object({
   url: z.string().optional(),
-  type: z.enum(['sqlite', 'postgresql', 'mysql']).default('sqlite'),
+  type: z.enum(["sqlite", "postgresql", "mysql"]).default("sqlite"),
   logging: z.boolean().default(false),
 });
 
 const RedisConfigSchema = z.object({
   url: z.string().optional(),
-  host: z.string().default('localhost'),
+  host: z.string().default("localhost"),
   port: z.number().default(6379),
   password: z.string().optional(),
   db: z.number().default(0),
@@ -67,7 +56,7 @@ const RedisConfigSchema = z.object({
 const SecurityConfigSchema = z.object({
   jwtSecret: z.string().optional(),
   sessionSecret: z.string().optional(),
-  corsOrigins: z.array(z.string()).default(['http://localhost:3000']),
+  corsOrigins: z.array(z.string()).default(["http://localhost:3000"]),
   rateLimitWindow: z.number().default(15 * 60 * 1000), // 15 minutes
   rateLimitMax: z.number().default(100),
 });
@@ -97,44 +86,48 @@ export type Config = z.infer<typeof ConfigSchema>;
 export function createConfig(): Config {
   const rawConfig = {
     server: {
-      port: parseInt(process.env.PORT ?? '3000', 10),
-      host: process.env.HOST ?? 'localhost',
-      nodeEnv: process.env.NODE_ENV ?? 'development',
-      logLevel: process.env.LOG_LEVEL ?? 'info',
+      port: parseInt(process.env.PORT ?? "3000", 10),
+      host: process.env.HOST ?? "localhost",
+      nodeEnv: process.env.NODE_ENV ?? "development",
+      logLevel: process.env.LOG_LEVEL ?? "info",
     },
     easypost: {
-      apiKey: process.env.EASYPOST_API_KEY ?? '',
-      baseUrl: process.env.EASYPOST_BASE_URL ?? 'https://api.easypost.com/v2',
-      timeout: parseInt(process.env.EASYPOST_TIMEOUT ?? '30000', 10),
-      mockMode: process.env.EASYPOST_API_KEY === 'mock',
+      apiKey: process.env.EASYPOST_API_KEY ?? "",
+      baseUrl: process.env.EASYPOST_BASE_URL ?? "https://api.easypost.com/v2",
+      timeout: parseInt(process.env.EASYPOST_TIMEOUT ?? "30000", 10),
+      mockMode: process.env.EASYPOST_API_KEY === "mock",
     },
     veeqo: {
-      apiKey: process.env.VEEQO_API_KEY ?? '',
-      baseUrl: process.env.VEEQO_BASE_URL ?? 'https://api.veeqo.com',
-      timeout: parseInt(process.env.VEEQO_TIMEOUT ?? '30000', 10),
-      mockMode: process.env.VEEQO_API_KEY === 'mock',
+      apiKey: process.env.VEEQO_API_KEY ?? "",
+      baseUrl: process.env.VEEQO_BASE_URL ?? "https://api.veeqo.com",
+      timeout: parseInt(process.env.VEEQO_TIMEOUT ?? "30000", 10),
+      mockMode: process.env.VEEQO_API_KEY === "mock",
     },
     ai: {
       // Claude Code integration removed
     },
     database: {
       url: process.env.DATABASE_URL,
-      type: (process.env.DATABASE_TYPE as 'sqlite' | 'postgresql' | 'mysql') ?? 'sqlite',
-      logging: process.env.DATABASE_LOGGING === 'true',
+      type:
+        (process.env.DATABASE_TYPE as "sqlite" | "postgresql" | "mysql") ??
+        "sqlite",
+      logging: process.env.DATABASE_LOGGING === "true",
     },
     redis: {
       url: process.env.REDIS_URL,
-      host: process.env.REDIS_HOST ?? 'localhost',
-      port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
+      host: process.env.REDIS_HOST ?? "localhost",
+      port: parseInt(process.env.REDIS_PORT ?? "6379", 10),
       password: process.env.REDIS_PASSWORD,
-      db: parseInt(process.env.REDIS_DB ?? '0', 10),
+      db: parseInt(process.env.REDIS_DB ?? "0", 10),
     },
     security: {
       jwtSecret: process.env.JWT_SECRET,
       sessionSecret: process.env.SESSION_SECRET,
-      corsOrigins: process.env.CORS_ORIGINS?.split(',') ?? ['http://localhost:3000'],
-      rateLimitWindow: parseInt(process.env.RATE_LIMIT_WINDOW ?? '900000', 10),
-      rateLimitMax: parseInt(process.env.RATE_LIMIT_MAX ?? '100', 10),
+      corsOrigins: process.env.CORS_ORIGINS?.split(",") ?? [
+        "http://localhost:3000",
+      ],
+      rateLimitWindow: parseInt(process.env.RATE_LIMIT_WINDOW ?? "900000", 10),
+      rateLimitMax: parseInt(process.env.RATE_LIMIT_MAX ?? "100", 10),
     },
   };
 
@@ -142,8 +135,12 @@ export function createConfig(): Config {
     return ConfigSchema.parse(rawConfig);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errorMessages = error.issues.map((err: any) => `${err.path.join('.')}: ${err.message}`);
-      throw new Error(`Configuration validation failed:\n${errorMessages.join('\n')}`);
+      const errorMessages = error.issues.map(
+        (err: any) => `${err.path.join(".")}: ${err.message}`,
+      );
+      throw new Error(
+        `Configuration validation failed:\n${errorMessages.join("\n")}`,
+      );
     }
     throw error;
   }
@@ -154,25 +151,31 @@ export const config = createConfig();
 
 // Environment validation
 export function validateEnvironment(): void {
-  const required = ['EASYPOST_API_KEY', 'VEEQO_API_KEY'];
+  const required = ["EASYPOST_API_KEY", "VEEQO_API_KEY"];
   const missing = required.filter((key) => !process.env[key]);
 
-  if (missing.length > 0 && !config.easypost.mockMode && !config.veeqo.mockMode) {
-    throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+  if (
+    missing.length > 0 &&
+    !config.easypost.mockMode &&
+    !config.veeqo.mockMode
+  ) {
+    throw new Error(
+      `Missing required environment variables: ${missing.join(", ")}`,
+    );
   }
 }
 
 // Configuration helpers
 export function isDevelopment(): boolean {
-  return config.server.nodeEnv === 'development';
+  return config.server.nodeEnv === "development";
 }
 
 export function isProduction(): boolean {
-  return config.server.nodeEnv === 'production';
+  return config.server.nodeEnv === "production";
 }
 
 export function isTest(): boolean {
-  return config.server.nodeEnv === 'test';
+  return config.server.nodeEnv === "test";
 }
 
 export function isMockMode(): boolean {

@@ -1,0 +1,154 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "typescript.suggest.autoImports": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "files.associations": {
+      "*.env*": "properties",
+      "Dockerfile*": "dockerfile"
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/coverage": true,
+      "**/.git": true,
+      "**/pnpm-lock.yaml": true
+    },
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/dist": false,
+      "**/coverage": true
+    },
+    "eslint.workingDirectories": [
+      "."
+    ],
+    "vitest.enable": true,
+    "testing.automaticallyOpenPeekView": "never"
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.vscode-typescript-next",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "vitest.explorer",
+      "ms-vscode.test-adapter-converter",
+      "bradlc.vscode-tailwindcss",
+      "ms-vscode.vscode-json",
+      "redhat.vscode-yaml"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "dev",
+        "type": "shell",
+        "command": "pnpm",
+        "args": ["run", "dev"],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared"
+        },
+        "problemMatcher": ["$tsc-watch"]
+      },
+      {
+        "label": "build",
+        "type": "shell",
+        "command": "pnpm",
+        "args": ["run", "build"],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "echo": true,
+          "reveal": "silent",
+          "focus": false,
+          "panel": "shared"
+        },
+        "problemMatcher": ["$tsc"]
+      },
+      {
+        "label": "test",
+        "type": "shell",
+        "command": "pnpm",
+        "args": ["test"],
+        "group": {
+          "kind": "test",
+          "isDefault": true
+        },
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared"
+        }
+      },
+      {
+        "label": "lint",
+        "type": "shell",
+        "command": "pnpm",
+        "args": ["run", "lint"],
+        "group": "build",
+        "presentation": {
+          "echo": true,
+          "reveal": "silent",
+          "focus": false,
+          "panel": "shared"
+        },
+        "problemMatcher": ["$eslint-stylish"]
+      }
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Server",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/src/server.ts",
+        "runtimeArgs": [
+          "--loader",
+          "tsx/esm"
+        ],
+        "env": {
+          "NODE_ENV": "development"
+        },
+        "envFile": "${workspaceFolder}/.env",
+        "console": "integratedTerminal",
+        "sourceMaps": true,
+        "restart": true,
+        "protocol": "inspector",
+        "outFiles": [
+          "${workspaceFolder}/dist/**/*.js"
+        ]
+      },
+      {
+        "name": "Debug Tests",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+        "args": ["run"],
+        "env": {
+          "NODE_ENV": "test"
+        },
+        "console": "integratedTerminal",
+        "sourceMaps": true
+      }
+    ]
+  }
+}

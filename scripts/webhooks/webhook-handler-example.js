@@ -5,15 +5,15 @@
  * Shows how to handle delivery status webhooks and send notifications
  */
 
-import express from 'express';
-import nodemailer from 'nodemailer';
+import express from "express";
+import nodemailer from "nodemailer";
 
 const app = express();
 app.use(express.json());
 
 // Email configuration (replace with your email service)
 const emailTransporter = nodemailer.createTransporter({
-  service: 'gmail', // or your email service
+  service: "gmail", // or your email service
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -21,40 +21,40 @@ const emailTransporter = nodemailer.createTransporter({
 });
 
 // Webhook handler for delivery status changes
-app.post('/webhooks/delivery', async (req, res) => {
+app.post("/webhooks/delivery", async (req, res) => {
   try {
     const { event, data } = req.body;
 
     console.log(`📦 Delivery webhook received: ${event}`);
-    console.log('Data:', JSON.stringify(data, null, 2));
+    console.log("Data:", JSON.stringify(data, null, 2));
 
     // Handle different delivery status events
     switch (event) {
-      case 'shipment.created':
+      case "shipment.created":
         await handleShipmentCreated(data);
         break;
 
-      case 'shipment.purchased':
+      case "shipment.purchased":
         await handleShipmentPurchased(data);
         break;
 
-      case 'shipment.picked_up':
+      case "shipment.picked_up":
         await handleShipmentPickedUp(data);
         break;
 
-      case 'tracker.updated':
+      case "tracker.updated":
         await handleTrackerUpdated(data);
         break;
 
-      case 'shipment.delivered':
+      case "shipment.delivered":
         await handleShipmentDelivered(data);
         break;
 
-      case 'shipment.exception':
+      case "shipment.exception":
         await handleShipmentException(data);
         break;
 
-      case 'shipment.returned':
+      case "shipment.returned":
         await handleShipmentReturned(data);
         break;
 
@@ -62,22 +62,22 @@ app.post('/webhooks/delivery', async (req, res) => {
         console.log(`Unknown event: ${event}`);
     }
 
-    res.status(200).send('OK');
+    res.status(200).send("OK");
   } catch (error) {
-    console.error('Webhook error:', error);
-    res.status(500).send('Error processing webhook');
+    console.error("Webhook error:", error);
+    res.status(500).send("Error processing webhook");
   }
 });
 
 // Handle shipment created
 async function handleShipmentCreated(data) {
-  console.log('🚚 Shipment created:', data.id);
+  console.log("🚚 Shipment created:", data.id);
 
   // Send confirmation email to customer
   await sendEmail({
     to: data.customer?.email,
-    subject: 'Shipping Label Created - Order Ready to Ship',
-    template: 'shipment_created',
+    subject: "Shipping Label Created - Order Ready to Ship",
+    template: "shipment_created",
     data: {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
@@ -88,21 +88,21 @@ async function handleShipmentCreated(data) {
 
 // Handle shipment purchased
 async function handleShipmentPurchased(data) {
-  console.log('💳 Shipment purchased:', data.id);
+  console.log("💳 Shipment purchased:", data.id);
 
   // Update order status in your system
-  await updateOrderStatus(data.reference, 'shipped');
+  await updateOrderStatus(data.reference, "shipped");
 }
 
 // Handle shipment picked up
 async function handleShipmentPickedUp(data) {
-  console.log('📦 Shipment picked up:', data.id);
+  console.log("📦 Shipment picked up:", data.id);
 
   // Send shipping notification to customer
   await sendEmail({
     to: data.customer?.email,
-    subject: 'Your Order is On the Way!',
-    template: 'shipment_picked_up',
+    subject: "Your Order is On the Way!",
+    template: "shipment_picked_up",
     data: {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
@@ -114,36 +114,40 @@ async function handleShipmentPickedUp(data) {
 
 // Handle tracker updated (delivery status changes)
 async function handleTrackerUpdated(data) {
-  console.log('📍 Tracker updated:', data.status);
+  console.log("📍 Tracker updated:", data.status);
 
   const { status, tracking_code, carrier, location, estimated_delivery } = data;
 
   // Send appropriate notification based on status
   switch (status) {
-    case 'in_transit':
+    case "in_transit":
       await sendEmail({
         to: data.customer?.email,
-        subject: 'Package In Transit - On the Way!',
-        template: 'in_transit',
+        subject: "Package In Transit - On the Way!",
+        template: "in_transit",
         data: { trackingNumber: tracking_code, carrier, location },
       });
       break;
 
-    case 'out_for_delivery':
+    case "out_for_delivery":
       await sendEmail({
         to: data.customer?.email,
-        subject: 'Out for Delivery Today!',
-        template: 'out_for_delivery',
+        subject: "Out for Delivery Today!",
+        template: "out_for_delivery",
         data: { trackingNumber: tracking_code, carrier, estimatedDelivery },
       });
       break;
 
-    case 'delivered':
+    case "delivered":
       await sendEmail({
         to: data.customer?.email,
-        subject: 'Package Delivered Successfully!',
-        template: 'delivered',
-        data: { trackingNumber: tracking_code, carrier, deliveredAt: new Date() },
+        subject: "Package Delivered Successfully!",
+        template: "delivered",
+        data: {
+          trackingNumber: tracking_code,
+          carrier,
+          deliveredAt: new Date(),
+        },
       });
       break;
   }
@@ -151,13 +155,13 @@ async function handleTrackerUpdated(data) {
 
 // Handle shipment delivered
 async function handleShipmentDelivered(data) {
-  console.log('✅ Shipment delivered:', data.id);
+  console.log("✅ Shipment delivered:", data.id);
 
   // Send delivery confirmation
   await sendEmail({
     to: data.customer?.email,
-    subject: 'Package Delivered - Thank You!',
-    template: 'delivered',
+    subject: "Package Delivered - Thank You!",
+    template: "delivered",
     data: {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
@@ -172,13 +176,13 @@ async function handleShipmentDelivered(data) {
 
 // Handle shipment exception
 async function handleShipmentException(data) {
-  console.log('⚠️ Shipment exception:', data.message);
+  console.log("⚠️ Shipment exception:", data.message);
 
   // Alert staff to delivery issue
   await sendEmail({
     to: process.env.STAFF_EMAIL,
-    subject: 'Delivery Issue - Action Required',
-    template: 'delivery_exception',
+    subject: "Delivery Issue - Action Required",
+    template: "delivery_exception",
     data: {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
@@ -191,7 +195,7 @@ async function handleShipmentException(data) {
   await sendEmail({
     to: data.customer?.email,
     subject: "Delivery Update - We're On It!",
-    template: 'delivery_delay',
+    template: "delivery_delay",
     data: {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
@@ -202,7 +206,7 @@ async function handleShipmentException(data) {
 
 // Handle shipment returned
 async function handleShipmentReturned(data) {
-  console.log('↩️ Shipment returned:', data.id);
+  console.log("↩️ Shipment returned:", data.id);
 
   // Process return automatically
   await processReturn(data.reference);
@@ -210,8 +214,8 @@ async function handleShipmentReturned(data) {
   // Notify customer
   await sendEmail({
     to: data.customer?.email,
-    subject: 'Package Returned - Next Steps',
-    template: 'package_returned',
+    subject: "Package Returned - Next Steps",
+    template: "package_returned",
     data: {
       orderNumber: data.reference,
       trackingNumber: data.tracking_code,
@@ -223,7 +227,7 @@ async function handleShipmentReturned(data) {
 // Send email notification
 async function sendEmail({ to, subject, template, data }) {
   if (!to) {
-    console.log('No email address provided');
+    console.log("No email address provided");
     return;
   }
 
@@ -239,7 +243,7 @@ async function sendEmail({ to, subject, template, data }) {
 
     console.log(`📧 Email sent to ${to}: ${subject}`);
   } catch (error) {
-    console.error('Email error:', error);
+    console.error("Email error:", error);
   }
 }
 
@@ -304,7 +308,7 @@ function generateEmailHTML(template, data) {
     `,
   };
 
-  return templates[template] || '<p>Delivery update</p>';
+  return templates[template] || "<p>Delivery update</p>";
 }
 
 // Update order status in your system
@@ -329,7 +333,9 @@ async function processReturn(orderNumber) {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚚 Delivery webhook server running on port ${PORT}`);
-  console.log(`📡 Webhook endpoint: http://localhost:${PORT}/webhooks/delivery`);
+  console.log(
+    `📡 Webhook endpoint: http://localhost:${PORT}/webhooks/delivery`,
+  );
 });
 
 export default app;

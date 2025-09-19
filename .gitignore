@@ -153,3 +153,4 @@ secrets/
 # MCP specific
 .mcp/
 mcp-debug.log
+temp_files/

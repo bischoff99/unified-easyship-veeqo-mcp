@@ -1,0 +1,34 @@
+FEDEX SHIPPING LABELS - PURCHASED ORDERS
+==========================================
+
+Order 1: Everloom Apparel → Paul Smith, Scotland
+- Tracking Code: 393329800049
+- Service: FedEx International Priority Express
+- Cost: $56.91
+- Delivery: 4 days
+- Label: order_1_scotland_label.png
+- Commercial Invoice: order_1_scotland_invoice.pdf
+
+Order 2: Aurora Threads → Selena Iglesias, Germany
+- Tracking Code: 393329805691
+- Service: FedEx International Priority Express
+- Cost: $56.91
+- Delivery: 4 days
+- Label: order_2_germany_label.png
+- Commercial Invoice: order_2_germany_invoice.pdf
+
+Order 3: Harlow Outfitters → Ivan Mandarić, Croatia
+- Tracking Code: 393329809789
+- Service: FedEx International Priority
+- Cost: $199.42
+- Delivery: 6 days
+- Label: order_3_croatia_label.png
+- Commercial Invoice: order_3_croatia_invoice.pdf
+
+TOTAL COST: $313.24
+
+All labels are ready for printing and shipping.
+Commercial invoices are included for international customs clearance.
+
+Generated: $(date)
+

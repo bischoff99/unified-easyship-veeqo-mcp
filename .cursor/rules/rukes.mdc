@@ -1,0 +1,277 @@
+---
+description: Unified EasyPost-Veeqo MCP Server Development Rules
+globs:
+alwaysApply: true
+---
+
+# Unified EasyPost-Veeqo MCP Server Development Rules
+
+## Project Context
+You are working on a TypeScript-based MCP (Model Context Protocol) server that integrates EasyPost and Veeqo shipping APIs. The project uses ESM modules, Vitest for testing, Pino for logging, and Zod for validation.
+
+## Core Development Principles
+
+### TypeScript & Node.js (Advanced Patterns)
+
+- Use TypeScript with strict mode enabled
+- Prefer interfaces over type aliases for object shapes
+- Use async/await for all asynchronous operations
+- Implement functional and declarative programming patterns
+- Prefer arrow functions and const declarations
+- Use named exports over default exports
+- Target Node.js 20+ features with ESM modules
+- Apply guard clause pattern for early error handling
+
+### Code Style & Architecture
+
+- Follow functional programming principles - avoid classes where possible
+- Implement RORO pattern: "Receive an Object, Return an Object"
+- Use dependency injection for testability
+- Apply Single Responsibility Principle strictly
+- Use early returns and guard clauses to reduce nesting
+- Prefer const over let, never use var
+- Use optional chaining (?.) and nullish coalescing (??)
+- File naming: kebab-case for files, camelCase for variables, PascalCase for types/interfaces
+
+### Advanced API Development Patterns
+
+#### Request/Response Handling
+```typescript
+// RORO Pattern with Zod validation
+const ApiRequestSchema = z.object({
+  id: z.string().uuid(),
+  data: z.record(z.unknown())
+});
+
+type ApiInput = z.infer<typeof ApiRequestSchema>;
+type ApiOutput = { success: boolean; result: unknown };
+
+const processRequest = async (input: ApiInput): Promise<ApiOutput> => {
+  // Guard clause pattern
+  const validation = ApiRequestSchema.safeParse(input);
+  if (!validation.success) {
+    throw new ApiError('Invalid request', 400, validation.error);
+  }
+
+  // Process validated data
+  return { success: true, result: await processData(validation.data) };
+};
+```
+
+#### Error Handling Architecture
+- Create custom error classes for domain-specific errors
+- Use HTTPException pattern for API errors with proper status codes
+- Implement comprehensive error middleware
+- Never expose sensitive information in error messages
+- Log errors with correlation IDs for tracing
+
+### MCP-Specific Implementation
+
+- Document all tool functions with comprehensive JSDoc
+- Validate tool inputs and outputs with Zod schemas
+- Use fastmcp patterns for server implementation
+- Implement tool response caching where appropriate
+- Include detailed error messages with recovery suggestions
+
+### Advanced Testing Patterns (Vitest)
+
+#### Test Structure
+```typescript
+// Mock dependencies before imports
+vi.mock('../services/api-client', () => ({
+  apiClient: vi.fn()
+}));
+
+describe('Feature: Shipping Rate Calculation', () => {
+  describe('when calculating EasyPost rates', () => {
+    test('handles multiple data scenarios', async () => {
+      // Test valid, invalid, edge cases, undefined
+      const scenarios = [
+        { input: validData, expected: successResponse },
+        { input: invalidData, expected: errorResponse },
+        { input: edgeCase, expected: edgeCaseResponse },
+        { input: undefined, expected: validationError }
+      ];
+
+      for (const scenario of scenarios) {
+        const result = await calculateRate(scenario.input);
+        expect(result).toEqual(scenario.expected);
+      }
+    });
+  });
+});
+```
+
+#### Testing Best Practices
+- Limit to 3-5 focused tests per file
+- Mock external dependencies using vi.mock()
+- Test multiple data scenarios: valid, invalid, edge cases, undefined
+- Use describe/context blocks for logical grouping
+- Focus on critical business logic and error paths
+- Validate both success and error scenarios
+- Test schema validation separately
+
+### Zod Schema Patterns
+
+```typescript
+// Composable schema pattern
+const BaseAddressSchema = z.object({
+  street: z.string().min(1),
+  city: z.string().min(1),
+  country: z.string().length(2)
+});
+
+const ShippingAddressSchema = BaseAddressSchema.extend({
+  name: z.string(),
+  phone: z.string().optional()
+});
+
+// Runtime validation with detailed errors
+const validateRequest = <T>(schema: z.ZodSchema<T>, data: unknown): T => {
+  const result = schema.safeParse(data);
+  if (!result.success) {
+    throw new ValidationError(
+      'Validation failed',
+      result.error.format()
+    );
+  }
+  return result.data;
+};
+```
+
+### Performance Optimization
+
+- Implement request/response caching strategies
+- Use lazy loading for heavy dependencies
+- Batch API requests when possible
+- Monitor memory usage with performance utilities
+- Implement circuit breaker pattern for external services
+- Use streaming for large data processing
+
+### Security Best Practices
+
+- Never log sensitive data (API keys, passwords, PII)
+- Implement rate limiting for all endpoints
+- Use parameterized queries for any database operations
+- Validate and sanitize all user inputs with Zod
+- Apply principle of least privilege
+- Use environment variables for all configuration
+- Implement request signing for webhook endpoints
+
+### Logging Strategy (Pino)
+
+```typescript
+// Structured logging pattern
+const logger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+  formatters: {
+    level: (label) => ({ level: label }),
+    bindings: (bindings) => ({
+      pid: bindings.pid,
+      hostname: bindings.hostname,
+      service: 'easypost-veeqo-mcp'
+    })
+  }
+});
+
+// Context-aware logging
+const requestLogger = logger.child({
+  requestId: generateRequestId(),
+  userId: getCurrentUserId()
+});
+```
+
+### Directory Structure
+
+```
+src/
+├── services/          # External service integrations
+│   ├── easypost/
+│   └── veeqo/
+├── handlers/          # MCP tool handlers
+├── middleware/        # Express/fastmcp middleware
+├── schemas/          # Zod schemas
+├── types/            # TypeScript type definitions
+├── utils/            # Utility functions
+├── errors/           # Custom error classes
+└── __tests__/        # Test files (mirror src structure)
+```
+
+### Development Workflow
+
+1. **Before Implementation**
+   - Check existing patterns in the codebase
+   - Review related tests for context
+   - Validate approach with existing architecture
+
+2. **During Implementation**
+   - Write tests first or alongside code
+   - Use guard clauses for early validation
+   - Implement comprehensive error handling
+   - Add structured logging for debugging
+
+3. **Before Committing**
+   - Run `pnpm run lint:check`
+   - Run `pnpm run type-check`
+   - Run `pnpm test` for all tests
+   - Run `pnpm run build` to verify build
+   - Ensure no sensitive data in code
+
+### API Response Standards
+
+```typescript
+// Consistent API response structure
+interface ApiResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: {
+    code: string;
+    message: string;
+    details?: unknown;
+  };
+  metadata?: {
+    timestamp: string;
+    requestId: string;
+    version: string;
+  };
+}
+```
+
+### Integration Patterns
+
+- Use adapter pattern for external service integrations
+- Implement retry logic with exponential backoff
+- Handle rate limiting with queue mechanisms
+- Use circuit breaker for fault tolerance
+- Implement health checks for all integrations
+
+## Commands Reference
+
+```bash
+# Quality checks (run before committing)
+pnpm run lint:check
+pnpm run type-check
+pnpm run test
+
+# Development
+pnpm run dev           # Start dev server with hot reload
+pnpm run build         # Build for production
+pnpm run test:watch    # Run tests in watch mode
+
+# Performance
+pnpm run perf:analyze  # Analyze performance metrics
+pnpm run perf:recommendations  # Get optimization suggestions
+```
+
+## Anti-Patterns to Avoid
+
+- Using `any` type without explicit justification
+- Creating deep inheritance hierarchies
+- Implementing synchronous file operations
+- Using global state or singletons unnecessarily
+- Writing tests that depend on execution order
+- Committing sensitive data or credentials
+- Ignoring existing project conventions
+- Creating unnecessary abstraction layers
+- Using console.log instead of structured logging
+- Catching errors without proper handling or re-throwing

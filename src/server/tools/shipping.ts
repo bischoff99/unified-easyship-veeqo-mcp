@@ -3,29 +3,29 @@
  * Contains all shipping-related tools and functionality
  */
 
-import { z } from 'zod';
-import type { FastMCP } from 'fastmcp';
-import { EasyPostClient, type EasyPostAddress } from '../../services/clients/easypost-enhanced.js';
-import { safeLogger as logger, safeMonitoring as monitoring } from '../../utils/type-safe-logger.js';
+import { z } from "zod";
+import type { FastMCP } from "fastmcp";
+import {
+  EasyPostClient,
+  type EasyPostAddress,
+} from "../../services/clients/easypost-enhanced.js";
+import {
+  safeLogger as logger,
+  safeMonitoring as monitoring,
+} from "../../utils/type-safe-logger.js";
+import { createApiHandler } from "../../utils/response-formatter.js";
+import { AddressSchema } from "../../api/schemas/address.js";
 
 const logError = (message: string, error: any) => {
   logger.error(message, error);
 };
 
-export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient) {
-  // Address validation schema
-  const addressSchema = z.object({
-    name: z.string(),
-    company: z.string().optional(),
-    street1: z.string(),
-    street2: z.string().optional(),
-    city: z.string(),
-    state: z.string(),
-    zip: z.string(),
-    country: z.string().default('US'),
-    phone: z.string().optional(),
-    email: z.string().optional(),
-  });
+export function addShippingTools(
+  server: FastMCP,
+  easyPostClient: EasyPostClient,
+) {
+  // Use canonical AddressSchema from schemas
+  const addressSchema = AddressSchema;
 
   const parcelSchema = z.object({
     length: z.number().min(0.1),
@@ -38,18 +38,22 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Calculate shipping rates from multiple carriers
    */
   server.addTool({
-    name: 'calculate_shipping_rates',
-    description: 'Calculate shipping rates from multiple carriers for a package',
+    name: "calculate_shipping_rates",
+    description:
+      "Calculate shipping rates from multiple carriers for a package",
     parameters: z.object({
       from_address: addressSchema,
       to_address: addressSchema,
       parcel: parcelSchema,
-      service_types: z.array(z.string()).optional().describe('Optional array of specific service types to filter'),
+      service_types: z
+        .array(z.string())
+        .optional()
+        .describe("Optional array of specific service types to filter"),
     }),
     execute: async (args) => {
       const startTime = Date.now();
       try {
-        logger.info('Calculating shipping rates', {
+        logger.info("Calculating shipping rates", {
           from: `${args.from_address.city}, ${args.from_address.state}`,
           to: `${args.to_address.city}, ${args.to_address.state}`,
           weight: args.parcel.weight,
@@ -58,18 +62,20 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         const rates = await easyPostClient.getRates(
           args.from_address as EasyPostAddress,
           args.to_address as EasyPostAddress,
-          args.parcel
+          args.parcel,
         );
 
         // Filter by service types if provided
         const filteredRates = args.service_types
-          ? rates.filter(rate => args.service_types!.includes(rate.service))
+          ? rates.filter((rate) => args.service_types!.includes(rate.service))
           : rates;
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/rates', duration, 200);
+        monitoring.recordApiCall("easypost", "/rates", duration, 200);
 
-        logger.info(`Found ${filteredRates.length} shipping rates in ${duration}ms`);
+        logger.info(
+          `Found ${filteredRates.length} shipping rates in ${duration}ms`,
+        );
         const result = {
           rates: filteredRates,
           count: filteredRates.length,
@@ -78,8 +84,8 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/rates', duration, 500, true);
-        logError('Failed to calculate shipping rates', error);
+        monitoring.recordApiCall("easypost", "/rates", duration, 500, true);
+        logError("Failed to calculate shipping rates", error);
         throw new Error(`Shipping rate calculation failed: ${error.message}`);
       }
     },
@@ -89,20 +95,27 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Create shipping label
    */
   server.addTool({
-    name: 'create_shipping_label',
-    description: 'Create a shipping label for a package',
+    name: "create_shipping_label",
+    description: "Create a shipping label for a package",
     parameters: z.object({
       from_address: addressSchema,
       to_address: addressSchema,
       parcel: parcelSchema,
-      service: z.string().describe('Shipping service (e.g., "Ground", "Priority", "Express")'),
-      carrier: z.string().describe('Shipping carrier (e.g., "USPS", "UPS", "FedEx")'),
-      reference: z.string().optional().describe('Optional reference number for tracking'),
+      service: z
+        .string()
+        .describe('Shipping service (e.g., "Ground", "Priority", "Express")'),
+      carrier: z
+        .string()
+        .describe('Shipping carrier (e.g., "USPS", "UPS", "FedEx")'),
+      reference: z
+        .string()
+        .optional()
+        .describe("Optional reference number for tracking"),
     }),
     execute: async (args) => {
       const startTime = Date.now();
       try {
-        logger.info('Creating shipping label', {
+        logger.info("Creating shipping label", {
           carrier: args.carrier,
           service: args.service,
           from: `${args.from_address.city}, ${args.from_address.state}`,
@@ -113,13 +126,15 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
           args.from_address as EasyPostAddress,
           args.to_address as EasyPostAddress,
           args.parcel,
-          { service: args.service, carrier: args.carrier }
+          { service: args.service, carrier: args.carrier },
         );
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/shipments', duration, 200);
+        monitoring.recordApiCall("easypost", "/shipments", duration, 200);
 
-        logger.info(`Created shipping label ${label.tracking_code} in ${duration}ms`);
+        logger.info(
+          `Created shipping label ${label.tracking_code} in ${duration}ms`,
+        );
         const result = {
           ...label,
           processing_time_ms: duration,
@@ -127,8 +142,8 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/shipments', duration, 500, true);
-        logError('Failed to create shipping label', error);
+        monitoring.recordApiCall("easypost", "/shipments", duration, 500, true);
+        logError("Failed to create shipping label", error);
         throw new Error(`Label creation failed: ${error.message}`);
       }
     },
@@ -138,35 +153,45 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Track shipment status
    */
   server.addTool({
-    name: 'track_shipment',
-    description: 'Track the status and location of a shipment',
+    name: "track_shipment",
+    description: "Track the status and location of a shipment",
     parameters: z.object({
-      tracking_code: z.string().describe('Tracking number or code'),
-      carrier: z.string().optional().describe('Carrier name (optional, helps with accuracy)'),
+      tracking_code: z.string().describe("Tracking number or code"),
+      carrier: z
+        .string()
+        .optional()
+        .describe("Carrier name (optional, helps with accuracy)"),
     }),
     execute: async (args) => {
       const startTime = Date.now();
+      const apiHandler = createApiHandler(
+        "easypost",
+        "/trackers",
+        "track shipment",
+      );
+
       try {
-        logger.info('Tracking shipment', {
+        logger.info("Tracking shipment", {
           tracking_code: args.tracking_code,
           carrier: args.carrier,
         });
 
-        const trackingInfo = await easyPostClient.trackPackage(args.tracking_code);
+        const trackingInfo = await easyPostClient.trackPackage(
+          args.tracking_code,
+        );
+        monitoring.recordApiCall(
+          "easypost",
+          "/trackers",
+          Date.now() - startTime,
+          200,
+        );
 
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/trackers', duration, 200);
-
-        logger.info(`Retrieved tracking info for ${args.tracking_code} in ${duration}ms`);
-        const result = {
-          ...trackingInfo,
-          processing_time_ms: duration,
-        };
-        return JSON.stringify(result, null, 2);
+        logger.info(
+          `Retrieved tracking info for ${args.tracking_code} in ${Date.now() - startTime}ms`,
+        );
+        return apiHandler.success(trackingInfo, startTime);
       } catch (error: any) {
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/trackers', duration, 500, true);
-        logError('Failed to track shipment', error);
+        apiHandler.error(error, startTime);
         throw new Error(`Shipment tracking failed: ${error.message}`);
       }
     },
@@ -176,35 +201,40 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Validate and normalize addresses
    */
   server.addTool({
-    name: 'validate_address',
-    description: 'Validate and normalize a shipping address',
+    name: "validate_address",
+    description: "Validate and normalize a shipping address",
     parameters: z.object({
       address: addressSchema,
     }),
     execute: async (args) => {
       const startTime = Date.now();
+      const apiHandler = createApiHandler(
+        "easypost",
+        "/addresses/verify",
+        "validate address",
+      );
+
       try {
-        logger.info('Validating address', {
+        logger.info("Validating address", {
           city: args.address.city,
           state: args.address.state,
           zip: args.address.zip,
         });
 
-        const validatedAddress = await easyPostClient.verifyAddress(args.address as EasyPostAddress);
+        const validatedAddress = await easyPostClient.verifyAddress(
+          args.address as EasyPostAddress,
+        );
+        monitoring.recordApiCall(
+          "easypost",
+          "/addresses/verify",
+          Date.now() - startTime,
+          200,
+        );
 
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 200);
-
-        logger.info(`Validated address in ${duration}ms`);
-        const result = {
-          ...validatedAddress,
-          processing_time_ms: duration,
-        };
-        return JSON.stringify(result, null, 2);
+        logger.info(`Validated address in ${Date.now() - startTime}ms`);
+        return apiHandler.success(validatedAddress, startTime);
       } catch (error: any) {
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 500, true);
-        logError('Failed to validate address', error);
+        apiHandler.error(error, startTime);
         throw new Error(`Address validation failed: ${error.message}`);
       }
     },
@@ -214,22 +244,27 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Get parcel presets for common package types
    */
   server.addTool({
-    name: 'get_parcel_presets',
-    description: 'Get predefined parcel dimensions for common package types',
+    name: "get_parcel_presets",
+    description: "Get predefined parcel dimensions for common package types",
     parameters: z.object({
-      carrier: z.string().optional().describe('Filter by specific carrier (USPS, UPS, FedEx)'),
+      carrier: z
+        .string()
+        .optional()
+        .describe("Filter by specific carrier (USPS, UPS, FedEx)"),
     }),
     execute: async (args) => {
       const startTime = Date.now();
       try {
-        logger.info('Fetching parcel presets', { carrier: args.carrier });
+        logger.info("Fetching parcel presets", { carrier: args.carrier });
 
         const presets = await easyPostClient.getParcelPresets(args.carrier);
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/parcel_presets', duration, 200);
+        monitoring.recordApiCall("easypost", "/parcel_presets", duration, 200);
 
-        logger.info(`Retrieved ${presets.length} parcel presets in ${duration}ms`);
+        logger.info(
+          `Retrieved ${presets.length} parcel presets in ${duration}ms`,
+        );
         const result = {
           presets,
           count: presets.length,
@@ -238,8 +273,14 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/parcel_presets', duration, 500, true);
-        logError('Failed to get parcel presets', error);
+        monitoring.recordApiCall(
+          "easypost",
+          "/parcel_presets",
+          duration,
+          500,
+          true,
+        );
+        logError("Failed to get parcel presets", error);
         throw new Error(`Failed to retrieve parcel presets: ${error.message}`);
       }
     },
@@ -249,24 +290,39 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Advanced shipping optimization with multi-carrier analysis
    */
   server.addTool({
-    name: 'optimize_shipping',
-    description: 'Advanced shipping optimization with multi-carrier rate comparison and intelligent recommendations',
+    name: "optimize_shipping",
+    description:
+      "Advanced shipping optimization with multi-carrier rate comparison and intelligent recommendations",
     parameters: z.object({
       from_address: addressSchema,
       to_address: addressSchema,
       parcel: parcelSchema,
-      preferences: z.object({
-        max_cost: z.number().optional().describe('Maximum acceptable cost'),
-        max_delivery_days: z.number().optional().describe('Maximum acceptable delivery days'),
-        preferred_carriers: z.array(z.string()).optional().describe('Preferred carriers (USPS, UPS, FedEx)'),
-        prioritize_speed: z.boolean().default(false).describe('Prioritize fastest delivery'),
-        prioritize_cost: z.boolean().default(true).describe('Prioritize lowest cost'),
-      }).optional(),
+      preferences: z
+        .object({
+          max_cost: z.number().optional().describe("Maximum acceptable cost"),
+          max_delivery_days: z
+            .number()
+            .optional()
+            .describe("Maximum acceptable delivery days"),
+          preferred_carriers: z
+            .array(z.string())
+            .optional()
+            .describe("Preferred carriers (USPS, UPS, FedEx)"),
+          prioritize_speed: z
+            .boolean()
+            .default(false)
+            .describe("Prioritize fastest delivery"),
+          prioritize_cost: z
+            .boolean()
+            .default(true)
+            .describe("Prioritize lowest cost"),
+        })
+        .optional(),
     }),
     execute: async (args) => {
       const startTime = Date.now();
       try {
-        logger.info('Optimizing shipping options', {
+        logger.info("Optimizing shipping options", {
           from: `${args.from_address.city}, ${args.from_address.state}`,
           to: `${args.to_address.city}, ${args.to_address.state}`,
           weight: args.parcel.weight,
@@ -279,35 +335,41 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
           fromAddress: args.from_address,
           toAddress: args.to_address,
           parcel: args.parcel,
-          preferences: args.preferences ? {
-            maxCost: args.preferences.max_cost,
-            maxDeliveryDays: args.preferences.max_delivery_days,
-            preferredCarriers: args.preferences.preferred_carriers,
-            prioritizeSpeed: args.preferences.prioritize_speed,
-            prioritizeCost: args.preferences.prioritize_cost,
-          } : undefined,
+          preferences: args.preferences
+            ? {
+                maxCost: args.preferences.max_cost,
+                maxDeliveryDays: args.preferences.max_delivery_days,
+                preferredCarriers: args.preferences.preferred_carriers,
+                prioritizeSpeed: args.preferences.prioritize_speed,
+                prioritizeCost: args.preferences.prioritize_cost,
+              }
+            : undefined,
         };
 
         // AI optimization disabled - returning basic rate comparison instead
-        const rates = await easyPostClient.getRates(optimizationRequest.fromAddress, optimizationRequest.toAddress, optimizationRequest.parcel);
+        const rates = await easyPostClient.getRates(
+          optimizationRequest.fromAddress,
+          optimizationRequest.toAddress,
+          optimizationRequest.parcel,
+        );
         const optimization = {
-          recommendations: rates.map(rate => ({
+          recommendations: rates.map((rate) => ({
             carrier: rate.carrier,
             service: rate.service,
             cost: parseFloat(rate.rate),
             delivery_days: rate.delivery_days || 3,
             confidence_score: 0.8,
-            reasoning: `Basic rate comparison for ${rate.carrier} ${rate.service}`
+            reasoning: `Basic rate comparison for ${rate.carrier} ${rate.service}`,
           })),
           total_options: rates.length,
           optimization_metadata: {
-            method: 'basic_rate_comparison',
-            ai_enabled: false
-          }
+            method: "basic_rate_comparison",
+            ai_enabled: false,
+          },
         };
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/optimize', duration, 200);
+        monitoring.recordApiCall("easypost", "/optimize", duration, 200);
 
         logger.info(`Completed shipping optimization in ${duration}ms`, {
           totalRates: optimization.total_options,
@@ -321,8 +383,8 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/optimize', duration, 500, true);
-        logError('Failed to optimize shipping', error);
+        monitoring.recordApiCall("easypost", "/optimize", duration, 500, true);
+        logError("Failed to optimize shipping", error);
         throw new Error(`Shipping optimization failed: ${error.message}`);
       }
     },
@@ -332,32 +394,36 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Convert weight units to ounces
    */
   server.addTool({
-    name: 'weight_to_oz',
-    description: 'Convert weight from various units to ounces',
+    name: "weight_to_oz",
+    description: "Convert weight from various units to ounces",
     parameters: z.object({
-      weight: z.number().positive().describe('Weight value to convert'),
-      unit: z.enum(['lb', 'kg', 'g', 'oz']).describe('Unit to convert from'),
+      weight: z.number().positive().describe("Weight value to convert"),
+      unit: z.enum(["lb", "kg", "g", "oz"]).describe("Unit to convert from"),
     }),
     execute: async (args) => {
       const startTime = Date.now();
       try {
-        logger.info('Converting weight to ounces', {
+        logger.info("Converting weight to ounces", {
           weight: args.weight,
           unit: args.unit,
         });
 
-        const { weightToOz } = await import('../../core/tools/weight-to-oz.js');
+        const { weightToOz } = await import("../../core/tools/weight-to-oz.js");
         const result = await weightToOz(args);
 
         const duration = Date.now() - startTime;
         logger.info(`Weight conversion completed in ${duration}ms`);
 
-        return JSON.stringify({
-          ...result,
-          processing_time_ms: duration,
-        }, null, 2);
+        return JSON.stringify(
+          {
+            ...result,
+            processing_time_ms: duration,
+          },
+          null,
+          2,
+        );
       } catch (error: any) {
-        logError('Failed to convert weight', error);
+        logError("Failed to convert weight", error);
         throw new Error(`Weight conversion failed: ${error.message}`);
       }
     },
@@ -367,28 +433,36 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * System health check
    */
   server.addTool({
-    name: 'health_check',
-    description: 'Check system health and external API connectivity',
+    name: "health_check",
+    description: "Check system health and external API connectivity",
     parameters: z.object({
-      verbose: z.boolean().optional().default(false).describe('Include detailed metrics'),
+      verbose: z
+        .boolean()
+        .optional()
+        .default(false)
+        .describe("Include detailed metrics"),
     }),
     execute: async (args) => {
       const startTime = Date.now();
       try {
-        logger.info('Running health check', { verbose: args.verbose });
+        logger.info("Running health check", { verbose: args.verbose });
 
-        const { health } = await import('../../core/tools/health.js');
+        const { health } = await import("../../core/tools/health.js");
         const healthStatus = await health();
 
         const duration = Date.now() - startTime;
         logger.info(`Health check completed in ${duration}ms`);
 
-        return JSON.stringify({
-          ...healthStatus,
-          processing_time_ms: duration,
-        }, null, 2);
+        return JSON.stringify(
+          {
+            ...healthStatus,
+            processing_time_ms: duration,
+          },
+          null,
+          2,
+        );
       } catch (error: any) {
-        logError('Health check failed', error);
+        logError("Health check failed", error);
         throw new Error(`Health check failed: ${error.message}`);
       }
     },
@@ -402,18 +476,18 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Get available carriers and their services
    */
   server.addTool({
-    name: 'get_carriers',
-    description: 'Get list of available carriers and their services',
+    name: "get_carriers",
+    description: "Get list of available carriers and their services",
     parameters: z.object({}),
     execute: async (_args) => {
       const startTime = Date.now();
       try {
-        logger.info('Fetching available carriers');
+        logger.info("Fetching available carriers");
 
         const carriers = await easyPostClient.getCarriers();
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/carriers', duration, 200);
+        monitoring.recordApiCall("easypost", "/carriers", duration, 200);
 
         logger.info(`Retrieved ${carriers.length} carriers in ${duration}ms`);
         const result = {
@@ -424,8 +498,8 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/carriers', duration, 500, true);
-        logError('Failed to get carriers', error);
+        monitoring.recordApiCall("easypost", "/carriers", duration, 500, true);
+        logError("Failed to get carriers", error);
         throw new Error(`Failed to get carriers: ${error.message}`);
       }
     },
@@ -435,18 +509,20 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Get rates from specific carriers
    */
   server.addTool({
-    name: 'get_rates_by_carriers',
-    description: 'Get shipping rates from specific carriers only',
+    name: "get_rates_by_carriers",
+    description: "Get shipping rates from specific carriers only",
     parameters: z.object({
       from_address: addressSchema,
       to_address: addressSchema,
       parcel: parcelSchema,
-      carriers: z.array(z.string()).describe('Array of carrier names (USPS, UPS, FedEx, DHL)'),
+      carriers: z
+        .array(z.string())
+        .describe("Array of carrier names (USPS, UPS, FedEx, DHL)"),
     }),
     execute: async (args) => {
       const startTime = Date.now();
       try {
-        logger.info('Getting rates by carriers', {
+        logger.info("Getting rates by carriers", {
           carriers: args.carriers,
           from: `${args.from_address.city}, ${args.from_address.state}`,
           to: `${args.to_address.city}, ${args.to_address.state}`,
@@ -456,13 +532,20 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
           args.from_address as EasyPostAddress,
           args.to_address as EasyPostAddress,
           args.parcel,
-          args.carriers
+          args.carriers,
         );
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/rates/by-carriers', duration, 200);
+        monitoring.recordApiCall(
+          "easypost",
+          "/rates/by-carriers",
+          duration,
+          200,
+        );
 
-        logger.info(`Found ${rates.length} carrier-specific rates in ${duration}ms`);
+        logger.info(
+          `Found ${rates.length} carrier-specific rates in ${duration}ms`,
+        );
         const result = {
           rates,
           count: rates.length,
@@ -472,8 +555,14 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/rates/by-carriers', duration, 500, true);
-        logError('Failed to get rates by carriers', error);
+        monitoring.recordApiCall(
+          "easypost",
+          "/rates/by-carriers",
+          duration,
+          500,
+          true,
+        );
+        logError("Failed to get rates by carriers", error);
         throw new Error(`Failed to get rates by carriers: ${error.message}`);
       }
     },
@@ -483,30 +572,41 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Get international shipping rates
    */
   server.addTool({
-    name: 'get_international_rates',
-    description: 'Get international shipping rates with customs support',
+    name: "get_international_rates",
+    description: "Get international shipping rates with customs support",
     parameters: z.object({
       from_address: addressSchema,
       to_address: addressSchema,
       parcel: parcelSchema,
-      customs_info: z.object({
-        contents_type: z.enum(['merchandise', 'documents', 'gift', 'returned_goods', 'sample', 'other']),
-        contents_explanation: z.string().optional(),
-        customs_certify: z.boolean().default(true),
-        customs_signer: z.string(),
-        customs_items: z.array(z.object({
-          description: z.string(),
-          quantity: z.number(),
-          weight: z.number(),
-          value: z.number(),
-          origin_country: z.string(),
-        })),
-      }).optional(),
+      customs_info: z
+        .object({
+          contents_type: z.enum([
+            "merchandise",
+            "documents",
+            "gift",
+            "returned_goods",
+            "sample",
+            "other",
+          ]),
+          contents_explanation: z.string().optional(),
+          customs_certify: z.boolean().default(true),
+          customs_signer: z.string(),
+          customs_items: z.array(
+            z.object({
+              description: z.string(),
+              quantity: z.number(),
+              weight: z.number(),
+              value: z.number(),
+              origin_country: z.string(),
+            }),
+          ),
+        })
+        .optional(),
     }),
     execute: async (args) => {
       const startTime = Date.now();
       try {
-        logger.info('Getting international rates', {
+        logger.info("Getting international rates", {
           from: `${args.from_address.city}, ${args.from_address.state}`,
           to: `${args.to_address.city}, ${args.to_address.state}`,
           to_country: args.to_address.country,
@@ -516,24 +616,38 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
           args.from_address as EasyPostAddress,
           args.to_address as EasyPostAddress,
           args.parcel,
-          args.customs_info
+          args.customs_info,
         );
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/rates/international', duration, 200);
+        monitoring.recordApiCall(
+          "easypost",
+          "/rates/international",
+          duration,
+          200,
+        );
 
-        logger.info(`Found ${rates.length} international rates in ${duration}ms`);
+        logger.info(
+          `Found ${rates.length} international rates in ${duration}ms`,
+        );
         const result = {
           rates,
           count: rates.length,
-          is_international: args.from_address.country !== args.to_address.country,
+          is_international:
+            args.from_address.country !== args.to_address.country,
           processing_time_ms: duration,
         };
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/rates/international', duration, 500, true);
-        logError('Failed to get international rates', error);
+        monitoring.recordApiCall(
+          "easypost",
+          "/rates/international",
+          duration,
+          500,
+          true,
+        );
+        logError("Failed to get international rates", error);
         throw new Error(`Failed to get international rates: ${error.message}`);
       }
     },
@@ -543,20 +657,27 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Get carrier account information
    */
   server.addTool({
-    name: 'get_carrier_accounts',
-    description: 'Get carrier account information and status',
+    name: "get_carrier_accounts",
+    description: "Get carrier account information and status",
     parameters: z.object({}),
     execute: async (_args) => {
       const startTime = Date.now();
       try {
-        logger.info('Fetching carrier accounts');
+        logger.info("Fetching carrier accounts");
 
         const accounts = await easyPostClient.getCarrierAccounts();
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/carrier_accounts', duration, 200);
+        monitoring.recordApiCall(
+          "easypost",
+          "/carrier_accounts",
+          duration,
+          200,
+        );
 
-        logger.info(`Retrieved ${accounts.length} carrier accounts in ${duration}ms`);
+        logger.info(
+          `Retrieved ${accounts.length} carrier accounts in ${duration}ms`,
+        );
         const result = {
           accounts,
           count: accounts.length,
@@ -565,8 +686,14 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/carrier_accounts', duration, 500, true);
-        logError('Failed to get carrier accounts', error);
+        monitoring.recordApiCall(
+          "easypost",
+          "/carrier_accounts",
+          duration,
+          500,
+          true,
+        );
+        logError("Failed to get carrier accounts", error);
         throw new Error(`Failed to get carrier accounts: ${error.message}`);
       }
     },
@@ -576,17 +703,19 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Purchase shipment with specific carrier
    */
   server.addTool({
-    name: 'purchase_shipment_with_carrier',
-    description: 'Purchase a shipment with a specific carrier and service',
+    name: "purchase_shipment_with_carrier",
+    description: "Purchase a shipment with a specific carrier and service",
     parameters: z.object({
-      shipment_id: z.string().describe('Shipment ID to purchase'),
-      carrier: z.string().describe('Carrier name (USPS, UPS, FedEx, DHL)'),
-      service: z.string().describe('Service type (Ground, Priority, Express, etc.)'),
+      shipment_id: z.string().describe("Shipment ID to purchase"),
+      carrier: z.string().describe("Carrier name (USPS, UPS, FedEx, DHL)"),
+      service: z
+        .string()
+        .describe("Service type (Ground, Priority, Express, etc.)"),
     }),
     execute: async (args) => {
       const startTime = Date.now();
       try {
-        logger.info('Purchasing shipment with carrier', {
+        logger.info("Purchasing shipment with carrier", {
           shipment_id: args.shipment_id,
           carrier: args.carrier,
           service: args.service,
@@ -595,11 +724,16 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         const shipment = await easyPostClient.purchaseShipmentWithCarrier(
           args.shipment_id,
           args.carrier,
-          args.service
+          args.service,
         );
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/shipments/purchase', duration, 200);
+        monitoring.recordApiCall(
+          "easypost",
+          "/shipments/purchase",
+          duration,
+          200,
+        );
 
         logger.info(`Purchased shipment ${shipment.id} in ${duration}ms`);
         const result = {
@@ -609,8 +743,14 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/shipments/purchase', duration, 500, true);
-        logError('Failed to purchase shipment', error);
+        monitoring.recordApiCall(
+          "easypost",
+          "/shipments/purchase",
+          duration,
+          500,
+          true,
+        );
+        logError("Failed to purchase shipment", error);
         throw new Error(`Failed to purchase shipment: ${error.message}`);
       }
     },
@@ -620,24 +760,27 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Get rates by ZIP codes (simplified)
    */
   server.addTool({
-    name: 'get_rates_by_zip',
-    description: 'Get shipping rates by ZIP codes (simplified method)',
+    name: "get_rates_by_zip",
+    description: "Get shipping rates by ZIP codes (simplified method)",
     parameters: z.object({
-      from_zip: z.string().describe('Origin ZIP code'),
-      to_zip: z.string().describe('Destination ZIP code'),
+      from_zip: z.string().describe("Origin ZIP code"),
+      to_zip: z.string().describe("Destination ZIP code"),
     }),
     execute: async (args) => {
       const startTime = Date.now();
       try {
-        logger.info('Getting rates by ZIP codes', {
+        logger.info("Getting rates by ZIP codes", {
           from_zip: args.from_zip,
           to_zip: args.to_zip,
         });
 
-        const rates = await easyPostClient.getRatesByZip(args.from_zip, args.to_zip);
+        const rates = await easyPostClient.getRatesByZip(
+          args.from_zip,
+          args.to_zip,
+        );
 
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/rates/by-zip', duration, 200);
+        monitoring.recordApiCall("easypost", "/rates/by-zip", duration, 200);
 
         logger.info(`Found ${rates.length} rates by ZIP in ${duration}ms`);
         const result = {
@@ -650,8 +793,14 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
         return JSON.stringify(result, null, 2);
       } catch (error: any) {
         const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/rates/by-zip', duration, 500, true);
-        logError('Failed to get rates by ZIP', error);
+        monitoring.recordApiCall(
+          "easypost",
+          "/rates/by-zip",
+          duration,
+          500,
+          true,
+        );
+        logError("Failed to get rates by ZIP", error);
         throw new Error(`Failed to get rates by ZIP: ${error.message}`);
       }
     },
@@ -661,33 +810,41 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Track a package (alias for trackShipment)
    */
   server.addTool({
-    name: 'track_package',
-    description: 'Track a package using tracking code (alias for trackShipment)',
+    name: "track_package",
+    description:
+      "Track a package using tracking code (alias for trackShipment)",
     parameters: z.object({
-      tracking_code: z.string().describe('Tracking number or code'),
+      tracking_code: z.string().describe("Tracking number or code"),
     }),
     execute: async (args) => {
       const startTime = Date.now();
+      const apiHandler = createApiHandler(
+        "easypost",
+        "/trackers/package",
+        "track package",
+      );
+
       try {
-        logger.info('Tracking package', {
+        logger.info("Tracking package", {
           tracking_code: args.tracking_code,
         });
 
-        const trackingInfo = await easyPostClient.trackPackage(args.tracking_code);
+        const trackingInfo = await easyPostClient.trackPackage(
+          args.tracking_code,
+        );
+        monitoring.recordApiCall(
+          "easypost",
+          "/trackers/package",
+          Date.now() - startTime,
+          200,
+        );
 
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/trackers/package', duration, 200);
-
-        logger.info(`Retrieved package tracking info for ${args.tracking_code} in ${duration}ms`);
-        const result = {
-          ...trackingInfo,
-          processing_time_ms: duration,
-        };
-        return JSON.stringify(result, null, 2);
+        logger.info(
+          `Retrieved package tracking info for ${args.tracking_code} in ${Date.now() - startTime}ms`,
+        );
+        return apiHandler.success(trackingInfo, startTime);
       } catch (error: any) {
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/trackers/package', duration, 500, true);
-        logError('Failed to track package', error);
+        apiHandler.error(error, startTime);
         throw new Error(`Package tracking failed: ${error.message}`);
       }
     },
@@ -697,35 +854,40 @@ export function addShippingTools(server: FastMCP, easyPostClient: EasyPostClient
    * Verify and normalize an address
    */
   server.addTool({
-    name: 'verify_address',
-    description: 'Verify and normalize a shipping address',
+    name: "verify_address",
+    description: "Verify and normalize a shipping address",
     parameters: z.object({
       address: addressSchema,
     }),
     execute: async (args) => {
       const startTime = Date.now();
+      const apiHandler = createApiHandler(
+        "easypost",
+        "/addresses/verify",
+        "verify address",
+      );
+
       try {
-        logger.info('Verifying address', {
+        logger.info("Verifying address", {
           city: args.address.city,
           state: args.address.state,
           zip: args.address.zip,
         });
 
-        const verifiedAddress = await easyPostClient.verifyAddress(args.address as EasyPostAddress);
+        const verifiedAddress = await easyPostClient.verifyAddress(
+          args.address as EasyPostAddress,
+        );
+        monitoring.recordApiCall(
+          "easypost",
+          "/addresses/verify",
+          Date.now() - startTime,
+          200,
+        );
 
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 200);
-
-        logger.info(`Verified address in ${duration}ms`);
-        const result = {
-          ...verifiedAddress,
-          processing_time_ms: duration,
-        };
-        return JSON.stringify(result, null, 2);
+        logger.info(`Verified address in ${Date.now() - startTime}ms`);
+        return apiHandler.success(verifiedAddress, startTime);
       } catch (error: any) {
-        const duration = Date.now() - startTime;
-        monitoring.recordApiCall('easypost', '/addresses/verify', duration, 500, true);
-        logError('Failed to verify address', error);
+        apiHandler.error(error, startTime);
         throw new Error(`Address verification failed: ${error.message}`);
       }
     },

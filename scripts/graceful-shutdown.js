@@ -5,8 +5,8 @@
  * Ensures proper cleanup and connection handling during shutdown
  */
 
-import { logger } from '../dist/utils/logger.js';
-import { performanceMonitor } from '../dist/utils/performance-monitor.js';
+import { logger } from "../dist/utils/logger.js";
+import { performanceMonitor } from "../dist/utils/performance-monitor.js";
 
 class GracefulShutdown {
   constructor() {
@@ -23,33 +23,36 @@ class GracefulShutdown {
    */
   setupSignalHandlers() {
     // Handle SIGINT (Ctrl+C)
-    process.on('SIGINT', () => {
-      logger.info('Received SIGINT signal');
-      this.initiateShutdown('SIGINT');
+    process.on("SIGINT", () => {
+      logger.info("Received SIGINT signal");
+      this.initiateShutdown("SIGINT");
     });
 
     // Handle SIGTERM (Docker/Kubernetes termination)
-    process.on('SIGTERM', () => {
-      logger.info('Received SIGTERM signal');
-      this.initiateShutdown('SIGTERM');
+    process.on("SIGTERM", () => {
+      logger.info("Received SIGTERM signal");
+      this.initiateShutdown("SIGTERM");
     });
 
     // Handle uncaught exceptions
-    process.on('uncaughtException', (error) => {
-      logger.error({ error: error.message, stack: error.stack }, 'Uncaught exception');
-      this.initiateShutdown('UNCAUGHT_EXCEPTION');
+    process.on("uncaughtException", (error) => {
+      logger.error(
+        { error: error.message, stack: error.stack },
+        "Uncaught exception",
+      );
+      this.initiateShutdown("UNCAUGHT_EXCEPTION");
     });
 
     // Handle unhandled promise rejections
-    process.on('unhandledRejection', (reason, promise) => {
-      logger.error({ reason, promise }, 'Unhandled promise rejection');
-      this.initiateShutdown('UNHANDLED_REJECTION');
+    process.on("unhandledRejection", (reason, promise) => {
+      logger.error({ reason, promise }, "Unhandled promise rejection");
+      this.initiateShutdown("UNHANDLED_REJECTION");
     });
 
     // Handle SIGUSR2 (nodemon restart)
-    process.on('SIGUSR2', () => {
-      logger.info('Received SIGUSR2 signal (development restart)');
-      this.initiateShutdown('SIGUSR2');
+    process.on("SIGUSR2", () => {
+      logger.info("Received SIGUSR2 signal (development restart)");
+      this.initiateShutdown("SIGUSR2");
     });
   }
 
@@ -60,11 +63,11 @@ class GracefulShutdown {
     this.connections.add(connection);
 
     // Remove connection when it closes
-    connection.on('close', () => {
+    connection.on("close", () => {
       this.connections.delete(connection);
     });
 
-    connection.on('error', () => {
+    connection.on("error", () => {
       this.connections.delete(connection);
     });
   }
@@ -88,26 +91,28 @@ class GracefulShutdown {
    */
   async initiateShutdown(signal) {
     if (this.isShuttingDown) {
-      logger.warn('Shutdown already in progress, forcing exit...');
+      logger.warn("Shutdown already in progress, forcing exit...");
       process.exit(1);
     }
 
     this.isShuttingDown = true;
-    logger.info({ signal }, 'Initiating graceful shutdown');
+    logger.info({ signal }, "Initiating graceful shutdown");
 
     // Set timeout for force shutdown
     const shutdownTimeout = setTimeout(() => {
-      logger.error('Graceful shutdown timeout, forcing exit');
+      logger.error("Graceful shutdown timeout, forcing exit");
       process.exit(1);
     }, 30000); // 30 second timeout
 
     try {
       // 1. Stop accepting new connections
-      logger.info('Step 1: Stop accepting new connections');
+      logger.info("Step 1: Stop accepting new connections");
       await this.stopAcceptingConnections();
 
       // 2. Close existing connections gracefully
-      logger.info(`Step 2: Closing ${this.connections.size} active connections`);
+      logger.info(
+        `Step 2: Closing ${this.connections.size} active connections`,
+      );
       await this.closeConnections();
 
       // 3. Clear timers and intervals
@@ -119,19 +124,19 @@ class GracefulShutdown {
       await this.runCleanup();
 
       // 5. Generate final performance report
-      logger.info('Step 5: Generating final performance report');
+      logger.info("Step 5: Generating final performance report");
       await this.generateFinalReport();
 
       // 6. Flush logs
-      logger.info('Step 6: Flushing logs');
+      logger.info("Step 6: Flushing logs");
       await this.flushLogs();
 
       clearTimeout(shutdownTimeout);
-      logger.info('Graceful shutdown completed successfully');
+      logger.info("Graceful shutdown completed successfully");
       process.exit(0);
     } catch (error) {
       clearTimeout(shutdownTimeout);
-      logger.error({ error: error.message }, 'Error during graceful shutdown');
+      logger.error({ error: error.message }, "Error during graceful shutdown");
       process.exit(1);
     }
   }
@@ -151,34 +156,39 @@ class GracefulShutdown {
    * Close all active connections
    */
   async closeConnections() {
-    const connectionPromises = Array.from(this.connections).map((connection) => {
-      return new Promise((resolve) => {
-        if (connection.destroyed) {
-          resolve();
-          return;
-        }
-
-        // Try to close gracefully first
-        if (typeof connection.close === 'function') {
-          connection.close(() => resolve());
-        } else if (typeof connection.end === 'function') {
-          connection.end(() => resolve());
-        } else if (typeof connection.destroy === 'function') {
-          connection.destroy();
-          resolve();
-        } else {
-          resolve();
-        }
-
-        // Force close after timeout
-        setTimeout(() => {
-          if (!connection.destroyed && typeof connection.destroy === 'function') {
-            connection.destroy();
+    const connectionPromises = Array.from(this.connections).map(
+      (connection) => {
+        return new Promise((resolve) => {
+          if (connection.destroyed) {
+            resolve();
+            return;
           }
-          resolve();
-        }, 5000);
-      });
-    });
+
+          // Try to close gracefully first
+          if (typeof connection.close === "function") {
+            connection.close(() => resolve());
+          } else if (typeof connection.end === "function") {
+            connection.end(() => resolve());
+          } else if (typeof connection.destroy === "function") {
+            connection.destroy();
+            resolve();
+          } else {
+            resolve();
+          }
+
+          // Force close after timeout
+          setTimeout(() => {
+            if (
+              !connection.destroyed &&
+              typeof connection.destroy === "function"
+            ) {
+              connection.destroy();
+            }
+            resolve();
+          }, 5000);
+        });
+      },
+    );
 
     await Promise.all(connectionPromises);
     this.connections.clear();
@@ -193,7 +203,7 @@ class GracefulShutdown {
         clearTimeout(timerId);
         clearInterval(timerId);
       } catch (error) {
-        logger.warn({ timerId, error: error.message }, 'Error clearing timer');
+        logger.warn({ timerId, error: error.message }, "Error clearing timer");
       }
     }
     this.timers.clear();
@@ -207,7 +217,7 @@ class GracefulShutdown {
       try {
         await cleanupFn();
       } catch (error) {
-        logger.warn({ error: error.message }, 'Error during cleanup function');
+        logger.warn({ error: error.message }, "Error during cleanup function");
       }
     }
   }
@@ -218,7 +228,8 @@ class GracefulShutdown {
   async generateFinalReport() {
     try {
       const summary = performanceMonitor.getPerformanceSummary();
-      const recommendations = performanceMonitor.getOptimizationRecommendations();
+      const recommendations =
+        performanceMonitor.getOptimizationRecommendations();
 
       const report = {
         shutdownTime: new Date().toISOString(),
@@ -228,23 +239,30 @@ class GracefulShutdown {
         recommendations: recommendations.slice(0, 10),
       };
 
-      logger.info({ report }, 'Final performance report');
+      logger.info({ report }, "Final performance report");
 
       // Save to file if in development
-      if (process.env.NODE_ENV === 'development') {
-        const fs = await import('fs/promises');
-        const path = await import('path');
+      if (process.env.NODE_ENV === "development") {
+        const fs = await import("fs/promises");
+        const path = await import("path");
 
         try {
-          const reportPath = path.join(process.cwd(), 'logs', 'shutdown-report.json');
+          const reportPath = path.join(
+            process.cwd(),
+            "logs",
+            "shutdown-report.json",
+          );
           await fs.mkdir(path.dirname(reportPath), { recursive: true });
           await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
         } catch (error) {
-          logger.warn({ error: error.message }, 'Could not save shutdown report to file');
+          logger.warn(
+            { error: error.message },
+            "Could not save shutdown report to file",
+          );
         }
       }
     } catch (error) {
-      logger.warn({ error: error.message }, 'Error generating final report');
+      logger.warn({ error: error.message }, "Error generating final report");
     }
   }
 
@@ -284,5 +302,10 @@ const gracefulShutdown = new GracefulShutdown();
 export default gracefulShutdown;
 
 // Export helpers for server integration
-export const { registerConnection, registerTimer, registerCleanup, isShuttingDownFlag, getStatus } =
-  gracefulShutdown;
+export const {
+  registerConnection,
+  registerTimer,
+  registerCleanup,
+  isShuttingDownFlag,
+  getStatus,
+} = gracefulShutdown;

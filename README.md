@@ -1,4 +1,4 @@
-****# Unified EasyPost-Veeqo MCP Server
+\*\*\*\*# Unified EasyPost-Veeqo MCP Server
 
 A comprehensive Model Context Protocol (MCP) server that unifies EasyPost shipping services with Veeqo inventory management for complete shipping and inventory orchestration.
 
@@ -240,11 +240,11 @@ pnpm run dev  # Start with hot reload
 The unified server implementation using the FastMCP framework:
 
 ```typescript
-import { FastMCP } from 'fastmcp';
+import { FastMCP } from "fastmcp";
 
 const server = new FastMCP({
-  name: 'unified-easyship-veeqo-mcp',
-  version: '1.0.0',
+  name: "unified-easyship-veeqo-mcp",
+  version: "1.0.0",
   authenticate: async (request) => {
     // API key authentication
   },
@@ -257,7 +257,7 @@ const server = new FastMCP({
 #### EasyPost Client
 
 ```typescript
-import { EasyPostClient } from './clients/easypost-enhanced.js';
+import { EasyPostClient } from "./clients/easypost-enhanced.js";
 
 const client = new EasyPostClient();
 const rates = await client.getRates(fromAddress, toAddress, parcel);
@@ -266,7 +266,7 @@ const rates = await client.getRates(fromAddress, toAddress, parcel);
 #### Veeqo Client
 
 ```typescript
-import { VeeqoClient } from './clients/veeqo-enhanced.js';
+import { VeeqoClient } from "./clients/veeqo-enhanced.js";
 
 const client = new VeeqoClient();
 const inventory = await client.getInventoryLevels();
@@ -279,8 +279,8 @@ const inventory = await client.getInventoryLevels();
 const optimization = await optimizeShipping({
   package: packageDetails,
   requirements: shippingRequirements,
-  origin: 'San Francisco, CA',
-  destination: 'New York, NY',
+  origin: "San Francisco, CA",
+  destination: "New York, NY",
 });
 
 // Returns multiple carrier options with cost comparison

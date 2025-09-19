@@ -2,8 +2,8 @@
  * Address verification tool using EasyPost API
  */
 
-import { EasyPostClient } from '../../services/clients/easypost-enhanced.js';
-import { AddressSchema } from '../../api/schemas/address.js';
+import { EasyPostClient } from "../../services/clients/easypost-enhanced.js";
+import { AddressSchema } from "../../api/schemas/address.js";
 
 const inputSchema = AddressSchema;
 
@@ -14,8 +14,8 @@ export async function verifyAddress(params: unknown) {
   // Ensure required fields are present
   const addressInput = {
     ...input,
-    name: input.name || 'Unknown',
-    state: input.state || '',
+    name: input.name || "Unknown",
+    state: input.state || "",
   };
 
   const response = await client.verifyAddress(addressInput);
