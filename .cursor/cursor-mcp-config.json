@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "unified-easyship-veeqo": {
+      "command": "node",
+      "args": [
+        "/home/bischoff666/Projects/unified-easyship-veeqo-mcp/dist/server.js"
+      ],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}

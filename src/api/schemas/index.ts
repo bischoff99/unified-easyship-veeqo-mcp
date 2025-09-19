@@ -3,11 +3,11 @@
  * Zod validation schemas for all API operations
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 // Common schemas
 // Import AddressSchema from the canonical location
-import { AddressSchema, type Address } from './address';
+import { AddressSchema, type Address } from "./address";
 export { AddressSchema, type Address };
 
 export const ParcelSchema = z.object({
@@ -57,7 +57,7 @@ export const CreateOrderSchema = z.object({
       product_id: z.string(),
       quantity: z.number().int().positive(),
       price: z.number().positive(),
-    })
+    }),
   ),
   shipping_address: AddressSchema,
   billing_address: AddressSchema.optional(),
@@ -70,8 +70,10 @@ export const OptimizeShippingSchema = z.object({
       from_address: AddressSchema,
       to_address: AddressSchema,
       parcel: ParcelSchema,
-      priority: z.enum(['standard', 'expedited', 'overnight']).default('standard'),
-    })
+      priority: z
+        .enum(["standard", "expedited", "overnight"])
+        .default("standard"),
+    }),
   ),
   preferences: z
     .object({

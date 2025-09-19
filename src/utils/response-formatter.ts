@@ -1,10 +1,13 @@
-import { monitoring } from './monitoring';
-import { logger } from './logger';
+import { monitoring } from "./monitoring.js";
+import { logger } from "./logger.js";
 
 /**
  * Formats API response with processing time
  */
-export function formatApiResponse<T>(data: T, startTime: number): T & { processing_time_ms: number } {
+export function formatApiResponse<T>(
+  data: T,
+  startTime: number,
+): T & { processing_time_ms: number } {
   const duration = Date.now() - startTime;
   return {
     ...data,
@@ -16,11 +19,11 @@ export function formatApiResponse<T>(data: T, startTime: number): T & { processi
  * Handles API errors with consistent logging and monitoring
  */
 export function handleApiError(
-  error: any, 
-  startTime: number, 
-  service: string, 
-  endpoint: string, 
-  operation: string
+  error: any,
+  startTime: number,
+  service: string,
+  endpoint: string,
+  operation: string,
 ): never {
   const duration = Date.now() - startTime;
   monitoring.recordApiCall(service, endpoint, duration, 500, true);
@@ -34,7 +37,7 @@ export function handleApiError(
 export function createApiHandler<T>(
   service: string,
   endpoint: string,
-  operation: string
+  operation: string,
 ) {
   return {
     success: (data: T, startTime: number) => {
@@ -43,6 +46,6 @@ export function createApiHandler<T>(
     },
     error: (error: any, startTime: number) => {
       handleApiError(error, startTime, service, endpoint, operation);
-    }
+    },
   };
 }

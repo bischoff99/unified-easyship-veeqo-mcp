@@ -2,21 +2,21 @@
  * Unit tests for EasyPost client implementation
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { EasyPostClient } from '@/services/clients/easypost-enhanced';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { EasyPostClient } from "@/services/clients/easypost-enhanced";
 import {
   mockEasyPostAddress,
   mockEasyPostParcel,
   mockEasyPostRates,
   mockShippingLabel,
-} from '@test/mocks/easypost';
+} from "@test/mocks/easypost";
 
 // Mock the config
-vi.mock('@/config/index.js', () => ({
+vi.mock("@/config/index.js", () => ({
   config: {
     easypost: {
-      apiKey: 'test-key',
-      baseUrl: 'https://api.easypost.com/v2',
+      apiKey: "test-key",
+      baseUrl: "https://api.easypost.com/v2",
       timeout: 30000,
       mockMode: false,
     },
@@ -24,7 +24,7 @@ vi.mock('@/config/index.js', () => ({
 }));
 
 // Mock the logger
-vi.mock('@/utils/logger.js', () => ({
+vi.mock("@/utils/logger.js", () => ({
   logger: {
     info: vi.fn(),
     warn: vi.fn(),
@@ -37,7 +37,7 @@ vi.mock('@/utils/logger.js', () => ({
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
-describe('EasyPostClient', () => {
+describe("EasyPostClient", () => {
   let client: EasyPostClient;
 
   beforeEach(() => {
@@ -45,8 +45,8 @@ describe('EasyPostClient', () => {
     vi.clearAllMocks();
   });
 
-  describe('getRates', () => {
-    it('should return shipping rates for valid addresses and parcel', async () => {
+  describe("getRates", () => {
+    it("should return shipping rates for valid addresses and parcel", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -59,38 +59,42 @@ describe('EasyPostClient', () => {
       const rates = await client.getRates(
         mockEasyPostAddress,
         mockEasyPostAddress,
-        mockEasyPostParcel
+        mockEasyPostParcel,
       );
 
       expect(rates).toHaveLength(3);
       expect(rates[0]).toMatchObject({
-        carrier: 'USPS',
-        service: 'Priority',
-        rate: '8.15',
+        carrier: "USPS",
+        service: "Priority",
+        rate: "8.15",
         delivery_days: 2,
       });
     });
 
-    it('should handle API errors gracefully', async () => {
+    it("should handle API errors gracefully", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 400,
         json: () =>
           Promise.resolve({
             error: {
-              message: 'Invalid address',
-              code: 'ADDRESS.INVALID',
+              message: "Invalid address",
+              code: "ADDRESS.INVALID",
             },
           }),
       });
 
       await expect(
-        client.getRates(mockEasyPostAddress, mockEasyPostAddress, mockEasyPostParcel)
-      ).rejects.toThrow('Invalid address');
+        client.getRates(
+          mockEasyPostAddress,
+          mockEasyPostAddress,
+          mockEasyPostParcel,
+        ),
+      ).rejects.toThrow("Invalid address");
     });
 
-    it('should validate input parameters', async () => {
-      const invalidAddress = { ...mockEasyPostAddress, zip: '' };
+    it("should validate input parameters", async () => {
+      const invalidAddress = { ...mockEasyPostAddress, zip: "" };
 
       // Mock the EasyPost API error response for invalid address
       mockFetch.mockResolvedValueOnce({
@@ -99,29 +103,33 @@ describe('EasyPostClient', () => {
         json: () =>
           Promise.resolve({
             error: {
-              message: 'ZIP code is required',
-              code: 'ADDRESS.INVALID',
+              message: "ZIP code is required",
+              code: "ADDRESS.INVALID",
             },
           }),
       });
 
       await expect(
-        client.getRates(invalidAddress, mockEasyPostAddress, mockEasyPostParcel)
-      ).rejects.toThrow('ZIP code is required');
+        client.getRates(
+          invalidAddress,
+          mockEasyPostAddress,
+          mockEasyPostParcel,
+        ),
+      ).rejects.toThrow("ZIP code is required");
     });
   });
 
-  describe('createLabel', () => {
-    it('should create a shipping label successfully', async () => {
+  describe("createLabel", () => {
+    it("should create a shipping label successfully", async () => {
       // First mock for createShipment call
       const mockShipment = {
-        id: 'shp_test123',
+        id: "shp_test123",
         rates: [
           {
-            id: 'rate_test123',
-            carrier: 'UPS',
-            service: 'Ground',
-            rate: '7.89',
+            id: "rate_test123",
+            carrier: "UPS",
+            service: "Ground",
+            rate: "7.89",
           },
         ],
       };
@@ -134,14 +142,14 @@ describe('EasyPostClient', () => {
 
       // Second mock for buyShipment call
       const mockBoughtShipment = {
-        tracking_code: '1Z999AA1234567890',
+        tracking_code: "1Z999AA1234567890",
         selected_rate: {
-          carrier: 'UPS',
-          service: 'Ground',
-          rate: '7.89',
+          carrier: "UPS",
+          service: "Ground",
+          rate: "7.89",
         },
         postage_label: {
-          label_url: 'https://example.com/label.pdf',
+          label_url: "https://example.com/label.pdf",
         },
       };
 
@@ -155,29 +163,29 @@ describe('EasyPostClient', () => {
         mockEasyPostAddress,
         mockEasyPostAddress,
         mockEasyPostParcel,
-        'UPS',
-        'Ground'
+        "UPS",
+        "Ground",
       );
 
       expect(label).toMatchObject({
-        tracking_code: '1Z999AA1234567890',
-        carrier: 'UPS',
-        service: 'Ground',
-        rate: '7.89',
-        label_url: expect.stringContaining('https://'),
+        tracking_code: "1Z999AA1234567890",
+        carrier: "UPS",
+        service: "Ground",
+        rate: "7.89",
+        label_url: expect.stringContaining("https://"),
       });
     });
 
-    it('should handle label creation failures', async () => {
+    it("should handle label creation failures", async () => {
       // First mock for createShipment call (success)
       const mockShipment = {
-        id: 'shp_test123',
+        id: "shp_test123",
         rates: [
           {
-            id: 'rate_test123',
-            carrier: 'UPS',
-            service: 'Ground',
-            rate: '7.89',
+            id: "rate_test123",
+            carrier: "UPS",
+            service: "Ground",
+            rate: "7.89",
           },
         ],
       };
@@ -195,8 +203,8 @@ describe('EasyPostClient', () => {
         json: () =>
           Promise.resolve({
             error: {
-              message: 'Insufficient funds',
-              code: 'BILLING.INSUFFICIENT_FUNDS',
+              message: "Insufficient funds",
+              code: "BILLING.INSUFFICIENT_FUNDS",
             },
           }),
       });
@@ -206,23 +214,23 @@ describe('EasyPostClient', () => {
           mockEasyPostAddress,
           mockEasyPostAddress,
           mockEasyPostParcel,
-          'UPS',
-          'Ground'
-        )
-      ).rejects.toThrow('Insufficient funds');
+          "UPS",
+          "Ground",
+        ),
+      ).rejects.toThrow("Insufficient funds");
     });
   });
 
-  describe('verifyAddress', () => {
-    it('should verify an address and return validation results', async () => {
+  describe("verifyAddress", () => {
+    it("should verify an address and return validation results", async () => {
       const mockValidation = {
-        id: 'adr_test123',
-        name: 'John Doe',
-        street1: '123 Main St',
-        city: 'San Francisco',
-        state: 'CA',
-        zip: '94105-1804',
-        country: 'US',
+        id: "adr_test123",
+        name: "John Doe",
+        street1: "123 Main St",
+        city: "San Francisco",
+        state: "CA",
+        zip: "94105-1804",
+        country: "US",
         verifications: {
           zip4: { success: true },
           delivery: { success: true },
@@ -238,46 +246,46 @@ describe('EasyPostClient', () => {
       const result = await client.verifyAddress(mockEasyPostAddress);
 
       expect(result).toMatchObject({
-        id: 'adr_test123',
-        street1: '123 Main St',
-        city: 'San Francisco',
-        state: 'CA',
-        zip: '94105-1804',
+        id: "adr_test123",
+        street1: "123 Main St",
+        city: "San Francisco",
+        state: "CA",
+        zip: "94105-1804",
         verifications: expect.any(Object),
       });
     });
 
-    it('should handle address verification failures', async () => {
+    it("should handle address verification failures", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 422,
         json: () =>
           Promise.resolve({
             error: {
-              message: 'Address verification failed',
-              code: 'ADDRESS.VERIFICATION_FAILED',
+              message: "Address verification failed",
+              code: "ADDRESS.VERIFICATION_FAILED",
             },
           }),
       });
 
       await expect(client.verifyAddress(mockEasyPostAddress)).rejects.toThrow(
-        'Address verification failed'
+        "Address verification failed",
       );
     });
   });
 
-  describe('trackShipment', () => {
-    it('should track a shipment by tracking number', async () => {
+  describe("trackShipment", () => {
+    it("should track a shipment by tracking number", async () => {
       const mockTracking = {
-        tracking_code: '1Z999AA1234567890',
-        status: 'delivered',
-        status_detail: 'delivered',
-        carrier: 'UPS',
+        tracking_code: "1Z999AA1234567890",
+        status: "delivered",
+        status_detail: "delivered",
+        carrier: "UPS",
         tracking_details: [
           {
-            datetime: '2024-01-16T18:00:00Z',
-            message: 'Package delivered',
-            status: 'delivered',
+            datetime: "2024-01-16T18:00:00Z",
+            message: "Package delivered",
+            status: "delivered",
           },
         ],
       };
@@ -288,67 +296,77 @@ describe('EasyPostClient', () => {
         json: () => Promise.resolve(mockTracking),
       });
 
-      const result = await client.trackShipment('1Z999AA1234567890');
+      const result = await client.trackShipment("1Z999AA1234567890");
 
       expect(result).toMatchObject({
-        status: 'delivered',
-        status_detail: 'delivered',
-        carrier: 'UPS',
+        status: "delivered",
+        status_detail: "delivered",
+        carrier: "UPS",
         tracking_details: expect.any(Array),
       });
     });
 
-    it('should handle tracking failures', async () => {
+    it("should handle tracking failures", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 404,
         json: () =>
           Promise.resolve({
             error: {
-              message: 'Tracking number not found',
-              code: 'TRACKING.NOT_FOUND',
+              message: "Tracking number not found",
+              code: "TRACKING.NOT_FOUND",
             },
           }),
       });
 
-      await expect(client.trackShipment('INVALID123')).rejects.toThrow('Tracking number not found');
+      await expect(client.trackShipment("INVALID123")).rejects.toThrow(
+        "Tracking number not found",
+      );
     });
   });
 
-  describe('error handling', () => {
-    it('should handle network timeouts', async () => {
-      mockFetch.mockRejectedValueOnce(new Error('Request timeout'));
+  describe("error handling", () => {
+    it("should handle network timeouts", async () => {
+      mockFetch.mockRejectedValueOnce(new Error("Request timeout"));
 
       await expect(
-        client.getRates(mockEasyPostAddress, mockEasyPostAddress, mockEasyPostParcel)
-      ).rejects.toThrow('Request timeout');
+        client.getRates(
+          mockEasyPostAddress,
+          mockEasyPostAddress,
+          mockEasyPostParcel,
+        ),
+      ).rejects.toThrow("Request timeout");
     });
 
-    it('should handle rate limiting', async () => {
+    it("should handle rate limiting", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 429,
         headers: new Headers({
-          'retry-after': '60',
+          "retry-after": "60",
         }),
         json: () =>
           Promise.resolve({
             error: {
-              message: 'Rate limit exceeded',
-              code: 'RATE_LIMIT.EXCEEDED',
+              message: "Rate limit exceeded",
+              code: "RATE_LIMIT.EXCEEDED",
             },
           }),
       });
 
       await expect(
-        client.getRates(mockEasyPostAddress, mockEasyPostAddress, mockEasyPostParcel)
-      ).rejects.toThrow('Rate limit exceeded');
+        client.getRates(
+          mockEasyPostAddress,
+          mockEasyPostAddress,
+          mockEasyPostParcel,
+        ),
+      ).rejects.toThrow("Rate limit exceeded");
     });
   });
 
-  describe('input validation', () => {
-    it('should handle API validation errors for invalid addresses', async () => {
-      const invalidAddress = { ...mockEasyPostAddress, name: '' };
+  describe("input validation", () => {
+    it("should handle API validation errors for invalid addresses", async () => {
+      const invalidAddress = { ...mockEasyPostAddress, name: "" };
 
       mockFetch.mockResolvedValueOnce({
         ok: false,
@@ -356,18 +374,22 @@ describe('EasyPostClient', () => {
         json: () =>
           Promise.resolve({
             error: {
-              message: 'Address name is required',
-              code: 'ADDRESS.INVALID',
+              message: "Address name is required",
+              code: "ADDRESS.INVALID",
             },
           }),
       });
 
       await expect(
-        client.getRates(invalidAddress, mockEasyPostAddress, mockEasyPostParcel)
-      ).rejects.toThrow('Address name is required');
+        client.getRates(
+          invalidAddress,
+          mockEasyPostAddress,
+          mockEasyPostParcel,
+        ),
+      ).rejects.toThrow("Address name is required");
     });
 
-    it('should handle API validation errors for invalid parcel dimensions', async () => {
+    it("should handle API validation errors for invalid parcel dimensions", async () => {
       const invalidParcel = { ...mockEasyPostParcel, weight: 0 };
 
       mockFetch.mockResolvedValueOnce({
@@ -376,15 +398,19 @@ describe('EasyPostClient', () => {
         json: () =>
           Promise.resolve({
             error: {
-              message: 'Parcel weight must be greater than 0',
-              code: 'PARCEL.INVALID',
+              message: "Parcel weight must be greater than 0",
+              code: "PARCEL.INVALID",
             },
           }),
       });
 
       await expect(
-        client.getRates(mockEasyPostAddress, mockEasyPostAddress, invalidParcel)
-      ).rejects.toThrow('Parcel weight must be greater than 0');
+        client.getRates(
+          mockEasyPostAddress,
+          mockEasyPostAddress,
+          invalidParcel,
+        ),
+      ).rejects.toThrow("Parcel weight must be greater than 0");
     });
   });
 });

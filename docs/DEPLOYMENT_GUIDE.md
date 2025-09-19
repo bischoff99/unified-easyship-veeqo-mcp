@@ -14,6 +14,7 @@ Your MCP server is production-ready with validated functionality across all core
 ### Environment Setup
 
 1. **Clone and install:**
+
 ```bash
 git clone https://github.com/bischoff99/unified-easyship-veeqo-mcp.git
 cd unified-easyship-veeqo-mcp
@@ -21,6 +22,7 @@ pnpm install
 ```
 
 2. **Configure environment variables:**
+
 ```bash
 # Copy example environment
 cp .env.example .env.production
@@ -74,14 +76,15 @@ curl http://your-server:3000/health
 ```
 
 Expected response:
+
 ```json
 {
   "status": "healthy",
   "checks": [
-    {"name": "memory", "status": "healthy"},
-    {"name": "performance", "status": "healthy"},
-    {"name": "environment", "status": "healthy"},
-    {"name": "external_apis", "status": "healthy"}
+    { "name": "memory", "status": "healthy" },
+    { "name": "performance", "status": "healthy" },
+    { "name": "environment", "status": "healthy" },
+    { "name": "external_apis", "status": "healthy" }
   ]
 }
 ```
@@ -107,6 +110,7 @@ Expected response:
 ### Production Monitoring
 
 Monitor key metrics:
+
 - Memory usage (target: <100MB)
 - API response times (target: <200ms)
 - Error rates (target: <1%)
@@ -128,6 +132,6 @@ Monitor key metrics:
 
 ---
 
-*Last updated: September 2025*
-*Version: 1.0.0*
-*Status: Production Ready ✅*
+_Last updated: September 2025_
+_Version: 1.0.0_
+_Status: Production Ready ✅_

@@ -1,12 +1,12 @@
 export interface JsonRpcRequest {
-  jsonrpc: '2.0';
+  jsonrpc: "2.0";
   id: number | string | null;
   method: string;
   params?: any;
 }
 
 export interface JsonRpcResponse {
-  jsonrpc: '2.0';
+  jsonrpc: "2.0";
   id: number | string | null;
   result?: any;
   error?: { code: number; message: string; data?: any };
@@ -43,7 +43,7 @@ export interface CanonicalRate {
   amount: number;
   deliveryDays?: number;
   estimatedDeliveryDate?: string | null;
-  provider: 'easypost' | 'veeqo';
+  provider: "easypost" | "veeqo";
   raw?: unknown;
 }
 
@@ -54,7 +54,7 @@ export interface PurchasedLabel {
   amount?: number;
   currency?: string;
   labelUrl?: string;
-  provider: 'easypost' | 'veeqo';
+  provider: "easypost" | "veeqo";
   raw?: unknown;
 }
 
@@ -68,5 +68,11 @@ export interface ShipmentRequest {
 
 export interface ShippingProvider {
   getRates(_request: ShipmentRequest): Promise<CanonicalRate[]>;
-  buyLabel(_request: ShipmentRequest & { rateId?: string; carrier: string; service: string }): Promise<PurchasedLabel>;
+  buyLabel(
+    _request: ShipmentRequest & {
+      rateId?: string;
+      carrier: string;
+      service: string;
+    },
+  ): Promise<PurchasedLabel>;
 }

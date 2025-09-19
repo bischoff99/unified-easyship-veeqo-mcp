@@ -1,6 +1,7 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (
+
 # Claude Code SDK integration removed
 
 ## Project Overview

@@ -1,12 +1,12 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * Creates a reusable API key validator that allows mock/test values
  */
-export const createApiKeyValidator = (keyName: string) => 
+export const createApiKeyValidator = (keyName: string) =>
   z.string().refine((val) => {
     // Allow empty/mock keys in test environment or when explicitly in mock mode
-    if (process.env.NODE_ENV === 'test' || val === 'mock') {
+    if (process.env.NODE_ENV === "test" || val === "mock") {
       return true;
     }
     return val.length > 0;

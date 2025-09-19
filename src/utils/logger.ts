@@ -1,12 +1,12 @@
-import pino from 'pino';
+import pino from "pino";
 
 export const logger = pino({
-  level: process.env.LOG_LEVEL ?? 'info',
+  level: process.env.LOG_LEVEL ?? "info",
   transport:
-    process.env.NODE_ENV === 'development'
-      ? { target: 'pino-pretty', options: { colorize: true } }
+    process.env.NODE_ENV === "development"
+      ? { target: "pino-pretty", options: { colorize: true } }
       : undefined,
-  redact: ['apiKey', 'authorization', 'EASYPOST_API_KEY', 'VEEQO_API_KEY'],
+  redact: ["apiKey", "authorization", "EASYPOST_API_KEY", "VEEQO_API_KEY"],
 });
 
 // Helper functions for structured logging
@@ -28,10 +28,26 @@ export const logError = (message: string, data?: Record<string, unknown>) => {
 
 // Type-safe logger interface for consistent usage
 export interface Logger {
-  debug: (_obj?: Record<string, unknown>, _msg?: string, ..._args: unknown[]) => void;
-  info: (_obj?: Record<string, unknown>, _msg?: string, ..._args: unknown[]) => void;
-  warn: (_obj?: Record<string, unknown>, _msg?: string, ..._args: unknown[]) => void;
-  error: (_obj?: Record<string, unknown>, _msg?: string, ..._args: unknown[]) => void;
+  debug: (
+    _obj?: Record<string, unknown>,
+    _msg?: string,
+    ..._args: unknown[]
+  ) => void;
+  info: (
+    _obj?: Record<string, unknown>,
+    _msg?: string,
+    ..._args: unknown[]
+  ) => void;
+  warn: (
+    _obj?: Record<string, unknown>,
+    _msg?: string,
+    ..._args: unknown[]
+  ) => void;
+  error: (
+    _obj?: Record<string, unknown>,
+    _msg?: string,
+    ..._args: unknown[]
+  ) => void;
 }
 
 // Logger is already exported above

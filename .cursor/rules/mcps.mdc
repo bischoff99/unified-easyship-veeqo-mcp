@@ -1,0 +1,170 @@
+---
+description: MCP Tools Usage Optimization Rules
+globs:
+alwaysApply: true
+---
+
+# MCP Tools Development Optimization Rules
+
+## Tool Selection Priority
+
+### 1. Always prefer MCP tools over standard tools when available
+
+- Use `mcp__context7__*` for library documentation and code context
+- Use `mcp__Everything__*` for filesystem operations when available
+- Use `mcp__Sequential_Thinking__*` for complex reasoning tasks
+- Use `mcp__desktop-commander__*` for desktop automation
+- Use `mcp__playwright__*` for browser automation and testing
+
+### 2. Batch Operations
+
+- Always batch multiple independent tool calls in a single message for parallel execution
+- Group related file reads, searches, and API calls together
+- Example: When analyzing code, read multiple files in parallel rather than sequentially
+
+### 3. Context Management
+
+- Store important project context in memory or configuration:
+  - API endpoints and configurations
+  - Common error patterns discovered
+  - Project-specific conventions and patterns
+  - Test data and mock responses
+- Retrieve stored context at the start of sessions to maintain continuity
+
+### 4. Code Analysis Workflow
+
+- Use `mcp__context7__*` tools for:
+  - Library documentation lookup (`resolve-library-id`, `get-library-docs`)
+  - Understanding code dependencies and context
+  - Finding relevant documentation for frameworks and libraries
+  - Identifying patterns and best practices from docs
+
+### 5. Testing Strategy
+
+- Run tests in parallel when possible using background Bash
+- Use `mcp__playwright__*` for end-to-end testing and browser automation
+- Use standard testing frameworks for unit and integration tests
+- Cache test results for quick reference
+
+### 6. Performance Optimization
+
+- Minimize tool calls by:
+  - Reading entire directories with glob patterns first
+  - Using grep/search before reading large files
+  - Caching frequently accessed data
+- Use background execution for long-running tasks:
+  - Build processes
+  - Test suites
+  - Linting operations
+
+### 7. Error Handling
+
+- Always check tool responses for errors before proceeding
+- Use fallback strategies when MCP tools fail:
+  - Try alternative MCP tools first
+  - Fall back to standard tools only if necessary
+  - Document failures for debugging
+
+### 8. Development Workflow
+
+1. **Start of session**: Check available MCP tools and retrieve context
+2. **Code changes**: Use appropriate MCP tools for operations
+3. **Testing**: Run tests in background, monitor with BashOutput
+4. **Validation**: Use linting and type-checking in parallel
+5. **Documentation**: Use `mcp__context7__*` for library docs lookup
+6. **End of session**: Save critical context for next session
+
+### 9. API and External Services
+
+- Use appropriate fetch tools for API calls
+- Store API responses for reuse within session
+- Batch API calls when possible to reduce latency
+
+### 10. Project-Specific Operations
+
+- Use standard API integrations for:
+  - Shipping rate calculations
+  - Inventory management
+  - Address validation
+  - Order processing and tracking
+- Cache API responses to avoid redundant calls
+- Use `mcp__context7__*` to lookup API documentation
+
+## Best Practices
+
+### Parallel Execution Pattern
+
+```javascript
+// GOOD - Parallel execution
+[Read file1, Read file2, Grep pattern, Run tests] // All in one message
+
+// BAD - Sequential execution
+Read file1
+Then read file2
+Then grep pattern
+Then run tests
+```
+
+### Context Storage Pattern
+
+```javascript
+// Store at start of session
+const config = await loadProjectConfig();
+const endpoints = await discoverAPIEndpoints();
+
+// Use throughout session
+const response = await callAPI(endpoints.shipping);
+```
+
+### Error Recovery Pattern
+
+```javascript
+1. Try primary MCP tool
+2. If failed, try alternative MCP tool
+3. If still failed, use standard tool with logged warning
+4. Document failure for debugging
+```
+
+## Tool-Specific Guidelines
+
+### mcp__context7__* tools
+
+- Use for library documentation lookup
+- Resolve library identifiers with `resolve-library-id`
+- Get detailed docs with `get-library-docs`
+- Essential for understanding frameworks and dependencies
+
+### mcp__playwright__* tools
+
+- Use for browser automation
+- End-to-end testing
+- UI validation and interaction
+
+### mcp__desktop-commander__* tools
+
+- Desktop automation tasks
+- System-level operations
+- Cross-application workflows
+
+### mcp__Sequential_Thinking__* tools
+
+- Complex reasoning tasks
+- Multi-step problem solving
+- Decision tree navigation
+
+## Performance Metrics to Track
+
+- Tool call latency
+- Parallel vs sequential execution time
+- Cache hit rates
+- Error rates by tool type
+- Recovery success rates
+
+## Debugging Guidelines
+
+1. Log all tool failures for analysis
+2. Track tool call sequences for replay
+3. Store error contexts for pattern analysis
+4. Use background shells for long-running debug sessions
+5. Use `mcp__context7__*` to lookup error documentation
+6. Use appropriate logging levels for different environments

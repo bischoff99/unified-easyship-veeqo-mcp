@@ -5,34 +5,34 @@
  * Provides optimized builds with minification, bundling, and analysis
  */
 
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+import { execSync } from "child_process";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.resolve(__dirname, '..');
+const projectRoot = path.resolve(__dirname, "..");
 
 /**
  * Build configuration
  */
 const buildConfig = {
-  target: 'node20',
-  format: 'esm',
-  platform: 'node',
+  target: "node20",
+  format: "esm",
+  platform: "node",
   bundle: false, // Keep modules separate for better debugging
-  minify: process.env.NODE_ENV === 'production',
+  minify: process.env.NODE_ENV === "production",
   sourcemap: true,
-  outdir: 'dist',
+  outdir: "dist",
   external: [
-    'fastmcp',
-    'pino',
-    'pino-pretty',
-    'zod',
-    'undici',
-    'dotenv',
-    'express',
-    'jsonwebtoken',
+    "fastmcp",
+    "pino",
+    "pino-pretty",
+    "zod",
+    "undici",
+    "dotenv",
+    "express",
+    "jsonwebtoken",
   ],
 };
 
@@ -40,12 +40,15 @@ const buildConfig = {
  * Clean build directory
  */
 async function cleanBuild() {
-  console.log('🧹 Cleaning build directory...');
+  console.log("🧹 Cleaning build directory...");
   try {
-    await fs.rm(path.join(projectRoot, 'dist'), { recursive: true, force: true });
-    console.log('✅ Build directory cleaned');
+    await fs.rm(path.join(projectRoot, "dist"), {
+      recursive: true,
+      force: true,
+    });
+    console.log("✅ Build directory cleaned");
   } catch (error) {
-    console.log('ℹ️  No existing build directory to clean');
+    console.log("ℹ️  No existing build directory to clean");
   }
 }
 
@@ -53,12 +56,12 @@ async function cleanBuild() {
  * Run TypeScript compilation
  */
 async function compileTSC() {
-  console.log('📝 Running TypeScript compilation...');
+  console.log("📝 Running TypeScript compilation...");
   try {
-    execSync('npx tsc', { cwd: projectRoot, stdio: 'inherit' });
-    console.log('✅ TypeScript compilation completed');
+    execSync("npx tsc", { cwd: projectRoot, stdio: "inherit" });
+    console.log("✅ TypeScript compilation completed");
   } catch (error) {
-    console.error('❌ TypeScript compilation failed');
+    console.error("❌ TypeScript compilation failed");
     throw error;
   }
 }
@@ -67,17 +70,17 @@ async function compileTSC() {
  * Bundle server for production if needed
  */
 async function bundleForProduction() {
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('ℹ️  Skipping bundling (not production build)');
+  if (process.env.NODE_ENV !== "production") {
+    console.log("ℹ️  Skipping bundling (not production build)");
     return;
   }
 
-  console.log('📦 Creating production bundle...');
+  console.log("📦 Creating production bundle...");
 
   // Create a simple bundled version for production deployment
   const serverContent = await fs.readFile(
-    path.join(projectRoot, 'dist/server/fastmcp-server.js'),
-    'utf-8'
+    path.join(projectRoot, "dist/server/fastmcp-server.js"),
+    "utf-8",
   );
 
   // Add production optimizations
@@ -85,37 +88,43 @@ async function bundleForProduction() {
 // Unified EasyPost-Veeqo MCP Server
 ${serverContent}`;
 
-  await fs.writeFile(path.join(projectRoot, 'dist/server/fastmcp-server.js'), optimizedContent);
+  await fs.writeFile(
+    path.join(projectRoot, "dist/server/fastmcp-server.js"),
+    optimizedContent,
+  );
 
-  console.log('✅ Production bundle created');
+  console.log("✅ Production bundle created");
 }
 
 /**
  * Generate build manifest
  */
 async function generateBuildManifest() {
-  console.log('📋 Generating build manifest...');
+  console.log("📋 Generating build manifest...");
 
   const packageJson = JSON.parse(
-    await fs.readFile(path.join(projectRoot, 'package.json'), 'utf-8')
+    await fs.readFile(path.join(projectRoot, "package.json"), "utf-8"),
   );
 
   const gitCommit = (() => {
     try {
-      return execSync('git rev-parse HEAD', { cwd: projectRoot, encoding: 'utf-8' }).trim();
+      return execSync("git rev-parse HEAD", {
+        cwd: projectRoot,
+        encoding: "utf-8",
+      }).trim();
     } catch {
-      return 'unknown';
+      return "unknown";
     }
   })();
 
   const gitBranch = (() => {
     try {
-      return execSync('git rev-parse --abbrev-ref HEAD', {
+      return execSync("git rev-parse --abbrev-ref HEAD", {
         cwd: projectRoot,
-        encoding: 'utf-8',
+        encoding: "utf-8",
       }).trim();
     } catch {
-      return 'unknown';
+      return "unknown";
     }
   })();
 
@@ -124,7 +133,7 @@ async function generateBuildManifest() {
     version: packageJson.version,
     description: packageJson.description,
     buildTime: new Date().toISOString(),
-    buildEnvironment: process.env.NODE_ENV || 'development',
+    buildEnvironment: process.env.NODE_ENV || "development",
     nodeVersion: process.version,
     git: {
       commit: gitCommit,
@@ -143,28 +152,28 @@ async function generateBuildManifest() {
   };
 
   await fs.writeFile(
-    path.join(projectRoot, 'dist/build-manifest.json'),
-    JSON.stringify(buildManifest, null, 2)
+    path.join(projectRoot, "dist/build-manifest.json"),
+    JSON.stringify(buildManifest, null, 2),
   );
 
-  console.log('✅ Build manifest generated');
+  console.log("✅ Build manifest generated");
 }
 
 /**
  * Copy static assets
  */
 async function copyAssets() {
-  console.log('📁 Copying static assets...');
+  console.log("📁 Copying static assets...");
 
   const assetsToCopy = [
-    { src: 'package.json', dest: 'package.json' },
-    { src: '.env.example', dest: '.env.example', optional: true },
+    { src: "package.json", dest: "package.json" },
+    { src: ".env.example", dest: ".env.example", optional: true },
   ];
 
   for (const asset of assetsToCopy) {
     try {
       const srcPath = path.join(projectRoot, asset.src);
-      const destPath = path.join(projectRoot, 'dist', asset.dest);
+      const destPath = path.join(projectRoot, "dist", asset.dest);
 
       await fs.mkdir(path.dirname(destPath), { recursive: true });
       await fs.copyFile(srcPath, destPath);
@@ -183,9 +192,9 @@ async function copyAssets() {
  * Analyze bundle size
  */
 async function analyzeBundleSize() {
-  console.log('📊 Analyzing bundle size...');
+  console.log("📊 Analyzing bundle size...");
 
-  const distPath = path.join(projectRoot, 'dist');
+  const distPath = path.join(projectRoot, "dist");
 
   async function getDirectorySize(dirPath) {
     let totalSize = 0;
@@ -247,7 +256,7 @@ async function analyzeBundleSize() {
   await findLargeFiles(distPath);
 
   if (largeFiles.length > 0) {
-    console.log('🔍 Largest files:');
+    console.log("🔍 Largest files:");
     largeFiles
       .sort((a, b) => b.size - a.size)
       .slice(0, 10)
@@ -264,20 +273,23 @@ async function analyzeBundleSize() {
   };
 
   await fs.writeFile(
-    path.join(projectRoot, 'dist/bundle-analysis.json'),
-    JSON.stringify(analysis, null, 2)
+    path.join(projectRoot, "dist/bundle-analysis.json"),
+    JSON.stringify(analysis, null, 2),
   );
 
-  console.log('✅ Bundle analysis completed');
+  console.log("✅ Bundle analysis completed");
 }
 
 /**
  * Validate build
  */
 async function validateBuild() {
-  console.log('🔍 Validating build...');
+  console.log("🔍 Validating build...");
 
-  const requiredFiles = ['dist/server/fastmcp-server.js', 'dist/build-manifest.json'];
+  const requiredFiles = [
+    "dist/server/fastmcp-server.js",
+    "dist/build-manifest.json",
+  ];
 
   const missingFiles = [];
 
@@ -290,39 +302,41 @@ async function validateBuild() {
   }
 
   if (missingFiles.length > 0) {
-    console.error('❌ Build validation failed - missing files:');
+    console.error("❌ Build validation failed - missing files:");
     missingFiles.forEach((file) => console.error(`  - ${file}`));
-    throw new Error('Build validation failed');
+    throw new Error("Build validation failed");
   }
 
   // Test that the server file can be imported
   try {
-    const serverPath = path.join(projectRoot, 'dist/server/fastmcp-server.js');
+    const serverPath = path.join(projectRoot, "dist/server/fastmcp-server.js");
     // Basic syntax check
-    await fs.readFile(serverPath, 'utf-8');
-    console.log('✅ Server file syntax validation passed');
+    await fs.readFile(serverPath, "utf-8");
+    console.log("✅ Server file syntax validation passed");
   } catch (error) {
-    console.error('❌ Server file validation failed:', error);
+    console.error("❌ Server file validation failed:", error);
     throw error;
   }
 
-  console.log('✅ Build validation completed');
+  console.log("✅ Build validation completed");
 }
 
 /**
  * Create deployment-ready archive
  */
 async function createDeploymentArchive() {
-  if (process.env.CREATE_ARCHIVE !== 'true') {
-    console.log('ℹ️  Skipping archive creation (set CREATE_ARCHIVE=true to enable)');
+  if (process.env.CREATE_ARCHIVE !== "true") {
+    console.log(
+      "ℹ️  Skipping archive creation (set CREATE_ARCHIVE=true to enable)",
+    );
     return;
   }
 
-  console.log('📦 Creating deployment archive...');
+  console.log("📦 Creating deployment archive...");
 
   try {
     const packageJson = JSON.parse(
-      await fs.readFile(path.join(projectRoot, 'package.json'), 'utf-8')
+      await fs.readFile(path.join(projectRoot, "package.json"), "utf-8"),
     );
 
     const archiveName = `${packageJson.name}-${packageJson.version}-${Date.now()}.tar.gz`;
@@ -330,12 +344,12 @@ async function createDeploymentArchive() {
 
     execSync(`tar -czf "${archiveName}" dist/ package.json README.md`, {
       cwd: projectRoot,
-      stdio: 'inherit',
+      stdio: "inherit",
     });
 
     console.log(`✅ Deployment archive created: ${archiveName}`);
   } catch (error) {
-    console.warn('⚠️  Failed to create deployment archive:', error.message);
+    console.warn("⚠️  Failed to create deployment archive:", error.message);
   }
 }
 
@@ -345,8 +359,8 @@ async function createDeploymentArchive() {
 async function main() {
   const startTime = Date.now();
 
-  console.log('🚀 Starting optimized build process...');
-  console.log(`📝 Build environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log("🚀 Starting optimized build process...");
+  console.log(`📝 Build environment: ${process.env.NODE_ENV || "development"}`);
 
   try {
     await cleanBuild();
@@ -363,10 +377,13 @@ async function main() {
 
     // Output summary
     const manifest = JSON.parse(
-      await fs.readFile(path.join(projectRoot, 'dist/build-manifest.json'), 'utf-8')
+      await fs.readFile(
+        path.join(projectRoot, "dist/build-manifest.json"),
+        "utf-8",
+      ),
     );
 
-    console.log('\n📋 Build Summary:');
+    console.log("\n📋 Build Summary:");
     console.log(`  Name: ${manifest.name}`);
     console.log(`  Version: ${manifest.version}`);
     console.log(`  Environment: ${manifest.buildEnvironment}`);
@@ -375,7 +392,7 @@ async function main() {
     console.log(`  Git Commit: ${manifest.git.commit.substring(0, 8)}`);
     console.log(`  Build Time: ${buildTime}ms`);
   } catch (error) {
-    console.error('❌ Build failed:', error);
+    console.error("❌ Build failed:", error);
     process.exit(1);
   }
 }

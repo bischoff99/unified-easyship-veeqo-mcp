@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const AddressSchema = z.object({
   name: z.string(),
@@ -8,7 +8,7 @@ export const AddressSchema = z.object({
   city: z.string(),
   state: z.string(),
   zip: z.string(),
-  country: z.string().default('US'),
+  country: z.string().default("US"),
   phone: z.string().optional(),
   email: z.string().email().optional(),
 });

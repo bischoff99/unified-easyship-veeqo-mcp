@@ -107,41 +107,46 @@ unified-easyship-veeqo-mcp/
 ## 🎯 Key Features of Clean Structure
 
 ### ✅ **Logical Organization**
+
 - **Clear separation of concerns** between core, services, and utilities
 - **Dedicated directories** for each major functionality area
 - **Consistent naming conventions** throughout the project
 
 ### ✅ **Modern Configuration**
+
 - **ESLint v9** with flat configuration format
 - **TypeScript** with strict settings and path aliases
 - **Vitest** for fast, modern testing
 - **pnpm** for efficient dependency management
 
 ### ✅ **Test Organization**
+
 - **Separate unit and integration** test directories
 - **Comprehensive mock data** for reliable testing
 - **41 tests** covering core functionality
 - **Test setup** with proper environment configuration
 
 ### ✅ **Documentation Structure**
+
 - **Centralized docs** directory with guides and examples
 - **Inline code documentation** with TSDoc comments
 - **Project documentation** files in root for easy access
 
 ## 📊 File Count Summary
 
-| Directory | Files | Description |
-|-----------|-------|-------------|
-| `src/` | 27 files | Source code implementation |
-| `test/` | 8 files | Test suite |
-| `docs/` | 15 files | Documentation and guides |
-| `scripts/` | 20 files | Utility and deployment scripts |
-| Root | 13 files | Configuration and documentation |
-| **Total** | **83 files** | Clean, organized codebase |
+| Directory  | Files        | Description                     |
+| ---------- | ------------ | ------------------------------- |
+| `src/`     | 27 files     | Source code implementation      |
+| `test/`    | 8 files      | Test suite                      |
+| `docs/`    | 15 files     | Documentation and guides        |
+| `scripts/` | 20 files     | Utility and deployment scripts  |
+| Root       | 13 files     | Configuration and documentation |
+| **Total**  | **83 files** | Clean, organized codebase       |
 
 ## 🔧 Development Workflow
 
 ### **Modern Toolchain (2025)**
+
 - **Node.js 22** - Latest LTS with modern features
 - **pnpm 8.15.0+** - Fast, reliable dependency management
 - **TypeScript** - Strict type checking with path aliases
@@ -150,6 +155,7 @@ unified-easyship-veeqo-mcp/
 - **GitHub Actions v5** - Automated CI/CD
 
 ### **Development Commands**
+
 ```bash
 # Install dependencies
 pnpm install

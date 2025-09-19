@@ -171,7 +171,12 @@
   // ESLint Configuration
   "eslint.enable": true,
   "eslint.autoFixOnSave": true,
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
   "eslint.workingDirectories": [{ "mode": "auto" }],
   "eslint.codeActionsOnSave.mode": "problems",
   "eslint.format.enable": true,
@@ -201,13 +206,13 @@
   "gitlens.codeLens.enabled": true,
   "gitlens.statusBar.enabled": true,
 
-  // AI/Cursor Specific Settings
+  // AI/Cursor Specific Settings (Optimized for MCP Development)
   "cursor.aiProvider": "claude-3.5-sonnet",
   "cursor.enableSuggestions": true,
   "cursor.enableInlineCompletion": true,
-  "cursor.suggestionDelay": 300,
-  "cursor.maxTokens": 4096,
-  "cursor.temperature": 0.7,
+  "cursor.suggestionDelay": 200,
+  "cursor.maxTokens": 8192,
+  "cursor.temperature": 0.3,
   "cursor.enableContextAwareness": true,
   "cursor.enableSemanticSearch": true,
   "cursor.enableCodeActions": true,
@@ -215,8 +220,11 @@
   "cursor.enableDocumentation": true,
   "cursor.enableTestGeneration": true,
   "cursor.enableDebugAssistance": true,
-  "cursor.contextWindow": 8192,
+  "cursor.contextWindow": 16384,
   "cursor.streamResponses": true,
+  "cursor.enableMCPIntegration": true,
+  "cursor.mcpAutoRefresh": true,
+  "cursor.enableTypeScriptAssist": true,
 
   // Error Lens Configuration
   "errorLens.enabled": true,
@@ -351,7 +359,14 @@
       "overviewRulerColor": "#42a5f5"
     }
   ],
-  "todohighlight.include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.md", "**/*.json"],
+  "todohighlight.include": [
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.md",
+    "**/*.json"
+  ],
   "todohighlight.exclude": ["**/node_modules/**", "**/dist/**", "**/build/**"],
 
   // REST Client
@@ -376,7 +391,14 @@
   // Code Spell Checker
   "cSpell.enabled": true,
   "cSpell.language": "en",
-  "cSpell.ignorePaths": ["node_modules", "vscode-extension", ".git", "*.log", "dist", "build"],
+  "cSpell.ignorePaths": [
+    "node_modules",
+    "vscode-extension",
+    ".git",
+    "*.log",
+    "dist",
+    "build"
+  ],
   "cSpell.userWords": [
     "easypost",
     "veeqo",
