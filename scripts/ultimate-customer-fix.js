@@ -43,7 +43,7 @@ class UltimateCustomerFixer {
   async fixCustomerUltimately(customer) {
     try {
       console.log(
-        `🎯 Ultimate fix for customer ${customer.id} (${customer.email})`
+        `🎯 Ultimate fix for customer ${customer.id} (${customer.email})`,
       );
 
       const updates = {};
@@ -62,21 +62,21 @@ class UltimateCustomerFixer {
         try {
           await this.veeqoClient.updateCustomer(
             customer.id.toString(),
-            updates
+            updates,
           );
           this.fixesApplied++;
           console.log(`   ✅ Successfully updated customer ${customer.id}`);
         } catch (error) {
           console.error(
             `   ❌ Failed to update customer ${customer.id}:`,
-            error.message
+            error.message,
           );
           this.errors.push(`Customer ${customer.id}: ${error.message}`);
         }
       } else if (needsUpdate && this.dryRun) {
         console.log(
           `   🧪 DRY RUN: Would update customer ${customer.id} with:`,
-          updates
+          updates,
         );
         this.fixesApplied++;
       } else {
@@ -85,7 +85,7 @@ class UltimateCustomerFixer {
     } catch (error) {
       console.error(
         `   ❌ Error fixing customer ${customer.id}:`,
-        error.message
+        error.message,
       );
       this.errors.push(`Customer ${customer.id}: ${error.message}`);
     }
@@ -101,7 +101,7 @@ class UltimateCustomerFixer {
     let fullName = customer.full_name ? customer.full_name.trim() : "";
 
     console.log(
-      `   🔍 Analyzing: firstName="${firstName}", lastName="${lastName}"`
+      `   🔍 Analyzing: firstName="${firstName}", lastName="${lastName}"`,
     );
 
     // Skip if customer already has good names
@@ -177,7 +177,7 @@ class UltimateCustomerFixer {
       const intelligentLastName = this.createIntelligentLastName(
         currentFirstName,
         email,
-        customer
+        customer,
       );
       if (intelligentLastName && currentFirstName !== intelligentLastName) {
         return {
@@ -479,7 +479,7 @@ class UltimateCustomerFixer {
 
     if (this.dryRun) {
       console.log(
-        "\n💡 This was a dry run. To apply actual fixes, run without --dry-run flag"
+        "\n💡 This was a dry run. To apply actual fixes, run without --dry-run flag",
       );
     } else {
       console.log("\n✅ Ultimate customer name fixes have been applied!");
@@ -489,8 +489,7 @@ class UltimateCustomerFixer {
 
 // Main execution
 async function main() {
-  const apiKey =
-    process.env.VEEQO_API_KEY || "Vqt/577d78212b6c99a6781dd844f42b284a";
+  const apiKey = process.env.VEEQO_API_KEY;
 
   if (!apiKey) {
     console.error("❌ VEEQO_API_KEY environment variable is required");

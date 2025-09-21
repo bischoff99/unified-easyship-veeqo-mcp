@@ -1,4 +1,5 @@
 # MCP Tools Reference
+
 **Project:** Unified EasyPost-Veeqo MCP Server  
 **Date:** September 18, 2025  
 **Total Tools:** 24 MCP Tools
@@ -6,6 +7,7 @@
 ## 🚚 **Shipping Tools (13 tools)**
 
 ### **Core Shipping Operations**
+
 1. **`calculate_shipping_rates`**
    - Calculate shipping rates from multiple carriers
    - Parameters: from_address, to_address, parcel, service_types (optional)
@@ -27,6 +29,7 @@
    - Returns: Same as track_shipment
 
 ### **Address & Validation**
+
 5. **`validate_address`**
    - Validate and normalize a shipping address
    - Parameters: address
@@ -38,6 +41,7 @@
    - Returns: Verified address information
 
 ### **Advanced Shipping**
+
 7. **`optimize_shipping`**
    - Advanced shipping optimization with multi-carrier analysis
    - Parameters: from_address, to_address, parcel, preferences (optional)
@@ -59,6 +63,7 @@
     - Returns: Rates for ZIP-to-ZIP shipping
 
 ### **Utility & Information**
+
 11. **`get_parcel_presets`**
     - Get predefined parcel dimensions for common package types
     - Parameters: carrier (optional)
@@ -75,6 +80,7 @@
     - Returns: Purchased shipment details
 
 ### **System & Carrier Info**
+
 14. **`get_carriers`**
     - Get list of available carriers and their services
     - Parameters: None
@@ -93,6 +99,7 @@
 ## 📦 **Inventory Tools (8 tools)**
 
 ### **Products & Orders**
+
 1. **`get_products`**
    - Retrieve products from Veeqo inventory
    - Parameters: page, per_page, search (optional)
@@ -109,6 +116,7 @@
    - Returns: Fulfillment details
 
 ### **Inventory Management**
+
 4. **`update_inventory`**
    - Update inventory levels for a product variant in Veeqo
    - Parameters: sellable_id, warehouse_id, quantity
@@ -125,6 +133,7 @@
    - Returns: Warehouse list with details
 
 ### **Business Data**
+
 7. **`get_customers`**
    - Retrieve customers from Veeqo
    - Parameters: page, per_page, search (optional)
@@ -148,6 +157,7 @@
 ## ✅ **Validation Tools (1 tool)**
 
 ### **FedEx Validation**
+
 1. **`validate_fedex_order`**
    - Validate order against FedEx shipping standards
    - Parameters: origin_address, destination_address, parcel, requested_carrier (optional), is_international (optional)
@@ -160,37 +170,42 @@
 
 ## 🔧 **Tool Categories Summary**
 
-| **Category** | **Count** | **Purpose** |
-|--------------|-----------|-------------|
-| **Shipping** | 16 tools | EasyPost integration, rate calculation, label creation, tracking |
-| **Inventory** | 10 tools | Veeqo integration, product management, order fulfillment |
-| **Validation** | 1 tool | FedEx standards compliance |
-| **System** | 2 tools | Health checks, carrier information |
-| **Total** | **29 tools** | Complete shipping and inventory management |
+| **Category**   | **Count**    | **Purpose**                                                      |
+| -------------- | ------------ | ---------------------------------------------------------------- |
+| **Shipping**   | 16 tools     | EasyPost integration, rate calculation, label creation, tracking |
+| **Inventory**  | 10 tools     | Veeqo integration, product management, order fulfillment         |
+| **Validation** | 1 tool       | FedEx standards compliance                                       |
+| **System**     | 2 tools      | Health checks, carrier information                               |
+| **Total**      | **29 tools** | Complete shipping and inventory management                       |
 
 ## 🎯 **Key Features**
 
 ### **Multi-Carrier Support**
+
 - USPS, UPS, FedEx, DHL integration
 - Carrier-specific validation
 - Service type filtering
 
 ### **International Shipping**
+
 - Customs information support
 - Country-specific restrictions
 - International rate calculation
 
 ### **Inventory Integration**
+
 - Veeqo API integration
 - Real-time inventory updates
 - Order fulfillment automation
 
 ### **Address Management**
+
 - Address validation and normalization
 - International address support
 - Format standardization
 
 ### **Advanced Features**
+
 - Shipping optimization
 - Multi-carrier rate comparison
 - Weight unit conversion
@@ -199,6 +214,7 @@
 ## 📋 **Usage Examples**
 
 ### **Calculate Shipping Rates**
+
 ```json
 {
   "from_address": {
@@ -227,6 +243,7 @@
 ```
 
 ### **Validate FedEx Order**
+
 ```json
 {
   "origin_address": {
@@ -257,5 +274,6 @@
 ```
 
 ---
+
 **MCP Tools Reference created:** September 18, 2025  
 **Status:** Complete tool inventory documented

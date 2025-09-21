@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "dev:fastmcp": "EASYPOST_API_KEY=\"mock\" VEEQO_API_KEY=\"mock\" tsx watch src/server.ts",
     "start": "node dist/server.js",
+    "start:fastmcp": "EASYPOST_API_KEY=\"mock\" VEEQO_API_KEY=\"mock\" node dist/server.js",
     "build": "tsc",
     "build:optimize": "node scripts/build-optimize.js",
     "build:production": "NODE_ENV=production pnpm run build:optimize",

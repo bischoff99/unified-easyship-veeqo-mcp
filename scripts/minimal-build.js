@@ -83,7 +83,7 @@ async function createMinimalBuild() {
       totalSize += stats.size;
       copiedFiles++;
       console.log(
-        `  ✅ ${path.basename(file)} (${(stats.size / 1024).toFixed(1)}KB)`
+        `  ✅ ${path.basename(file)} (${(stats.size / 1024).toFixed(1)}KB)`,
       );
     } catch (error) {
       console.log(`  ⚠️  ${file} not found, skipping`);
@@ -93,7 +93,7 @@ async function createMinimalBuild() {
   // Copy package.json for dependencies
   await fs.copyFile(
     path.join(projectRoot, "package.json"),
-    path.join(minimalDist, "package.json")
+    path.join(minimalDist, "package.json"),
   );
 
   // Create minimal server.js that imports from current directory
@@ -148,7 +148,7 @@ server.serve();
 
   await fs.writeFile(
     path.join(minimalDist, "build-summary.json"),
-    JSON.stringify(buildSummary, null, 2)
+    JSON.stringify(buildSummary, null, 2),
   );
 
   console.log();
@@ -182,25 +182,25 @@ async function compareBuildSizes() {
   try {
     // Get full build size
     const fullBuildSize = await getDirectorySize(
-      path.join(projectRoot, "dist")
+      path.join(projectRoot, "dist"),
     );
     console.log(
-      `📦 Full build: ${(fullBuildSize / 1024 / 1024).toFixed(2)} MB`
+      `📦 Full build: ${(fullBuildSize / 1024 / 1024).toFixed(2)} MB`,
     );
 
     // Get minimal build size
     const minimalBuildSize = await getDirectorySize(
-      path.join(projectRoot, "dist-minimal")
+      path.join(projectRoot, "dist-minimal"),
     );
     console.log(
-      `🎯 Minimal build: ${(minimalBuildSize / 1024 / 1024).toFixed(2)} MB`
+      `🎯 Minimal build: ${(minimalBuildSize / 1024 / 1024).toFixed(2)} MB`,
     );
 
     const savings = fullBuildSize - minimalBuildSize;
     const savingsPercent = ((savings / fullBuildSize) * 100).toFixed(1);
 
     console.log(
-      `💰 Space saved: ${(savings / 1024 / 1024).toFixed(2)} MB (${savingsPercent}%)`
+      `💰 Space saved: ${(savings / 1024 / 1024).toFixed(2)} MB (${savingsPercent}%)`,
     );
   } catch (error) {
     console.log("ℹ️  Could not compare sizes:", error.message);

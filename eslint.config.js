@@ -168,6 +168,7 @@ export default [
       "eslint-plugin-fastmcp/**/*",
       "node_modules/**/*",
       "dist/**/*",
+      "dist-minimal/**/*",
       "build/**/*",
       "coverage/**/*",
       "*.log",

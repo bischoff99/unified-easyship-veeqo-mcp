@@ -47,8 +47,8 @@
     "src/utils/errors.ts"
   ],
   "exclude": [
-    "node_modules", 
-    "dist", 
+    "node_modules",
+    "dist",
     "test",
     "src/server/prompts/**/*",
     "src/api/**/*",
