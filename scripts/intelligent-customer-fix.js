@@ -43,7 +43,7 @@ class IntelligentCustomerFixer {
   async fixCustomerIntelligently(customer) {
     try {
       console.log(
-        `🧠 Intelligent fix for customer ${customer.id} (${customer.email})`
+        `🧠 Intelligent fix for customer ${customer.id} (${customer.email})`,
       );
 
       const updates = {};
@@ -62,21 +62,21 @@ class IntelligentCustomerFixer {
         try {
           await this.veeqoClient.updateCustomer(
             customer.id.toString(),
-            updates
+            updates,
           );
           this.fixesApplied++;
           console.log(`   ✅ Successfully updated customer ${customer.id}`);
         } catch (error) {
           console.error(
             `   ❌ Failed to update customer ${customer.id}:`,
-            error.message
+            error.message,
           );
           this.errors.push(`Customer ${customer.id}: ${error.message}`);
         }
       } else if (needsUpdate && this.dryRun) {
         console.log(
           `   🧪 DRY RUN: Would update customer ${customer.id} with:`,
-          updates
+          updates,
         );
         this.fixesApplied++;
       } else {
@@ -85,7 +85,7 @@ class IntelligentCustomerFixer {
     } catch (error) {
       console.error(
         `   ❌ Error fixing customer ${customer.id}:`,
-        error.message
+        error.message,
       );
       this.errors.push(`Customer ${customer.id}: ${error.message}`);
     }
@@ -122,7 +122,7 @@ class IntelligentCustomerFixer {
       const professionalLastName = this.generateProfessionalLastName(customer);
       updates.last_name = professionalLastName;
       description.push(
-        `generated professional last name: ${professionalLastName}`
+        `generated professional last name: ${professionalLastName}`,
       );
     }
 
@@ -174,7 +174,7 @@ class IntelligentCustomerFixer {
 
     // Method 4: Use first name as last name if it's a common surname
     const surnameFromFirstName = this.checkIfFirstNameIsSurname(
-      customer.first_name
+      customer.first_name,
     );
     if (surnameFromFirstName) return surnameFromFirstName;
 
@@ -431,7 +431,7 @@ class IntelligentCustomerFixer {
 
     if (this.dryRun) {
       console.log(
-        "\n💡 This was a dry run. To apply actual fixes, run without --dry-run flag"
+        "\n💡 This was a dry run. To apply actual fixes, run without --dry-run flag",
       );
     } else {
       console.log("\n✅ Intelligent customer name fixes have been applied!");
@@ -441,8 +441,7 @@ class IntelligentCustomerFixer {
 
 // Main execution
 async function main() {
-  const apiKey =
-    process.env.VEEQO_API_KEY || "Vqt/577d78212b6c99a6781dd844f42b284a";
+  const apiKey = process.env.VEEQO_API_KEY;
 
   if (!apiKey) {
     console.error("❌ VEEQO_API_KEY environment variable is required");

@@ -6,7 +6,14 @@ async function debugCustomerFix() {
   try {
     console.log("🔍 Debugging Customer Fix Logic...\n");
 
-    const veeqoClient = new VeeqoClient("Vqt/577d78212b6c99a6781dd844f42b284a");
+    const apiKey = process.env.VEEQO_API_KEY;
+
+    if (!apiKey) {
+      console.error("❌ VEEQO_API_KEY environment variable is required");
+      process.exit(1);
+    }
+
+    const veeqoClient = new VeeqoClient(apiKey);
     const customers = await veeqoClient.getCustomers({ limit: 100 });
 
     customers.forEach((customer, index) => {

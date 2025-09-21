@@ -39,7 +39,7 @@ class CustomerDatabaseFixer {
     } catch (error) {
       console.error(
         "❌ Error during customer database cleanup:",
-        error.message
+        error.message,
       );
     }
   }
@@ -98,16 +98,16 @@ class CustomerDatabaseFixer {
 
     console.log("📋 Fix Plan Created:");
     console.log(
-      `   - ${fixPlan.missingNames.length} customers need name fixes`
+      `   - ${fixPlan.missingNames.length} customers need name fixes`,
     );
     console.log(
-      `   - ${fixPlan.missingBilling.length} customers need billing address fixes`
+      `   - ${fixPlan.missingBilling.length} customers need billing address fixes`,
     );
     console.log(
-      `   - ${fixPlan.missingShipping.length} customers need shipping address fixes`
+      `   - ${fixPlan.missingShipping.length} customers need shipping address fixes`,
     );
     console.log(
-      `   - ${fixPlan.duplicateEmails.size} duplicate email groups found\n`
+      `   - ${fixPlan.duplicateEmails.size} duplicate email groups found\n`,
     );
 
     return fixPlan;
@@ -139,7 +139,7 @@ class CustomerDatabaseFixer {
 
   async handleDuplicateEmails(email, customers) {
     console.log(
-      `🔄 Handling duplicate email: ${email} (${customers.length} customers)`
+      `🔄 Handling duplicate email: ${email} (${customers.length} customers)`,
     );
 
     // Find the most complete customer (keep this one)
@@ -221,14 +221,14 @@ class CustomerDatabaseFixer {
         // This would need to be implemented based on Veeqo's API capabilities
         console.log(
           `   ✅ Would update customer ${customer.id} with:`,
-          updateData
+          updateData,
         );
         this.fixesApplied++;
       }
     } catch (error) {
       console.error(
         `   ❌ Error fixing names for customer ${customer.id}:`,
-        error.message
+        error.message,
       );
       this.errors.push(`Customer ${customer.id} names: ${error.message}`);
     }
@@ -257,14 +257,14 @@ class CustomerDatabaseFixer {
         };
 
         console.log(
-          `   ✅ Would update billing address for customer ${customer.id}`
+          `   ✅ Would update billing address for customer ${customer.id}`,
         );
         this.fixesApplied++;
       }
     } catch (error) {
       console.error(
         `   ❌ Error fixing billing address for customer ${customer.id}:`,
-        error.message
+        error.message,
       );
       this.errors.push(`Customer ${customer.id} billing: ${error.message}`);
     }
@@ -289,14 +289,14 @@ class CustomerDatabaseFixer {
         };
 
         console.log(
-          `   ✅ Would add shipping address for customer ${customer.id}`
+          `   ✅ Would add shipping address for customer ${customer.id}`,
         );
         this.fixesApplied++;
       }
     } catch (error) {
       console.error(
         `   ❌ Error fixing shipping address for customer ${customer.id}:`,
-        error.message
+        error.message,
       );
       this.errors.push(`Customer ${customer.id} shipping: ${error.message}`);
     }
@@ -315,20 +315,19 @@ class CustomerDatabaseFixer {
 
     console.log("\n💡 Recommendations:");
     console.log(
-      "   1. Review duplicate customers and merge or delete as needed"
+      "   1. Review duplicate customers and merge or delete as needed",
     );
     console.log("   2. Implement proper customer data validation on creation");
     console.log("   3. Add data quality checks to prevent future issues");
     console.log(
-      "   4. Consider implementing customer data import/export for bulk fixes"
+      "   4. Consider implementing customer data import/export for bulk fixes",
     );
   }
 }
 
 // Main execution
 async function main() {
-  const apiKey =
-    process.env.VEEQO_API_KEY || "Vqt/577d78212b6c99a6781dd844f42b284a";
+  const apiKey = process.env.VEEQO_API_KEY;
 
   if (!apiKey) {
     console.error("❌ VEEQO_API_KEY environment variable is required");

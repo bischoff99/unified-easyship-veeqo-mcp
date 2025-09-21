@@ -172,7 +172,7 @@ export class EasyPostClient {
     fromAddress: EasyPostAddress,
     toAddress: EasyPostAddress,
     parcel: EasyPostParcel,
-    customsInfo?: any
+    customsInfo?: any,
   ): Promise<EasyPostShipment> {
     if (this.mockMode) {
       return this.getMockShipment(fromAddress, toAddress, parcel);
@@ -195,7 +195,7 @@ export class EasyPostClient {
       const response = await this.makeRequest(
         "POST",
         "/shipments",
-        shipmentData
+        shipmentData,
       );
 
       logger.info({ shipmentId: response.id }, "Shipment created successfully");
@@ -203,7 +203,7 @@ export class EasyPostClient {
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to create shipment"
+        "Failed to create shipment",
       );
       throw error;
     }
@@ -217,7 +217,7 @@ export class EasyPostClient {
     toAddress: EasyPostAddress,
     parcel: EasyPostParcel,
     carriers?: string[],
-    customsInfo?: any
+    customsInfo?: any,
   ): Promise<EasyPostRate[]> {
     if (this.mockMode) {
       return this.getMockRates(fromAddress, toAddress, parcel, carriers);
@@ -228,7 +228,7 @@ export class EasyPostClient {
         fromAddress,
         toAddress,
         parcel,
-        customsInfo
+        customsInfo,
       );
 
       // Filter rates by carriers if specified
@@ -236,8 +236,8 @@ export class EasyPostClient {
       if (carriers && carriers.length > 0) {
         rates = rates.filter((rate) =>
           carriers.some((carrier) =>
-            rate.carrier.toLowerCase().includes(carrier.toLowerCase())
-          )
+            rate.carrier.toLowerCase().includes(carrier.toLowerCase()),
+          ),
         );
       }
 
@@ -246,7 +246,7 @@ export class EasyPostClient {
           count: rates.length,
           carriers: carriers,
         },
-        "Rates retrieved successfully"
+        "Rates retrieved successfully",
       );
       return rates;
     } catch (error) {
@@ -296,7 +296,7 @@ export class EasyPostClient {
     parcel: EasyPostParcel,
     carrier: string,
     service: string,
-    customsInfo?: any
+    customsInfo?: any,
   ): Promise<any> {
     if (this.mockMode) {
       return this.getMockLabel(
@@ -304,7 +304,7 @@ export class EasyPostClient {
         toAddress,
         parcel,
         carrier,
-        service
+        service,
       );
     }
 
@@ -313,19 +313,19 @@ export class EasyPostClient {
         fromAddress,
         toAddress,
         parcel,
-        customsInfo
+        customsInfo,
       );
 
       // Find the selected rate
       const selectedRate = shipment.rates.find(
         (rate) =>
           rate.carrier.toLowerCase().includes(carrier.toLowerCase()) &&
-          rate.service.toLowerCase().includes(service.toLowerCase())
+          rate.service.toLowerCase().includes(service.toLowerCase()),
       );
 
       if (!selectedRate) {
         throw new Error(
-          `No rate found for carrier ${carrier} and service ${service}`
+          `No rate found for carrier ${carrier} and service ${service}`,
         );
       }
 
@@ -335,7 +335,7 @@ export class EasyPostClient {
         `/shipments/${shipment.id}/buy`,
         {
           rate: { id: selectedRate.id },
-        }
+        },
       );
 
       logger.info(
@@ -344,7 +344,7 @@ export class EasyPostClient {
           carrier: response.selected_rate.carrier,
           service: response.selected_rate.service,
         },
-        "Label created successfully"
+        "Label created successfully",
       );
 
       return {
@@ -357,7 +357,7 @@ export class EasyPostClient {
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to create label"
+        "Failed to create label",
       );
       throw error;
     }
@@ -383,7 +383,7 @@ export class EasyPostClient {
           trackingCode,
           status: response.status,
         },
-        "Shipment tracked successfully"
+        "Shipment tracked successfully",
       );
 
       return response;
@@ -393,7 +393,7 @@ export class EasyPostClient {
           error: (error as Error).message,
           trackingCode,
         },
-        "Failed to track shipment"
+        "Failed to track shipment",
       );
       throw error;
     }
@@ -424,14 +424,14 @@ export class EasyPostClient {
           addressId: response.id,
           verified: response.verifications,
         },
-        "Address verified successfully"
+        "Address verified successfully",
       );
 
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to verify address"
+        "Failed to verify address",
       );
       throw error;
     }
@@ -453,13 +453,13 @@ export class EasyPostClient {
       const response = await this.makeRequest("GET", "/parcels");
       logger.info(
         { count: response.length },
-        "Parcel presets retrieved successfully"
+        "Parcel presets retrieved successfully",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to get parcel presets"
+        "Failed to get parcel presets",
       );
       throw error;
     }
@@ -471,17 +471,17 @@ export class EasyPostClient {
   private async makeRequest(
     method: string,
     endpoint: string,
-    data?: any
+    data?: any,
   ): Promise<any> {
     return this.circuitBreaker.execute(() =>
-      this._makeRequestInternal(method, endpoint, data)
+      this._makeRequestInternal(method, endpoint, data),
     );
   }
 
   private async _makeRequestInternal(
     method: string,
     endpoint: string,
-    data?: any
+    data?: any,
   ): Promise<any> {
     const url = `${this.baseUrl}${endpoint}`;
     const headers: Record<string, string> = {
@@ -521,7 +521,7 @@ export class EasyPostClient {
           ErrorCode.API_ERROR,
           `${errorMessage}`,
           { status: response.status, service: "easypost" },
-          response.status
+          response.status,
         );
 
         this.errorCollector.add(apiError);
@@ -567,7 +567,7 @@ export class EasyPostClient {
   private getMockShipment(
     toAddress: EasyPostAddress,
     fromAddress: EasyPostAddress,
-    parcel: EasyPostParcel
+    parcel: EasyPostParcel,
   ): EasyPostShipment {
     return {
       id: "shp_mock_" + Date.now(),
@@ -591,7 +591,7 @@ export class EasyPostClient {
     _toAddress: EasyPostAddress,
     _fromAddress: EasyPostAddress,
     _parcel: EasyPostParcel,
-    carriers?: string[]
+    carriers?: string[],
   ): EasyPostRate[] {
     const allRates: EasyPostRate[] = [
       {
@@ -659,8 +659,8 @@ export class EasyPostClient {
     if (carriers && carriers.length > 0) {
       return allRates.filter((rate) =>
         carriers.some((carrier) =>
-          rate.carrier.toLowerCase().includes(carrier.toLowerCase())
-        )
+          rate.carrier.toLowerCase().includes(carrier.toLowerCase()),
+        ),
       );
     }
 
@@ -672,7 +672,7 @@ export class EasyPostClient {
     _fromAddress: EasyPostAddress,
     _parcel: EasyPostParcel,
     carrier: string,
-    service: string
+    service: string,
   ): any {
     return {
       tracking_code:
@@ -735,13 +735,13 @@ export class EasyPostClient {
       const response = await this.makeRequest("GET", "/carriers");
       logger.info(
         { carrierCount: response.length },
-        "Retrieved available carriers"
+        "Retrieved available carriers",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to fetch carriers"
+        "Failed to fetch carriers",
       );
       throw error;
     }
@@ -755,7 +755,7 @@ export class EasyPostClient {
     toAddress: EasyPostAddress,
     parcel: EasyPostParcel,
     carrierNames: string[] = ["USPS", "UPS", "FedEx", "DHL"],
-    customsInfo?: any
+    customsInfo?: any,
   ): Promise<EasyPostRate[]> {
     if (this.mockMode) {
       return this.getMockRatesByCarriers(carrierNames);
@@ -766,12 +766,12 @@ export class EasyPostClient {
         fromAddress,
         toAddress,
         parcel,
-        customsInfo
+        customsInfo,
       );
 
       // Filter rates by requested carriers
       const filteredRates = shipment.rates.filter((rate) =>
-        carrierNames.includes(rate.carrier.toUpperCase())
+        carrierNames.includes(rate.carrier.toUpperCase()),
       );
 
       logger.info(
@@ -780,7 +780,7 @@ export class EasyPostClient {
           foundRates: filteredRates.length,
           totalRates: shipment.rates.length,
         },
-        "Retrieved carrier-specific rates"
+        "Retrieved carrier-specific rates",
       );
 
       return filteredRates;
@@ -790,7 +790,7 @@ export class EasyPostClient {
           error: (error as Error).message,
           carriers: carrierNames,
         },
-        "Failed to get rates by carriers"
+        "Failed to get rates by carriers",
       );
       throw error;
     }
@@ -803,7 +803,7 @@ export class EasyPostClient {
     toAddress: EasyPostAddress,
     fromAddress: EasyPostAddress,
     parcel: EasyPostParcel,
-    customsInfo?: EasyPostCustomsInfo
+    customsInfo?: EasyPostCustomsInfo,
   ): Promise<EasyPostRate[]> {
     if (this.mockMode) {
       return this.getMockInternationalRates();
@@ -826,7 +826,7 @@ export class EasyPostClient {
       const response = await this.makeRequest(
         "POST",
         "/shipments",
-        shipmentData
+        shipmentData,
       );
 
       // Filter for international services
@@ -834,7 +834,7 @@ export class EasyPostClient {
         (rate: EasyPostRate) =>
           rate.service.toLowerCase().includes("international") ||
           rate.service.toLowerCase().includes("express") ||
-          toAddress.country !== fromAddress.country
+          toAddress.country !== fromAddress.country,
       );
 
       logger.info(
@@ -844,7 +844,7 @@ export class EasyPostClient {
           internationalRates: internationalRates.length,
           totalRates: response.rates.length,
         },
-        "Retrieved international shipping rates"
+        "Retrieved international shipping rates",
       );
 
       return internationalRates;
@@ -854,7 +854,7 @@ export class EasyPostClient {
           error: (error as Error).message,
           destination: toAddress.country,
         },
-        "Failed to get international rates"
+        "Failed to get international rates",
       );
       throw error;
     }
@@ -872,13 +872,13 @@ export class EasyPostClient {
       const response = await this.makeRequest("GET", "/carrier_accounts");
       logger.info(
         { accountCount: response.length },
-        "Retrieved carrier accounts"
+        "Retrieved carrier accounts",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to fetch carrier accounts"
+        "Failed to fetch carrier accounts",
       );
       throw error;
     }
@@ -897,13 +897,13 @@ export class EasyPostClient {
       const addresses = response.addresses || response;
       logger.info(
         { addressCount: addresses.length },
-        "Retrieved addresses from EasyPost"
+        "Retrieved addresses from EasyPost",
       );
       return addresses;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to fetch addresses"
+        "Failed to fetch addresses",
       );
       throw error;
     }
@@ -915,7 +915,7 @@ export class EasyPostClient {
   async purchaseShipmentWithCarrier(
     shipmentId: string,
     carrier: string,
-    service: string
+    service: string,
   ): Promise<EasyPostShipment> {
     if (this.mockMode) {
       return this.getMockPurchasedShipment(carrier, service);
@@ -925,13 +925,13 @@ export class EasyPostClient {
       // Find the rate for the specific carrier and service
       const shipment = await this.makeRequest(
         "GET",
-        `/shipments/${shipmentId}`
+        `/shipments/${shipmentId}`,
       );
 
       const targetRate = shipment.rates.find(
         (rate: EasyPostRate) =>
           rate.carrier.toUpperCase() === carrier.toUpperCase() &&
-          rate.service.toLowerCase() === service.toLowerCase()
+          rate.service.toLowerCase() === service.toLowerCase(),
       );
 
       if (!targetRate) {
@@ -943,7 +943,7 @@ export class EasyPostClient {
         `/shipments/${shipmentId}/buy`,
         {
           rate: targetRate,
-        }
+        },
       );
 
       logger.info(
@@ -953,7 +953,7 @@ export class EasyPostClient {
           service: response.selected_rate.service,
           cost: response.selected_rate.rate,
         },
-        "Shipment purchased successfully"
+        "Shipment purchased successfully",
       );
 
       return response;
@@ -965,7 +965,7 @@ export class EasyPostClient {
           carrier,
           service,
         },
-        "Failed to purchase shipment"
+        "Failed to purchase shipment",
       );
       throw error;
     }
@@ -1110,8 +1110,8 @@ export class EasyPostClient {
 
     return allRates.filter((rate) =>
       carrierNames.some(
-        (carrier) => carrier.toUpperCase() === rate.carrier.toUpperCase()
-      )
+        (carrier) => carrier.toUpperCase() === rate.carrier.toUpperCase(),
+      ),
     );
   }
 
@@ -1314,7 +1314,7 @@ export class EasyPostClient {
 
   private getMockPurchasedShipment(
     carrier: string,
-    service: string
+    service: string,
   ): EasyPostShipment {
     return {
       id: `shp_${carrier.toLowerCase()}_${Date.now()}`,

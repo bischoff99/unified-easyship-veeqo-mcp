@@ -1,8 +1,8 @@
 {
   "folders": [
     {
-      "path": "."
-    }
+      "path": ".",
+    },
   ],
   "settings": {
     "typescript.preferences.importModuleSpecifier": "relative",
@@ -11,29 +11,27 @@
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
-      "source.organizeImports": "explicit"
+      "source.organizeImports": "explicit",
     },
     "files.associations": {
       "*.env*": "properties",
-      "Dockerfile*": "dockerfile"
+      "Dockerfile*": "dockerfile",
     },
     "search.exclude": {
       "**/node_modules": true,
       "**/dist": true,
       "**/coverage": true,
       "**/.git": true,
-      "**/pnpm-lock.yaml": true
+      "**/pnpm-lock.yaml": true,
     },
     "files.exclude": {
       "**/node_modules": true,
       "**/dist": false,
-      "**/coverage": true
+      "**/coverage": true,
     },
-    "eslint.workingDirectories": [
-      "."
-    ],
+    "eslint.workingDirectories": ["."],
     "vitest.enable": true,
-    "testing.automaticallyOpenPeekView": "never"
+    "testing.automaticallyOpenPeekView": "never",
   },
   "extensions": {
     "recommendations": [
@@ -44,8 +42,8 @@
       "ms-vscode.test-adapter-converter",
       "bradlc.vscode-tailwindcss",
       "ms-vscode.vscode-json",
-      "redhat.vscode-yaml"
-    ]
+      "redhat.vscode-yaml",
+    ],
   },
   "tasks": {
     "version": "2.0.0",
@@ -60,9 +58,9 @@
           "echo": true,
           "reveal": "always",
           "focus": false,
-          "panel": "shared"
+          "panel": "shared",
         },
-        "problemMatcher": ["$tsc-watch"]
+        "problemMatcher": ["$tsc-watch"],
       },
       {
         "label": "build",
@@ -71,15 +69,15 @@
         "args": ["run", "build"],
         "group": {
           "kind": "build",
-          "isDefault": true
+          "isDefault": true,
         },
         "presentation": {
           "echo": true,
           "reveal": "silent",
           "focus": false,
-          "panel": "shared"
+          "panel": "shared",
         },
-        "problemMatcher": ["$tsc"]
+        "problemMatcher": ["$tsc"],
       },
       {
         "label": "test",
@@ -88,14 +86,14 @@
         "args": ["test"],
         "group": {
           "kind": "test",
-          "isDefault": true
+          "isDefault": true,
         },
         "presentation": {
           "echo": true,
           "reveal": "always",
           "focus": false,
-          "panel": "shared"
-        }
+          "panel": "shared",
+        },
       },
       {
         "label": "lint",
@@ -107,11 +105,11 @@
           "echo": true,
           "reveal": "silent",
           "focus": false,
-          "panel": "shared"
+          "panel": "shared",
         },
-        "problemMatcher": ["$eslint-stylish"]
-      }
-    ]
+        "problemMatcher": ["$eslint-stylish"],
+      },
+    ],
   },
   "launch": {
     "version": "0.2.0",
@@ -121,21 +119,16 @@
         "type": "node",
         "request": "launch",
         "program": "${workspaceFolder}/src/server.ts",
-        "runtimeArgs": [
-          "--loader",
-          "tsx/esm"
-        ],
+        "runtimeArgs": ["--loader", "tsx/esm"],
         "env": {
-          "NODE_ENV": "development"
+          "NODE_ENV": "development",
         },
         "envFile": "${workspaceFolder}/.env",
         "console": "integratedTerminal",
         "sourceMaps": true,
         "restart": true,
         "protocol": "inspector",
-        "outFiles": [
-          "${workspaceFolder}/dist/**/*.js"
-        ]
+        "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       },
       {
         "name": "Debug Tests",
@@ -144,11 +137,11 @@
         "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
         "args": ["run"],
         "env": {
-          "NODE_ENV": "test"
+          "NODE_ENV": "test",
         },
         "console": "integratedTerminal",
-        "sourceMaps": true
-      }
-    ]
-  }
+        "sourceMaps": true,
+      },
+    ],
+  },
 }

@@ -350,7 +350,7 @@ export class VeeqoClient {
    */
   async getInventoryLevels(
     productIds?: string[],
-    locationIds?: string[]
+    locationIds?: string[],
   ): Promise<VeeqoInventoryLevel[]> {
     if (this.mockMode) {
       return this.getMockInventoryLevels(productIds, locationIds);
@@ -408,14 +408,14 @@ export class VeeqoClient {
           productIds: productIds?.length || "all",
           locationIds: locationIds?.length || "all",
         },
-        "Inventory levels retrieved successfully"
+        "Inventory levels retrieved successfully",
       );
 
       return inventoryLevels;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to get inventory levels"
+        "Failed to get inventory levels",
       );
       throw error;
     }
@@ -432,7 +432,7 @@ export class VeeqoClient {
    * Update inventory levels
    */
   async updateInventoryLevels(
-    updates: VeeqoInventoryUpdate[]
+    updates: VeeqoInventoryUpdate[],
   ): Promise<VeeqoInventoryUpdateResult[]> {
     if (this.mockMode) {
       return this.getMockInventoryUpdateResults(updates);
@@ -477,14 +477,14 @@ export class VeeqoClient {
           successful: results.filter((r) => r.success).length,
           failed: results.filter((r) => !r.success).length,
         },
-        "Inventory levels updated"
+        "Inventory levels updated",
       );
 
       return results;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to update inventory levels"
+        "Failed to update inventory levels",
       );
       throw error;
     }
@@ -495,7 +495,7 @@ export class VeeqoClient {
    */
   async getProducts(
     limit: number = 100,
-    page: number = 1
+    page: number = 1,
   ): Promise<VeeqoProduct[]> {
     if (this.mockMode) {
       return this.getMockProducts();
@@ -516,14 +516,14 @@ export class VeeqoClient {
           page,
           limit,
         },
-        "Products retrieved successfully"
+        "Products retrieved successfully",
       );
 
       return products;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to get products"
+        "Failed to get products",
       );
       throw error;
     }
@@ -545,7 +545,7 @@ export class VeeqoClient {
     } catch (error) {
       logger.error(
         { error: (error as Error).message, productId },
-        "Failed to get product"
+        "Failed to get product",
       );
       throw error;
     }
@@ -557,7 +557,7 @@ export class VeeqoClient {
   async getOrders(
     limit: number = 100,
     page: number = 1,
-    status?: string
+    status?: string,
   ): Promise<VeeqoOrder[]> {
     if (this.mockMode) {
       return this.getMockOrders();
@@ -583,7 +583,7 @@ export class VeeqoClient {
           limit,
           status,
         },
-        "Orders retrieved successfully"
+        "Orders retrieved successfully",
       );
 
       return orders;
@@ -609,7 +609,7 @@ export class VeeqoClient {
     } catch (error) {
       logger.error(
         { error: (error as Error).message, orderId },
-        "Failed to get order"
+        "Failed to get order",
       );
       throw error;
     }
@@ -677,13 +677,13 @@ export class VeeqoClient {
 
       logger.info(
         { count: fixedCustomers.length },
-        "Customers retrieved successfully"
+        "Customers retrieved successfully",
       );
       return fixedCustomers;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to get customers"
+        "Failed to get customers",
       );
       throw error;
     }
@@ -708,18 +708,18 @@ export class VeeqoClient {
       const response = await this.makeRequest(
         "PUT",
         `/customers/${customerId}`,
-        formattedData
+        formattedData,
       );
 
       logger.info(
         { customerId, updatedFields: Object.keys(updateData) },
-        "Customer updated successfully"
+        "Customer updated successfully",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, customerId },
-        "Failed to update customer"
+        "Failed to update customer",
       );
       throw error;
     }
@@ -808,13 +808,13 @@ export class VeeqoClient {
 
       logger.info(
         { count: suppliers.length },
-        "Suppliers retrieved successfully"
+        "Suppliers retrieved successfully",
       );
       return suppliers;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to get suppliers"
+        "Failed to get suppliers",
       );
       throw error;
     }
@@ -834,13 +834,13 @@ export class VeeqoClient {
 
       logger.info(
         { count: carriers.length },
-        "Carriers retrieved successfully"
+        "Carriers retrieved successfully",
       );
       return carriers;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to get carriers"
+        "Failed to get carriers",
       );
       throw error;
     }
@@ -860,13 +860,13 @@ export class VeeqoClient {
 
       logger.info(
         { count: channels.length },
-        "Channels retrieved successfully"
+        "Channels retrieved successfully",
       );
       return channels;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to get channels"
+        "Failed to get channels",
       );
       throw error;
     }
@@ -886,13 +886,13 @@ export class VeeqoClient {
 
       logger.info(
         { count: locations.length },
-        "Locations retrieved successfully"
+        "Locations retrieved successfully",
       );
       return locations;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to get locations"
+        "Failed to get locations",
       );
       throw error;
     }
@@ -916,7 +916,7 @@ export class VeeqoClient {
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to create order"
+        "Failed to create order",
       );
       throw error;
     }
@@ -927,7 +927,7 @@ export class VeeqoClient {
    */
   async updateOrder(
     orderId: string,
-    orderData: VeeqoOrderUpdate
+    orderData: VeeqoOrderUpdate,
   ): Promise<VeeqoOrder> {
     if (this.mockMode) {
       return this.getMockOrder(orderId);
@@ -943,7 +943,7 @@ export class VeeqoClient {
     } catch (error) {
       logger.error(
         { error: (error as Error).message, orderId },
-        "Failed to update order"
+        "Failed to update order",
       );
       throw error;
     }
@@ -975,7 +975,7 @@ export class VeeqoClient {
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to create customer"
+        "Failed to create customer",
       );
       throw error;
     }
@@ -986,7 +986,7 @@ export class VeeqoClient {
    */
   async getDemandForecast(
     locationId?: string,
-    days: number = 30
+    days: number = 30,
   ): Promise<any[]> {
     if (this.mockMode) {
       return this.getMockDemandForecast();
@@ -1003,7 +1003,7 @@ export class VeeqoClient {
 
       const response = await this.makeRequest(
         "GET",
-        `/demand_forecast?${params}`
+        `/demand_forecast?${params}`,
       );
 
       logger.info(
@@ -1012,14 +1012,14 @@ export class VeeqoClient {
           locationId,
           days,
         },
-        "Demand forecast retrieved successfully"
+        "Demand forecast retrieved successfully",
       );
 
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to get demand forecast"
+        "Failed to get demand forecast",
       );
       throw error;
     }
@@ -1031,17 +1031,17 @@ export class VeeqoClient {
   private async makeRequest(
     method: string,
     endpoint: string,
-    data?: any
+    data?: any,
   ): Promise<any> {
     return this.circuitBreaker.execute(() =>
-      this._makeRequestInternal(method, endpoint, data)
+      this._makeRequestInternal(method, endpoint, data),
     );
   }
 
   private async _makeRequestInternal(
     method: string,
     endpoint: string,
-    data?: any
+    data?: any,
   ): Promise<any> {
     const url = `${this.baseUrl}${endpoint}`;
     const headers: Record<string, string> = {
@@ -1089,7 +1089,7 @@ export class VeeqoClient {
       if ((error as Error).name === "AbortError") {
         const timeoutError = handleApiError(
           { code: "ETIMEDOUT", message: "Request timeout" },
-          "veeqo"
+          "veeqo",
         );
         this.errorCollector.add(timeoutError);
         throw timeoutError;
@@ -1130,7 +1130,7 @@ export class VeeqoClient {
   private async makeRequestWithRetry(
     method: string,
     endpoint: string,
-    data?: any
+    data?: any,
   ): Promise<any> {
     return withRetry(() => this.makeRequest(method, endpoint, data), {
       maxAttempts: 3,
@@ -1157,7 +1157,7 @@ export class VeeqoClient {
    */
   private getMockInventoryLevels(
     productIds?: string[],
-    locationIds?: string[]
+    locationIds?: string[],
   ): VeeqoInventoryLevel[] {
     const mockData: VeeqoInventoryLevel[] = [
       {
@@ -1217,13 +1217,13 @@ export class VeeqoClient {
 
     if (productIds) {
       filtered = filtered.filter((item) =>
-        productIds.includes(item.product_id.toString())
+        productIds.includes(item.product_id.toString()),
       );
     }
 
     if (locationIds) {
       filtered = filtered.filter((item) =>
-        locationIds.includes(item.location_id.toString())
+        locationIds.includes(item.location_id.toString()),
       );
     }
 
@@ -1231,7 +1231,7 @@ export class VeeqoClient {
   }
 
   private getMockInventoryUpdateResults(
-    updates: VeeqoInventoryUpdate[]
+    updates: VeeqoInventoryUpdate[],
   ): VeeqoInventoryUpdateResult[] {
     return updates.map((update) => ({
       product_id: update.product_id,
@@ -1462,13 +1462,13 @@ export class VeeqoClient {
           title: response.title,
           sku: response.sku,
         },
-        "Product created successfully"
+        "Product created successfully",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, productData },
-        "Failed to create product"
+        "Failed to create product",
       );
       throw error;
     }
@@ -1479,7 +1479,7 @@ export class VeeqoClient {
    */
   async updateProduct(
     productId: string,
-    updates: VeeqoProductUpdate
+    updates: VeeqoProductUpdate,
   ): Promise<VeeqoProduct> {
     if (this.mockMode) {
       return this.getMockUpdatedProduct(productId, updates);
@@ -1494,13 +1494,13 @@ export class VeeqoClient {
           productId: response.id,
           updates: Object.keys(updates),
         },
-        "Product updated successfully"
+        "Product updated successfully",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, productId, updates },
-        "Failed to update product"
+        "Failed to update product",
       );
       throw error;
     }
@@ -1521,7 +1521,7 @@ export class VeeqoClient {
     } catch (error) {
       logger.error(
         { error: (error as Error).message, productId },
-        "Failed to delete product"
+        "Failed to delete product",
       );
       throw error;
     }
@@ -1532,7 +1532,7 @@ export class VeeqoClient {
    */
   async createProductVariant(
     productId: string,
-    variantData: VeeqoVariantCreate
+    variantData: VeeqoVariantCreate,
   ): Promise<VeeqoVariant> {
     if (this.mockMode) {
       return this.getMockCreatedVariant(productId, variantData);
@@ -1542,7 +1542,7 @@ export class VeeqoClient {
       const response = await this.makeRequest(
         "POST",
         `/products/${productId}/variants`,
-        { variant: variantData }
+        { variant: variantData },
       );
       logger.info(
         {
@@ -1550,13 +1550,13 @@ export class VeeqoClient {
           productId,
           sku: response.sku,
         },
-        "Product variant created successfully"
+        "Product variant created successfully",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, productId, variantData },
-        "Failed to create product variant"
+        "Failed to create product variant",
       );
       throw error;
     }
@@ -1567,7 +1567,7 @@ export class VeeqoClient {
    */
   async updateProductVariant(
     variantId: string,
-    updates: VeeqoVariantUpdate
+    updates: VeeqoVariantUpdate,
   ): Promise<VeeqoVariant> {
     if (this.mockMode) {
       return this.getMockUpdatedVariant(variantId, updates);
@@ -1582,13 +1582,13 @@ export class VeeqoClient {
           variantId: response.id,
           updates: Object.keys(updates),
         },
-        "Product variant updated successfully"
+        "Product variant updated successfully",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, variantId, updates },
-        "Failed to update product variant"
+        "Failed to update product variant",
       );
       throw error;
     }
@@ -1602,7 +1602,7 @@ export class VeeqoClient {
    * Create a new warehouse/location
    */
   async createLocation(
-    locationData: VeeqoLocationCreate
+    locationData: VeeqoLocationCreate,
   ): Promise<VeeqoLocation> {
     if (this.mockMode) {
       return this.getMockCreatedLocation(locationData);
@@ -1617,13 +1617,13 @@ export class VeeqoClient {
           locationId: response.id,
           name: response.name,
         },
-        "Location created successfully"
+        "Location created successfully",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, locationData },
-        "Failed to create location"
+        "Failed to create location",
       );
       throw error;
     }
@@ -1634,7 +1634,7 @@ export class VeeqoClient {
    */
   async updateLocation(
     locationId: string,
-    updates: VeeqoLocationUpdate
+    updates: VeeqoLocationUpdate,
   ): Promise<VeeqoLocation> {
     if (this.mockMode) {
       return this.getMockUpdatedLocation(locationId, updates);
@@ -1644,20 +1644,20 @@ export class VeeqoClient {
       const response = await this.makeRequest(
         "PUT",
         `/locations/${locationId}`,
-        { location: updates }
+        { location: updates },
       );
       logger.info(
         {
           locationId: response.id,
           updates: Object.keys(updates),
         },
-        "Location updated successfully"
+        "Location updated successfully",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, locationId, updates },
-        "Failed to update location"
+        "Failed to update location",
       );
       throw error;
     }
@@ -1678,7 +1678,7 @@ export class VeeqoClient {
     } catch (error) {
       logger.error(
         { error: (error as Error).message, locationId },
-        "Failed to delete location"
+        "Failed to delete location",
       );
       throw error;
     }
@@ -1692,7 +1692,7 @@ export class VeeqoClient {
    * Create a shipment using the working Veeqo workflow
    */
   async createShipment(
-    shipmentData: VeeqoShipmentCreate
+    shipmentData: VeeqoShipmentCreate,
   ): Promise<VeeqoShipment> {
     if (this.mockMode) {
       return this.getMockCreatedShipment(shipmentData);
@@ -1701,7 +1701,7 @@ export class VeeqoClient {
     try {
       logger.info(
         { orderId: shipmentData.order_id },
-        "Creating international shipment"
+        "Creating international shipment",
       );
 
       // If using quote data, try creating shipment via allocation first
@@ -1714,7 +1714,7 @@ export class VeeqoClient {
             sub_carrier_id: shipmentData.quote_data.sub_carrier_id,
             service_carrier: shipmentData.quote_data.service_carrier,
             total_net_charge: parseFloat(
-              shipmentData.quote_data.total_net_charge
+              shipmentData.quote_data.total_net_charge,
             ),
             base_rate: parseFloat(shipmentData.quote_data.base_rate),
             service_type:
@@ -1725,18 +1725,18 @@ export class VeeqoClient {
 
           logger.info(
             { shipmentPayload },
-            "Attempting quote-based shipment creation"
+            "Attempting quote-based shipment creation",
           );
 
           const quoteResponse = await this.makeRequest(
             "POST",
             "/shipping/shipments",
-            shipmentPayload
+            shipmentPayload,
           );
 
           logger.info(
             { shipmentId: quoteResponse.id },
-            "Quote-based shipment created successfully"
+            "Quote-based shipment created successfully",
           );
           return quoteResponse;
         } catch (quoteError) {
@@ -1745,7 +1745,7 @@ export class VeeqoClient {
               error: (quoteError as Error).message,
               orderId: shipmentData.order_id,
             },
-            "Quote-based shipment failed, falling back to order update"
+            "Quote-based shipment failed, falling back to order update",
           );
         }
       }
@@ -1761,13 +1761,13 @@ export class VeeqoClient {
 
       logger.info(
         { orderId: shipmentData.order_id, updateData },
-        "Creating shipment via order update"
+        "Creating shipment via order update",
       );
 
       const response = await this.makeRequest(
         "PUT",
         `/orders/${shipmentData.order_id}`,
-        updateData
+        updateData,
       );
 
       // Create a shipment-like response from the updated order
@@ -1798,14 +1798,14 @@ export class VeeqoClient {
           carrier: shipmentResponse.carrier,
           status: response.status,
         },
-        "Shipment created successfully by updating order"
+        "Shipment created successfully by updating order",
       );
 
       return shipmentResponse;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, shipmentData },
-        "Failed to create shipment"
+        "Failed to create shipment",
       );
       throw error;
     }
@@ -1816,7 +1816,7 @@ export class VeeqoClient {
    */
   async updateShipment(
     shipmentId: string,
-    updates: VeeqoShipmentUpdate
+    updates: VeeqoShipmentUpdate,
   ): Promise<VeeqoShipment> {
     if (this.mockMode) {
       return this.getMockUpdatedShipment(shipmentId, updates);
@@ -1826,20 +1826,20 @@ export class VeeqoClient {
       const response = await this.makeRequest(
         "PUT",
         `/shipments/${shipmentId}`,
-        { shipment: updates }
+        { shipment: updates },
       );
       logger.info(
         {
           shipmentId: response.id,
           updates: Object.keys(updates),
         },
-        "Shipment updated successfully"
+        "Shipment updated successfully",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, shipmentId, updates },
-        "Failed to update shipment"
+        "Failed to update shipment",
       );
       throw error;
     }
@@ -1859,14 +1859,14 @@ export class VeeqoClient {
         `/shipments/${shipmentId}`,
         {
           shipment: { status: "cancelled" },
-        }
+        },
       );
       logger.info({ shipmentId }, "Shipment cancelled successfully");
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, shipmentId },
-        "Failed to cancel shipment"
+        "Failed to cancel shipment",
       );
       throw error;
     }
@@ -1877,7 +1877,7 @@ export class VeeqoClient {
    */
   async createPartialShipment(
     orderId: string,
-    items: Array<{ product_id: number; variant_id: number; quantity: number }>
+    items: Array<{ product_id: number; variant_id: number; quantity: number }>,
   ): Promise<VeeqoShipment> {
     const shipmentData: VeeqoShipmentCreate = {
       order_id: parseInt(orderId),
@@ -1898,13 +1898,13 @@ export class VeeqoClient {
           orderId,
           itemCount: items.length,
         },
-        "Partial shipment created successfully"
+        "Partial shipment created successfully",
       );
       return response;
     } catch (error) {
       logger.error(
         { error: (error as Error).message, orderId, items },
-        "Failed to create partial shipment"
+        "Failed to create partial shipment",
       );
       throw error;
     }
@@ -1961,7 +1961,7 @@ export class VeeqoClient {
           customer: data.customer.email,
           destination: data.customer.address.country,
         },
-        "Starting international shipment workflow"
+        "Starting international shipment workflow",
       );
 
       // Step 1: Create or get customer
@@ -2040,11 +2040,11 @@ export class VeeqoClient {
 
       const updatedOrder = await this.updateOrder(
         order.id.toString(),
-        addressUpdateData
+        addressUpdateData,
       );
       logger.info(
         { orderId: updatedOrder.id },
-        "Order updated with delivery address"
+        "Order updated with delivery address",
       );
 
       // Step 4: Get shipping quotes for the allocation
@@ -2058,17 +2058,17 @@ export class VeeqoClient {
           // Get shipping quotes using amazon_shipping_v2 carrier
           const quotesResponse = await this.makeRequest(
             "GET",
-            `/shipping/quotes/amazon_shipping_v2?allocation_id=${allocationId}&from_allocation_package=true`
+            `/shipping/quotes/amazon_shipping_v2?allocation_id=${allocationId}&from_allocation_package=true`,
           );
           quotes = Array.isArray(quotesResponse) ? quotesResponse : [];
           logger.info(
             { allocationId, quoteCount: quotes.length },
-            "Retrieved shipping quotes"
+            "Retrieved shipping quotes",
           );
         } catch (quoteError) {
           logger.warn(
             { error: (quoteError as Error).message, allocationId },
-            "Failed to retrieve quotes"
+            "Failed to retrieve quotes",
           );
         }
       }
@@ -2107,7 +2107,7 @@ export class VeeqoClient {
             cost: bestQuote.total_net_charge,
             carrier: bestQuote.service_carrier,
           },
-          "Using best quote for shipment creation"
+          "Using best quote for shipment creation",
         );
       }
 
@@ -2117,7 +2117,7 @@ export class VeeqoClient {
           shipmentId: shipment.id,
           trackingNumber: shipment.tracking_number,
         },
-        "International shipment created successfully"
+        "International shipment created successfully",
       );
 
       return {
@@ -2129,7 +2129,7 @@ export class VeeqoClient {
     } catch (error) {
       logger.error(
         { error: (error as Error).message },
-        "Failed to create international shipment"
+        "Failed to create international shipment",
       );
       throw error;
     }
@@ -2159,7 +2159,7 @@ export class VeeqoClient {
 
   private getMockUpdatedProduct(
     productId: string,
-    updates: VeeqoProductUpdate
+    updates: VeeqoProductUpdate,
   ): VeeqoProduct {
     const baseProduct = this.getMockProduct(productId);
     return {
@@ -2171,7 +2171,7 @@ export class VeeqoClient {
 
   private getMockCreatedVariant(
     productId: string,
-    variantData: VeeqoVariantCreate
+    variantData: VeeqoVariantCreate,
   ): VeeqoVariant {
     return {
       id: Math.floor(Math.random() * 10000) + 2000,
@@ -2192,7 +2192,7 @@ export class VeeqoClient {
 
   private getMockUpdatedVariant(
     variantId: string,
-    updates: VeeqoVariantUpdate
+    updates: VeeqoVariantUpdate,
   ): VeeqoVariant {
     return {
       id: parseInt(variantId),
@@ -2212,7 +2212,7 @@ export class VeeqoClient {
   }
 
   private getMockCreatedLocation(
-    locationData: VeeqoLocationCreate
+    locationData: VeeqoLocationCreate,
   ): VeeqoLocation {
     return {
       id: Math.floor(Math.random() * 1000) + 100,
@@ -2228,7 +2228,7 @@ export class VeeqoClient {
 
   private getMockUpdatedLocation(
     locationId: string,
-    updates: VeeqoLocationUpdate
+    updates: VeeqoLocationUpdate,
   ): VeeqoLocation {
     return {
       id: parseInt(locationId),
@@ -2251,7 +2251,7 @@ export class VeeqoClient {
   }
 
   private getMockCreatedShipment(
-    shipmentData: VeeqoShipmentCreate
+    shipmentData: VeeqoShipmentCreate,
   ): VeeqoShipment {
     return {
       id: Math.floor(Math.random() * 10000) + 3000,
@@ -2274,7 +2274,7 @@ export class VeeqoClient {
 
   private getMockUpdatedShipment(
     shipmentId: string,
-    updates: VeeqoShipmentUpdate
+    updates: VeeqoShipmentUpdate,
   ): VeeqoShipment {
     return {
       id: parseInt(shipmentId),
@@ -2337,7 +2337,7 @@ export class VeeqoClient {
   }
 
   async updateInventory(
-    params: any
+    params: any,
   ): Promise<{ success: boolean; message: string }> {
     // Use existing updateInventoryLevels method
     await this.updateInventoryLevels([

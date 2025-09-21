@@ -75,7 +75,7 @@ class CustomerFixApplier {
             updates.first_name = shippingAddr.first_name;
             needsUpdate = true;
             console.log(
-              `   ✅ Will set first_name to: "${shippingAddr.first_name}"`
+              `   ✅ Will set first_name to: "${shippingAddr.first_name}"`,
             );
           }
         }
@@ -92,7 +92,7 @@ class CustomerFixApplier {
             updates.last_name = shippingAddr.last_name;
             needsUpdate = true;
             console.log(
-              `   ✅ Will set last_name to: "${shippingAddr.last_name}"`
+              `   ✅ Will set last_name to: "${shippingAddr.last_name}"`,
             );
           }
         }
@@ -126,32 +126,32 @@ class CustomerFixApplier {
         try {
           await this.veeqoClient.updateCustomer(
             customer.id.toString(),
-            updates
+            updates,
           );
           this.fixesApplied++;
           console.log(`   ✅ Successfully updated customer ${customer.id}`);
         } catch (error) {
           console.error(
             `   ❌ Failed to update customer ${customer.id}:`,
-            error.message
+            error.message,
           );
           this.errors.push(`Customer ${customer.id}: ${error.message}`);
         }
       } else if (needsUpdate && this.dryRun) {
         console.log(
           `   🧪 DRY RUN: Would update customer ${customer.id} with:`,
-          updates
+          updates,
         );
         this.fixesApplied++;
       } else {
         console.log(
-          `   ✅ Customer ${customer.id} is already properly formatted`
+          `   ✅ Customer ${customer.id} is already properly formatted`,
         );
       }
     } catch (error) {
       console.error(
         `   ❌ Error fixing customer ${customer.id}:`,
-        error.message
+        error.message,
       );
       this.errors.push(`Customer ${customer.id}: ${error.message}`);
     }
@@ -170,7 +170,7 @@ class CustomerFixApplier {
 
     if (this.dryRun) {
       console.log(
-        "\n💡 This was a dry run. To apply actual fixes, run without --dry-run flag"
+        "\n💡 This was a dry run. To apply actual fixes, run without --dry-run flag",
       );
     } else {
       console.log("\n✅ Customer database fixes have been applied!");
@@ -180,8 +180,7 @@ class CustomerFixApplier {
 
 // Main execution
 async function main() {
-  const apiKey =
-    process.env.VEEQO_API_KEY || "Vqt/577d78212b6c99a6781dd844f42b284a";
+  const apiKey = process.env.VEEQO_API_KEY;
 
   if (!apiKey) {
     console.error("❌ VEEQO_API_KEY environment variable is required");

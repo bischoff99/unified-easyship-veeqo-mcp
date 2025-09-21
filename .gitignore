@@ -130,6 +130,7 @@ logs
 
 # Build outputs
 dist/
+dist-minimal/
 build/
 *.tsbuildinfo
 
