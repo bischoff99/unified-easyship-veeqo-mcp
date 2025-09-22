@@ -76,7 +76,7 @@
     "pino": "^9.0.0",
     "pino-pretty": "^11.0.0",
     "undici": "^7.15.0",
-    "zod": "^4.1.5"
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@railway/cli": "^4.6.3",
