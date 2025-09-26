@@ -64,7 +64,19 @@
     "setup:premium": "bash scripts/setup-integrated-services.sh",
     "deploy:railway": "railway up",
     "logs:railway": "railway logs --follow",
-    "status:railway": "railway status"
+    "status:railway": "railway status",
+    "cursor:setup": "bash scripts/setup-cursor-environment.sh",
+    "cursor:dev": "pnpm run dev",
+    "cursor:test": "pnpm test",
+    "cursor:build": "pnpm run build",
+    "cursor:quality": "pnpm run quality:check",
+    "cursor:format": "pnpm run format",
+    "cursor:lint": "pnpm run lint:fix",
+    "cursor:type-check": "pnpm run type-check",
+    "cursor:validate": "pnpm run validate:structure",
+    "cursor:debug": "pnpm run dev:fastmcp",
+    "cursor:extensions": "echo 'Install recommended Cursor IDE extensions from .cursor/extensions.json'",
+    "cursor:workspace": "echo 'Open unified-easyship-veeqo-mcp.code-workspace in Cursor IDE'"
   },
   "dependencies": {
     "@easypost/api": "^8.2.0",

@@ -1,24 +1,31 @@
 {
-  "__disabled": {},
   "mcpServers": {
-    "everything": {
-      "_creator": "mcp_linker",
-      "args": ["-y", "@modelcontextprotocol/server-everything"],
-      "command": "npx",
-      "description": "Utility and testing server",
-      "id": "00f8f0c7-7367-45ac-9544-c0024c6d329f",
-      "name": "everything",
-      "updated_at": "2025-09-16T16:25:57.407994400+00:00"
-    },
-    "postgresql": {
-      "_creator": "mcp_linker",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-postgres",
-        "postgresql://localhost/mydb"
-      ],
-      "command": "npx",
-      "updated_at": "2025-09-17T09:29:51.687614500+00:00"
+    "unified-easyship-veeqo-mcp": {
+      "command": "node",
+      "args": ["dist/server.js"],
+      "env": {
+        "NODE_ENV": "development",
+        "EASYPOST_API_KEY": "${EASYPOST_API_KEY}",
+        "VEEQO_API_KEY": "${VEEQO_API_KEY}"
+      },
+      "cwd": "${workspaceFolder}",
+      "description": "Unified EasyPost-Veeqo MCP Server for shipping and inventory management",
+      "capabilities": {
+        "tools": true,
+        "prompts": true,
+        "resources": true
+      },
+      "autoStart": true,
+      "restartOnChange": true,
+      "logLevel": "info"
     }
+  },
+  "globalSettings": {
+    "enableAutoRefresh": true,
+    "enableHealthChecks": true,
+    "enablePerformanceMonitoring": true,
+    "logLevel": "info",
+    "maxRetries": 3,
+    "retryDelay": 1000
   }
 }
