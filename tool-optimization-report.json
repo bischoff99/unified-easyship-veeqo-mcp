@@ -1,0 +1,537 @@
+{
+  "current": {
+    "total": 46,
+    "byCategory": {
+      "core": [
+        {
+          "name": "weight_to_oz",
+          "file": "src/server/tools/shipping.ts",
+          "category": "core"
+        },
+        {
+          "name": "health_check",
+          "file": "src/server/tools/shipping.ts",
+          "category": "core"
+        },
+        {
+          "name": "verify_address",
+          "file": "src/server/tools/shipping.ts",
+          "category": "core"
+        }
+      ],
+      "shipping": [
+        {
+          "name": "calculate_shipping_rates",
+          "file": "src/server/tools/shipping.ts",
+          "category": "shipping"
+        },
+        {
+          "name": "create_shipping_label",
+          "file": "src/server/tools/shipping.ts",
+          "category": "shipping"
+        },
+        {
+          "name": "optimize_shipping",
+          "file": "src/server/tools/shipping.ts",
+          "category": "shipping"
+        },
+        {
+          "name": "get_rates_by_carriers",
+          "file": "src/server/tools/shipping.ts",
+          "category": "shipping"
+        },
+        {
+          "name": "get_international_rates",
+          "file": "src/server/tools/shipping.ts",
+          "category": "shipping"
+        },
+        {
+          "name": "get_rates_by_zip",
+          "file": "src/server/tools/shipping.ts",
+          "category": "shipping"
+        },
+        {
+          "name": "get_shipping_quotes",
+          "file": "src/server/tools/inventory.ts",
+          "category": "shipping"
+        }
+      ],
+      "inventory": [
+        {
+          "name": "get_products",
+          "file": "src/server/tools/inventory.ts",
+          "category": "inventory"
+        },
+        {
+          "name": "update_inventory",
+          "file": "src/server/tools/inventory.ts",
+          "category": "inventory"
+        },
+        {
+          "name": "get_warehouses",
+          "file": "src/server/tools/inventory.ts",
+          "category": "inventory"
+        },
+        {
+          "name": "get_inventory_levels",
+          "file": "src/server/tools/inventory.ts",
+          "category": "inventory"
+        },
+        {
+          "name": "get_product",
+          "file": "src/server/tools/inventory.ts",
+          "category": "inventory"
+        },
+        {
+          "name": "create_product",
+          "file": "src/server/tools/inventory.ts",
+          "category": "inventory"
+        },
+        {
+          "name": "update_product",
+          "file": "src/server/tools/inventory.ts",
+          "category": "inventory"
+        },
+        {
+          "name": "delete_product",
+          "file": "src/server/tools/inventory.ts",
+          "category": "inventory"
+        }
+      ],
+      "validation": [
+        {
+          "name": "validate_address",
+          "file": "src/server/tools/shipping.ts",
+          "category": "validation"
+        },
+        {
+          "name": "validate_fedex_order",
+          "file": "src/server/tools/fedex-validation.ts",
+          "category": "validation"
+        }
+      ],
+      "other": [
+        {
+          "name": "track_shipment",
+          "file": "src/server/tools/shipping.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_parcel_presets",
+          "file": "src/server/tools/shipping.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_carriers",
+          "file": "src/server/tools/shipping.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_carrier_accounts",
+          "file": "src/server/tools/shipping.ts",
+          "category": "other"
+        },
+        {
+          "name": "purchase_shipment_with_carrier",
+          "file": "src/server/tools/shipping.ts",
+          "category": "other"
+        },
+        {
+          "name": "track_package",
+          "file": "src/server/tools/shipping.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_orders",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "create_fulfillment",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_customers",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_suppliers",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_veeqo_carriers",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_channels",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_locations",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "create_customer",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "create_international_shipment",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "create_veeqo_shipment",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "update_veeqo_shipment",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "cancel_veeqo_shipment",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "create_partial_shipment",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_order",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "create_order",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "update_order",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "get_demand_forecast",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "create_location",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "update_location",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        },
+        {
+          "name": "delete_location",
+          "file": "src/server/tools/inventory.ts",
+          "category": "other"
+        }
+      ]
+    }
+  },
+  "optimized": {
+    "total": 35,
+    "byCategory": {
+      "core": [
+        {
+          "name": "weight_to_oz",
+          "file": "src/server/tools/shipping.ts",
+          "category": "core"
+        },
+        {
+          "name": "health_check",
+          "file": "src/server/tools/shipping.ts",
+          "category": "core"
+        },
+        {
+          "name": "verify_address",
+          "file": "src/server/tools/shipping.ts",
+          "category": "core"
+        }
+      ],
+      "shipping": [
+        {
+          "name": "shipping_rates",
+          "description": "Calculate and compare shipping rates from multiple carriers",
+          "consolidates": [
+            {
+              "name": "calculate_shipping_rates",
+              "file": "src/server/tools/shipping.ts",
+              "category": "shipping"
+            },
+            {
+              "name": "get_rates_by_carriers",
+              "file": "src/server/tools/shipping.ts",
+              "category": "shipping"
+            },
+            {
+              "name": "get_international_rates",
+              "file": "src/server/tools/shipping.ts",
+              "category": "shipping"
+            },
+            {
+              "name": "get_rates_by_zip",
+              "file": "src/server/tools/shipping.ts",
+              "category": "shipping"
+            }
+          ]
+        },
+        {
+          "name": "shipping_management",
+          "description": "Create, update, and manage shipments",
+          "consolidates": [
+            {
+              "name": "create_shipping_label",
+              "file": "src/server/tools/shipping.ts",
+              "category": "shipping"
+            }
+          ]
+        },
+        {
+          "name": "shipping_tracking",
+          "description": "Track shipments and get delivery details",
+          "consolidates": []
+        },
+        {
+          "name": "address_validation",
+          "description": "Validate and normalize shipping addresses",
+          "consolidates": []
+        },
+        {
+          "name": "carrier_management",
+          "description": "Manage carriers and carrier accounts",
+          "consolidates": [
+            {
+              "name": "get_rates_by_carriers",
+              "file": "src/server/tools/shipping.ts",
+              "category": "shipping"
+            }
+          ]
+        },
+        {
+          "name": "webhook_management",
+          "description": "Handle all webhook operations",
+          "consolidates": []
+        },
+        {
+          "name": "batch_operations",
+          "description": "Manage batch shipments and operations",
+          "consolidates": []
+        },
+        {
+          "name": "pickup_management",
+          "description": "Schedule and manage package pickups",
+          "consolidates": []
+        },
+        {
+          "name": "insurance_management",
+          "description": "Handle insurance options and claims",
+          "consolidates": []
+        },
+        {
+          "name": "customs_management",
+          "description": "Manage customs information and duties",
+          "consolidates": []
+        },
+        {
+          "name": "billing_management",
+          "description": "Handle billing and payment operations",
+          "consolidates": []
+        },
+        {
+          "name": "account_management",
+          "description": "Manage account settings and information",
+          "consolidates": []
+        }
+      ],
+      "inventory": [
+        {
+          "name": "product_management",
+          "description": "CRUD operations for products",
+          "consolidates": [
+            {
+              "name": "get_products",
+              "file": "src/server/tools/inventory.ts",
+              "category": "inventory"
+            },
+            {
+              "name": "get_product",
+              "file": "src/server/tools/inventory.ts",
+              "category": "inventory"
+            },
+            {
+              "name": "create_product",
+              "file": "src/server/tools/inventory.ts",
+              "category": "inventory"
+            },
+            {
+              "name": "update_product",
+              "file": "src/server/tools/inventory.ts",
+              "category": "inventory"
+            },
+            {
+              "name": "delete_product",
+              "file": "src/server/tools/inventory.ts",
+              "category": "inventory"
+            }
+          ]
+        },
+        {
+          "name": "inventory_management",
+          "description": "Track and update inventory levels",
+          "consolidates": [
+            {
+              "name": "update_inventory",
+              "file": "src/server/tools/inventory.ts",
+              "category": "inventory"
+            },
+            {
+              "name": "get_inventory_levels",
+              "file": "src/server/tools/inventory.ts",
+              "category": "inventory"
+            }
+          ]
+        },
+        {
+          "name": "warehouse_management",
+          "description": "Manage warehouses and locations",
+          "consolidates": [
+            {
+              "name": "get_warehouses",
+              "file": "src/server/tools/inventory.ts",
+              "category": "inventory"
+            }
+          ]
+        },
+        {
+          "name": "supplier_management",
+          "description": "Manage suppliers and relationships",
+          "consolidates": []
+        },
+        {
+          "name": "order_management",
+          "description": "Process and manage orders",
+          "consolidates": []
+        },
+        {
+          "name": "customer_management",
+          "description": "Manage customer data",
+          "consolidates": []
+        },
+        {
+          "name": "sales_channel_management",
+          "description": "Manage sales channels",
+          "consolidates": []
+        },
+        {
+          "name": "brand_management",
+          "description": "Manage brands and categories",
+          "consolidates": []
+        },
+        {
+          "name": "tag_management",
+          "description": "Manage tags and labels",
+          "consolidates": []
+        },
+        {
+          "name": "stock_movement_management",
+          "description": "Track stock movements and transfers",
+          "consolidates": []
+        },
+        {
+          "name": "purchase_order_management",
+          "description": "Manage purchase orders",
+          "consolidates": []
+        },
+        {
+          "name": "receipt_management",
+          "description": "Handle receipts and returns",
+          "consolidates": []
+        },
+        {
+          "name": "allocation_management",
+          "description": "Manage order allocations",
+          "consolidates": []
+        },
+        {
+          "name": "fulfillment_management",
+          "description": "Handle order fulfillment",
+          "consolidates": []
+        },
+        {
+          "name": "dispatch_management",
+          "description": "Manage order dispatching",
+          "consolidates": []
+        },
+        {
+          "name": "shipment_management",
+          "description": "Manage shipments and tracking",
+          "consolidates": []
+        },
+        {
+          "name": "note_management",
+          "description": "Handle notes and attachments",
+          "consolidates": []
+        },
+        {
+          "name": "webhook_management",
+          "description": "Manage webhooks and events",
+          "consolidates": []
+        }
+      ],
+      "validation": [
+        {
+          "name": "validate_address",
+          "file": "src/server/tools/shipping.ts",
+          "category": "validation"
+        },
+        {
+          "name": "validate_fedex_order",
+          "file": "src/server/tools/fedex-validation.ts",
+          "category": "validation"
+        }
+      ]
+    }
+  },
+  "recommendations": [
+    {
+      "type": "consolidation",
+      "description": "Consolidate 46 tools into 35 tools (23.9% reduction)",
+      "impact": "high",
+      "effort": "medium"
+    },
+    {
+      "type": "performance",
+      "description": "Reduce memory usage and startup time",
+      "impact": "medium",
+      "effort": "low"
+    },
+    {
+      "type": "maintenance",
+      "description": "Simplify tool maintenance and updates",
+      "impact": "high",
+      "effort": "low"
+    },
+    {
+      "type": "developer_experience",
+      "description": "Improve developer experience with fewer tools to learn",
+      "impact": "medium",
+      "effort": "low"
+    }
+  ]
+}
