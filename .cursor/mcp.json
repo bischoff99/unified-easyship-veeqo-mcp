@@ -1,58 +1,6 @@
 {
   "__disabled": {},
   "mcpServers": {
-    "Fetch": {
-      "_creator": "mcp_linker",
-      "args": ["mcp-server-fetch"],
-      "command": "uvx",
-      "id": "57be16ef-033b-4bf7-8d38-1fbfe2ed4915",
-      "name": "Fetch",
-      "updated_at": "2025-09-16T16:25:57.546812200+00:00"
-    },
-    "Puppeteer": {
-      "_creator": "mcp_linker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "--init",
-        "-e",
-        "DOCKER_CONTAINER=true",
-        "mcp/puppeteer"
-      ],
-      "command": "docker",
-      "id": "50111a07-76c7-4d02-841c-247ba82a701f",
-      "name": "Puppeteer",
-      "updated_at": "2025-09-16T16:25:57.524082400+00:00"
-    },
-    "Sequential Thinking": {
-      "_creator": "mcp_linker",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
-      "command": "npx",
-      "id": "fdb74761-ba2a-4013-95fa-a1dfee518af8",
-      "name": "Sequential Thinking",
-      "updated_at": "2025-09-16T16:25:57.501498700+00:00"
-    },
-    "context7": {
-      "_creator": "mcp_linker",
-      "args": ["-y", "@upstash/context7-mcp"],
-      "command": "npx",
-      "env": {
-        "DEFAULT_MINIMUM_TOKENS": "6000"
-      },
-      "id": "a418a03d-a32f-4bb7-90e0-fea336a623c1",
-      "name": "context7",
-      "updated_at": "2025-09-16T16:25:57.477808600+00:00"
-    },
-    "desktop-commander": {
-      "_creator": "mcp_linker",
-      "args": ["-y", "@wonderwhy-er/desktop-commander"],
-      "command": "npx",
-      "description": "File system and process management",
-      "id": "dae915fe-c0f2-4b47-a3a3-332babeaa40d",
-      "name": "desktop-commander",
-      "updated_at": "2025-09-16T16:25:57.457398800+00:00"
-    },
     "everything": {
       "_creator": "mcp_linker",
       "args": ["-y", "@modelcontextprotocol/server-everything"],
@@ -61,26 +9,6 @@
       "id": "00f8f0c7-7367-45ac-9544-c0024c6d329f",
       "name": "everything",
       "updated_at": "2025-09-16T16:25:57.407994400+00:00"
-    },
-    "mcpx": {
-      "args": [
-        "/C",
-        "npx",
-        "mcp-remote@0.1.21",
-        "http://localhost:9000/mcp",
-        "--header",
-        "x-lunar-consumer-tag: Claude"
-      ],
-      "command": "cmd"
-    },
-    "playwright": {
-      "_creator": "mcp_linker",
-      "args": ["@playwright/mcp@latest"],
-      "command": "npx",
-      "description": "Browser automation and testing capabilities",
-      "id": "9e60a1c4-0965-4107-a967-2b59d17a0c3c",
-      "name": "playwright",
-      "updated_at": "2025-09-16T16:25:57.374543900+00:00"
     },
     "postgresql": {
       "_creator": "mcp_linker",
@@ -91,15 +19,6 @@
       ],
       "command": "npx",
       "updated_at": "2025-09-17T09:29:51.687614500+00:00"
-    },
-    "sequential-thinking": {
-      "_creator": "mcp_linker",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
-      "command": "npx",
-      "description": "Advanced reasoning and thought process",
-      "id": "07c10567-b968-49bc-a2f4-4c8beabe84aa",
-      "name": "sequential-thinking",
-      "updated_at": "2025-09-16T16:25:57.343736100+00:00"
     }
   }
 }
