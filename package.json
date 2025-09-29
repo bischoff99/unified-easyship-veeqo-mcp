@@ -90,7 +90,7 @@
     "zod": "^4.1.11"
   },
   "devDependencies": {
-    "@railway/cli": "^4.9.0",
+    "@railway/cli": "^4.10.0",
     "@types/node": "^24.5.2",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.44.1",
