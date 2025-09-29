@@ -84,7 +84,7 @@
     "dotenv": "^17.2.2",
     "fastmcp": "^3.18.0",
     "jsonwebtoken": "^9.0.2",
-    "pino": "^9.11.0",
+    "pino": "^9.12.0",
     "pino-pretty": "^11.0.0",
     "undici": "^7.15.0",
     "zod": "^4.1.11"
